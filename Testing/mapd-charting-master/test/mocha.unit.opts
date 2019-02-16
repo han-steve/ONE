@@ -1,2 +1,0 @@
---require ./test/config.js
---require ./test/setup-unit-tests.js
