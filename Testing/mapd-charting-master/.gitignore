@@ -1,0 +1,53 @@
+.DS_Store
+
+# tmp files
+*.log
+*~
+
+# local files
+node_modules
+bower_components
+docs
+
+# ide files
+*.iml
+.idea
+.project
+.vscode
+
+# vim files
+.*.swp
+
+# mac
+.DS_Store
+
+# ctag
+.tags
+
+# files for gh-pages and grunt-contrib-jasmine
+.grunt
+
+# jasmine spec runners
+spec/*.html
+
+# coverage reports
+coverage
+
+# browserify bundle & test
+bundle.js
+spec/index-browserify.html
+
+# font noise from some doc tool
+web/docs/public
+
+# example libs
+example/js
+example/assets
+example/css/mapbox-gl-draw.css
+example/css/mapdc.min.css
+example/css/chart.min.css
+example/css/mapdc.css
+example/css/chart.css
+
+.nyc_output
+*.lcov

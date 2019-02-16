@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<style>
+  img {
+    height: 40%;
+    width: 40%;
+  }
+  hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 0px 200px 0px 200px;
+    padding: 0;
+  }
+  body {
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.25;
+  }
+  table {
+    border-collapse: collapse;
+    margin-top: 15px;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+  .title {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+    text-align: center;
+  }
+  .table-wrapper {
+    padding: 0px 20px 0px 20px;
+  }
+  table tr {
+    padding: .35em;
+  }
+  table th,
+  table td {
+    padding: .625em;
+    text-align: center;
+  }
+  table th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  @media screen and (max-width: 600px) {
+    table {
+      border: 0;
+    }
+    table thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+    table tr {
+      border-bottom: 3px solid #ddd;
+      display: block;
+      margin-bottom: .625em;
+    }
+    table td {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: .8em;
+      text-align: right;
+    }
+    table td:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>
+<body>
+<div class="title">MapD Charting Examples</div>
+<hr>
+<div class="table-wrapper">
+  <table>
+
+    <tbody>
+      <tr>
+        <td scope="row">
+        <a href="./example1.html">
+          Bar Chart, Scatterplot, and Time Chart (Flights Dataset)
+          <br>
+          <img src="https://cloud.githubusercontent.com/assets/2932405/25759197/33ef5384-3186-11e7-897b-7b11077695d9.png">
+        </a>
+        </td>
+      </tr>
+      <tr>
+        <td scope="row">
+          <a href="./example2.html">
+          Backend-rendered Point Map (Tweets Dataset)
+          <br>
+          <img src="https://user-images.githubusercontent.com/4845281/28191946-21bb7ec0-67e8-11e7-855e-8922939d1241.gif">
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td scope="row">
+          <a href="./example3.html">
+          Backend-rendered Poly Map (Political Contributions Dataset)
+          <br>
+          <img src="https://cloud.githubusercontent.com/assets/2932405/25759370/176c8fd2-3187-11e7-8cae-d3cae7e084f9.png">
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td scope="row">
+        <a href="./example4.html">
+        Backend-rendered Scatter Plot (Tweets Dataset)
+        <br>
+        <img src="https://user-images.githubusercontent.com/4845281/28191948-21be4150-67e8-11e7-8221-35c59f51df80.gif">
+        </a>
+        </td>
+      </tr>
+      <tr>
+        <td scope="row"><a href="./example5.html">
+        Selection Tool With Raster Chart
+        <br>
+        <img src="https://user-images.githubusercontent.com/4845281/28191947-21bd2ad6-67e8-11e7-9c8d-a5ddcd0f07fc.gif">
+        </a></td>
+
+      </tr>
+      <tr>
+        <td scope="row"><a href="./exampleMultiLayerMap.html">
+        Backend-rendered Multi-Layer Map
+        <br>
+        <img src="https://cloud.githubusercontent.com/assets/2932405/25759781/c741c4da-3188-11e7-9d0f-65e7b6727c64.png">
+        </a></td>
+      </tr>
+      <tr>
+        <td scope="row"><a href="./exampleMultiLayerScatterplot.html">
+        Backend-rendered Multi-Layer Scatterplot
+        <br>
+        <img src="https://cloud.githubusercontent.com/assets/2932405/25759813/ec56e066-3188-11e7-985e-908ddbdcd7ff.png">
+        </a></td>
+        <tr>
+        <td scope="row"><a href="./exampleStackedBarchart.html">
+        Stacked Bar Chart
+        <br>
+        <img src="https://user-images.githubusercontent.com/9290058/27661196-44bf27c2-5c0e-11e7-8e33-5771c52075c7.png">
+        </a></td>
+      </tr>
+      </tr>
+      <tr>
+          <td scope="row"><a href="./exampleLinemap.html">
+              Backend-rendered Line Map
+              <br>
+              <img src="https://user-images.githubusercontent.com/11098472/48163531-c69cc480-e294-11e8-95f2-7baf901108ae.png">
+          </a></td>
+      </tr>
+      <!-- <tr>
+        <td scope="row"><a href="./exampleGeoHeat.html">
+        Backend-rendered Geo Heatmap
+        <br>
+        <img src="https://user-images.githubusercontent.com/9220038/28692842-269c5546-72d7-11e7-86f9-43e8c7c37426.png">
+        </a></td>
+      </tr> -->
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
