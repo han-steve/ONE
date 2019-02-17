@@ -82,6 +82,11 @@
 </script>
 
 <style>
+  #table {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: -2px 2px 30px grey;
+  }
   .table-heading {
     text-align: center;
 
