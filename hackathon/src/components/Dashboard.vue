@@ -84,7 +84,6 @@ export default {
           this.list[i].category.toLowerCase().match(this.search.toLowerCase())
         ) {
           final.push(this.list[i]);
-          console.log(this.list[i].amount);
           this.sum += new Number(this.list[i].amount);
         }
       }
