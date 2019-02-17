@@ -14,7 +14,7 @@
         <!--<a class="navbar-brand" :href="`#/`"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Transactions </a>-->
       <!--</div>-->
       <div>
-        <a class="navbar-brand" :href="`#/`"><i class="fa fa-line-chart" aria-hidden="true"></i> Goals </a>
+        <a class="navbar-brand" @click="chart()"><i class="fa fa-line-chart" aria-hidden="true"></i> Goals </a>
       </div>
       <div>
         <a class="navbar-brand" @click="account()"><i class="fa fa-users" aria-hidden="true"></i> Accounts </a>
@@ -42,6 +42,12 @@
                 this.$router.push({path: '/'});
             else
                 this.$router.push({path: '/dashboard'});
+        },
+        chart() {
+            if(Window.states.username === '')
+                this.$router.push({path: '/'});
+            else
+                this.$router.push({path: '/chart'});
         },
         account() {
             if(Window.states.username === '')
