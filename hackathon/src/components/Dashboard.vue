@@ -92,7 +92,7 @@ export default {
         }
       }
       return final;
-    },
+    }
   },
   methods: {
       first() {
