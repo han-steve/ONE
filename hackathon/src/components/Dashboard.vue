@@ -3,47 +3,30 @@
     <main>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
-      <label>Search by Category: </label>
-      <input type="text" v-model="search">
+      <div id="search-bar">
+        <label>Search by Category:</label>
+        <input type="text" v-model="search">        
+      </div>
+
       <div id="table">
-        <div class="rows">
-              <div class="table-heading">
-                Date
-              </div>
-              <div class="table-heading">
-              </div>
-              <div class="table-heading">
-              </div>
-              <div class="table-heading">
-              </div>
-              <div class="table-heading">
-              </div>
-              <div class="table-heading">
-              </div>
-            </div>
+        <div id="heading" class="rows">
+          <div class="table-heading">Date</div>
+          <div class="table-heading">Amount</div>
+          <div class="table-heading">Account</div>
+          <div class="table-heading">Category</div>
+          <div class="table-heading">Payee</div>
+          <div class="table-heading">Memo</div>
+        </div>
         <ul>
-          <li v-for="transaction of list" v-bind:key="transaction['.key']">
+          <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
             <div class="rows">
-              <div class="date">
-                {{transaction.date}}
-              </div>
-              <div class="amount">
-                {{transaction.amount}}
-              </div>
-              <div class="account">
-                {{transaction.account}}
-              </div>
-              <div class="category">
-                {{transaction.category}}
-              </div>
-              <div class="payee">
-                {{transaction.payee}}
-              </div>
-              <div class="memo">
-                {{transaction.memo}}
-              </div>
+              <div class="date">{{transaction.date}}</div>
+              <div class="amount">{{transaction.amount}}</div>
+              <div class="account">{{transaction.account}}</div>
+              <div class="category">{{transaction.category}}</div>
+              <div class="payee">{{transaction.payee}}</div>
+              <div class="memo">{{transaction.memo}}</div>
             </div>
-            
           </li>
         </ul>
       </div>
@@ -52,70 +35,97 @@
 </template>
 
 <script>
-  var user = "Q";
-  import {transactions} from '../firebase';
-  import {users} from '../firebase';
-  export default {
-    name: 'dashboard',
-    data(){
-      return{
-        search: ''
+var user = "";
+import { transactions } from "../firebase";
+import { users } from "../firebase";
+export default {
+  name: "dashboard",
+  data() {
+    return {
+      user: "",
+      search: ""
+    };
+  },
+  mounted() {
+    console.log("áctivated!");
+    this.user = Window.states.username;
+  },
+  firebase: {
+    list: transactions
+  },
+  methods: {
+    // remove(key) {
+    //   namesRef.child(key).remove();
+    // }
+  },
+  computed: {
+    filteredList: function() {
+      var final = [];
+      for (let i = 0; i < this.list.length; i++) {
+        if (
+          this.list[i].username === this.user &&
+          this.list[i].category.toLowerCase().match(this.search.toLowerCase())
+        ) {
+          final.push(this.list[i]);
+        }
       }
-    }, 
-    firebase: {
-      list: transactions.orderByChild("username").equalTo(user)
+      return final;
     },
-    methods: {
-      
-      // remove(key) {
-      //   namesRef.child(key).remove(); 
-      // }
-    },
-    // computed: {
-    //   filteredList: function() {
-    //     return list.filter((transaction) => {
-    //       return list.category.match(this.search)
-    //     })
-    //   }
-    // } 
-  };
+  }
+};
 </script>
 
 <style>
-  #table {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: -2px 2px 30px grey;
-  }
-  .table-heading {
-    text-align: center;
-
-  }
-  ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-  }
-  .rows {
-    text-align: center;
-    width: 100%;
-    display: grid; 
-    grid-template-columns: repeat(6, auto);
-  }
-  main {
-    background-color: #F7F7FC;
-    padding: 3em;
-    padding-left: 4em;
-  }
-  h2 {
-    font-size: 2em;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  .subtitle {
-    margin: 0;
-    font-weight: 500;
-    font-size: 1.2em;
-    color: #878B9D;
-  }
+label {
+  font-weight: 500;
+  font-size: 1.1em;
+}
+#search-bar {
+  margin: 30px auto;
+}
+#search-bar input {
+  margin-left: 20px;
+}
+#table {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: -5px 29px 162px -54px grey;
+  padding-bottom: 4px;
+}
+.table-heading {
+  text-align: center;
+  padding-top: 12px;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+#heading {
+  margin-bottom: 10px;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.rows {
+  text-align: center;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr;
+}
+main {
+  background-color: #f7f7fc;
+  padding: 3em;
+  padding-left: 4em;
+}
+h2 {
+  font-size: 2em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.subtitle {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: #878b9d;
+}
 </style>
