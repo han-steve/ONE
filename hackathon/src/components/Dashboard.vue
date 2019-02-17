@@ -39,7 +39,7 @@
         </div>
         <hr/>
           <ul>
-            <div style="height: 38vh;overflow:scroll;background-color: ghostwhite">
+            <div id="data">
               <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
                 <div class="rows">
                   <div class="date">{{transaction.date}}</div>
@@ -221,5 +221,30 @@ i {
   font-weight: 500;
   font-size: 1.2em;
   color: #878b9d;
+}
+#data{
+  height: 38vh;
+  overflow:scroll;
+}
+
+@media only screen and (max-width: 1100px) {
+  main{
+    height: 85vh;
+    border-radius: 1em;
+    margin: 0 5vw;
+    width: 90vw;
+  }
+  .container {
+    margin: 0;
+  }
+  .datepicker {
+  width: auto;
+  }
+  .search {
+  width: auto;
+  }
+  #data{
+    height: 35vh;
+  }
 }
 </style>

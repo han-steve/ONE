@@ -73,4 +73,12 @@ h2 {
 input {
     margin-bottom: 1em;
 }
+@media only screen and (max-width: 1100px) {
+  main{
+    height: 85vh;
+    border-radius: 1em;
+    margin: 0 5vw;
+    background-color: transparent;
+  }
+}
 </style>

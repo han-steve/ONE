@@ -23,4 +23,13 @@
     grid-template-columns: 20em auto;
     grid-template-areas: "navTpl dashboard"; 
   }
+  
+  @media only screen and (max-width: 1100px) {
+  #app {
+    grid-template-columns: auto; 
+    grid-template-rows: 6em auto;
+    grid-template-areas: "navTpl" 
+                        "dashboard";
+  }
+}
 </style>

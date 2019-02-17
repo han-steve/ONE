@@ -81,4 +81,12 @@
           box-shadow: -5px 29px 162px -54px grey;
 
     }
+    @media only screen and (max-width: 1100px) {
+  main{
+    height: 85vh;
+    border-radius: 1em;
+    margin: 0 5vw;
+    background-color: transparent;
+  }
+}
 </style>
