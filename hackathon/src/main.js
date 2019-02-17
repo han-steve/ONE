@@ -1,8 +1,22 @@
+import './firebase';
 import Vue from "vue";
 import App from "./App.vue";
+import VueFire from 'vuefire';
+import router from './router';
+
+
+require('bootstrap/dist/css/bootstrap.css');
+require('font-awesome/css/font-awesome.css');
+
+Vue.use(VueFire);
 
 Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App)
-}).$mount("#app");
+  el: '#app',
+  render: h => h(App),
+  router,
+  components: {App},
+  template: '<App/>'
+});
+

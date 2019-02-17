@@ -1,29 +1,26 @@
 <template>
   <div id="app">
-    <navigation/>
-    <dashboard/>
+    <nav-tpl></nav-tpl>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Navigation from "./components/Navigation.vue";
-import Dashboard from "./components/Dashboard.vue";
-
-export default {
-  name: "app",
-  components: {
-    Navigation,
-    Dashboard
+  import navTpl from "./components/NavTpl.vue";
+  export default {
+    name: 'App',
+    components: {
+      navTpl
+    }
   }
-};
 </script>
 
 <style>
-#app {
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  display: grid; 
-  grid-template-columns: 28em auto;
-  grid-template-areas: "navigation dashboard"
-}
+  #app {
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    display: grid;
+    grid-template-columns: 28em auto;
+    grid-template-areas: "navTpl dashboard"
+  }
 </style>
