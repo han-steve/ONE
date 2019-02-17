@@ -1,6 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container-1">
         <main>
+            <div id="container-2">
             <h2>Login</h2>
             <input type="text" class="form-control margin-bottom" placeholder="Username" v-model=LoginModel.username><br/>
             <input type="password" class="form-control margin-bottom" placeholder="Password" @keyup.enter="login()" v-model=LoginModel.password><br/>
@@ -10,7 +11,7 @@
             <button id="signupButton" class="btn btn-md btn-primary float-center" @click="signup()">
                 SignUp
             </button>
-
+            </div>
         </main>
     </div>
 </template>
@@ -51,18 +52,30 @@
     };
 </script>
 
-<style>
+<style scoped>
     main {
         background-color: #F7F7FC;
-        padding: 3em;
-        padding-left: 4em;
+        height: 100vh;
+        padding: 200px 6em 3em 6em;
     }
     h2 {
         font-size: 2em;
         margin-top: 0;
-        margin-bottom: 0;
+        margin-bottom: 1em;
     }
     #signupButton {
         margin-left: 1%;
+    }
+    .container-1 {
+        display: grid; 
+        align-items: center;
+        align-content: center;
+    }
+    #container-2 {
+        background-color: white;
+        padding: 4em;
+        border-radius: 2em;
+          box-shadow: -5px 29px 162px -54px grey;
+
     }
 </style>
