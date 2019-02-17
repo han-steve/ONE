@@ -65,7 +65,6 @@
         refresh() {
             setInterval(function(){
                 var out = Window.states.username === '';
-                console.log(out + ": " + Window.states.username);
                 if (out) {
                     document.getElementById("in").style.display = "block";
                     document.getElementById("out").style.display = "none";
