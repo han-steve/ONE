@@ -25,30 +25,32 @@ const chartData = {
         label: "Number of Moons",
         data: [],
         backgroundColor: [
-          "rgba(54,73,93,.5)", // Blue
-          "rgba(54,73,93,.5)",
-          "rgba(54,73,93,.5)",
-          "rgba(54,73,93,.5)",
-          "rgba(54,73,93,.5)",
-          "rgba(54,73,93,.5)",
-          "rgba(54,73,93,.5)",
-          "rgba(54,73,93,.5)"
+          "#CD5C5C",
+          "#F08080",
+          "#FA8072",
+          "#E9967A",
+          "#FFA07A",
+          "#338EFF",
+          "#0F55AD",
+          "#083F83", 
+          "#072A55",
+          "#3B1A64",
+          "#7536C3",
+          "#EE51AB"
         ],
         borderColor: [
-          "#36495d",
-          "#36495d",
-          "#36495d",
-          "#36495d",
-          "#36495d",
-          "#36495d",
-          "#36495d",
-          "#36495d"
+          
         ],
         borderWidth: 3
       }
     ]
-  }
-};
+  },
+   options: {
+         legend: {
+            display: false
+         }
+}
+}
 
 export default {
   name: "chart",
@@ -82,10 +84,12 @@ export default {
     filteredNames: function() {
       var final = [];
       for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].username === this.user) {
+        if (this.list[i].username === this.user && !final.includes(this.list[i].category)) {
           final.push(this.list[i].category);
         }
       }
+            console.log("final: ", final)
+
       return final;
     },
     filteredAmount: function() {
@@ -97,8 +101,9 @@ export default {
       console.log(final);
       for (let j = 0; j < arr.length; j++) {
         for (let i = 0; i < this.list.length; i++) {
-          if (this.list[i].category === arr[j]) {
-            final[j] -= parseFloat(this.list[i].amount);
+          if (this.list[i].category === arr[j] && this.list[i].username === this.user) {
+              console.log(parseFloat(this.list[i].amount) + this.list[i].category);
+            final[j] += parseFloat(this.list[i].amount);
           }
         }
       }
