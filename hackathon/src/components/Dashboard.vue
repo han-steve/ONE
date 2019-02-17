@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <main>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
@@ -28,6 +28,17 @@
               <div class="memo">{{transaction.memo}}</div>
             </div>
           </li>
+          <hr/>
+          <li>
+            <div class="rows">
+              <div class="date"></div>
+              <div class="amount">${{this.sum.toFixed(2)}}</div>
+              <div class="account"></div>
+              <div class="category"></div>
+              <div class="payee"></div>
+              <div class="memo"></div>
+            </div>
+          </li>
         </ul>
       </div>
     </main>
@@ -43,7 +54,8 @@ export default {
   data() {
     return {
       user: "",
-      search: ""
+      search: "",
+      sum: 0
     };
   },
   mounted() {
@@ -53,20 +65,17 @@ export default {
   firebase: {
     list: transactions
   },
-  methods: {
-    // remove(key) {
-    //   namesRef.child(key).remove();
-    // }
-  },
   computed: {
     filteredList: function() {
       var final = [];
-      for (let i = 0; i < this.list.length; i++) {
+      for (let i = 0; i < Math.min(this.list.length, 10); i++) {
         if (
           this.list[i].username === this.user &&
           this.list[i].category.toLowerCase().match(this.search.toLowerCase())
         ) {
           final.push(this.list[i]);
+          console.log(this.list[i].amount);
+          this.sum += new Number(this.list[i].amount);
         }
       }
       return final;

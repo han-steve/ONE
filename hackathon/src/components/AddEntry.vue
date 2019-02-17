@@ -38,6 +38,9 @@
   export default {
     name: 'entry',
     components: {navTpl},
+    firebase: {
+      names: users
+    },
     data() {
       return {
         EntryModel: {

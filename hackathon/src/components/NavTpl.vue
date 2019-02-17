@@ -8,19 +8,22 @@
     <p id="subtitle">your personal financial manager</p>
     <div id="nav">
       <div>
-        <a class="navbar-brand" :href="`#/dashboard`"><i class="fa fa-home"></i> Dashboard </a>
+        <a class="navbar-brand" @click="dashboard()"><i class="fa fa-home"></i> Dashboard </a>
+      </div>
+      <!--<div>-->
+        <!--<a class="navbar-brand" :href="`#/`"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Transactions </a>-->
+      <!--</div>-->
+      <!--<div>-->
+        <!--<a class="navbar-brand" :href="`#/`"><i class="fa fa-line-chart" aria-hidden="true"></i> Goals </a>-->
+      <!--</div>-->
+      <div>
+        <a class="navbar-brand" @click="account()"><i class="fa fa-users" aria-hidden="true"></i> Accounts </a>
       </div>
       <div>
-        <a class="navbar-brand" :href="`#/`"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Transactions </a>
+        <a class="navbar-brand" @click="addEntry()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Entry</a>
       </div>
       <div>
-        <a class="navbar-brand" :href="`#/`"><i class="fa fa-line-chart" aria-hidden="true"></i> Goals </a>
-      </div>
-      <div>
-        <a class="navbar-brand" :href="`#/`"><i class="fa fa-users" aria-hidden="true"></i> Accounts </a>
-      </div>
-      <div>
-        <a class="navbar-brand" :href="`#/add`"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Entry</a>
+        <a class="navbar-brand" @click="signout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
       </div>
     </div>
   </div>
@@ -28,7 +31,31 @@
 
 <script>
   export default {
-    name: 'navTpl'
+    name: 'navTpl',
+    methods: {
+        dashboard() {
+            if(Window.states.username === '')
+                this.$router.push({path: '/'});
+            else
+                this.$router.push({path: '/dashboard'});
+        },
+        account() {
+            if(Window.states.username === '')
+                this.$router.push({path: '/'});
+            else
+                this.$router.push({path: '/accounts'});
+        },
+        addEntry() {
+            if(Window.states.username === '')
+                this.$router.push({path: '/'});
+            else
+                this.$router.push({path: '/add'});
+        },
+        signout() {
+            Window.states.username = '';
+            this.$router.push({path: '/'});
+        }
+    }
   };
 </script>
 

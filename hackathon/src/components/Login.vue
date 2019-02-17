@@ -1,11 +1,15 @@
 <template>
-    <div>
+    <div class="container">
         <main>
             <h2>Login</h2>
-            <input type="text" placeholder="Username" v-model=LoginModel.username><br/>
-            <input type="password" placeholder="Password" @keyup.enter="login()" v-model=LoginModel.password><br/>
-            <button @click="login()">Submit</button><br/>
-            <button @click="signup()">Sign Up</button>
+            <input type="text" class="form-control margin-bottom" placeholder="Username" v-model=LoginModel.username><br/>
+            <input type="password" class="form-control margin-bottom" placeholder="Password" @keyup.enter="login()" v-model=LoginModel.password><br/>
+            <button id="loginButton" class="btn btn-md btn-success float-center" @click="login()">
+                Submit
+            </button>
+            <button id="signupButton" class="btn btn-md btn-primary float-center" @click="signup()">
+                SignUp
+            </button>
 
         </main>
     </div>
@@ -29,10 +33,8 @@
         methods: {
             login() {
                 var found = false;
-                console.log(this.LoginModel.username + ";" + this.LoginModel.password);
                 for(var i = 0; i < this.names.length; i++) {
-                    console.log(this.names[i].username + ":" + this.names[i].password);
-                    if(this.names[i].username === this.LoginModel.username && this.names[i].password === this.LoginModel.password) {
+                    if(this.names[i].username.trim() === this.LoginModel.username.trim() && this.names[i].password.trim() === this.LoginModel.password.trim()) {
                         found = true;
                         Window.states.username = this.LoginModel.username;
                         this.$router.push({path: '/dashboard'});
@@ -59,5 +61,8 @@
         font-size: 2em;
         margin-top: 0;
         margin-bottom: 0;
+    }
+    #signupButton {
+        margin-left: 1%;
     }
 </style>

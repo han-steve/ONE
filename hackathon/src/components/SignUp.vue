@@ -4,7 +4,7 @@
             <h2>SignUp</h2>
             <input type="text" placeholder="Username" v-model=SignUpModel.username>
             <input type="password" placeholder="Password" @keyup.enter="signup()" v-model=SignUpModel.password>
-            <button @click="signup()">Submit</button>
+            <button @click="signup()">Sign Up</button>
         </main>
     </div>
 </template>
@@ -18,7 +18,6 @@
                 SignUpModel: {
                     username: '',
                     password: '',
-                    transactions: []
                 }
             }
         },
@@ -27,7 +26,7 @@
         },
         methods: {
             signup() {
-                Window.states.username = this.SignUpModel.username;
+                Window.states.username = this.SignUpModel.username.trim();
                 users.push(this.SignUpModel);
                 this.$router.push({path: '/dashboard'});
             }
