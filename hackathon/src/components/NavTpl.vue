@@ -125,7 +125,7 @@
     display: grid;
     align-content: center;
     padding: auto;
-    padding-left: 4em;
+    padding-left: 15%;
     font-size: 1.7em;
     text-align: left;
     font-weight: 600;

@@ -33,6 +33,7 @@
               <div class="category">{{transaction.category}}</div>
               <div class="payee">{{transaction.payee}}</div>
               <div class="memo">{{transaction.memo}}</div>
+              <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
             </div>
           </li>
           <hr/>
@@ -105,6 +106,9 @@ export default {
       },
       last() {
         this.page = this.max;
+      },
+      rm(elm) {
+        transactions.child(elm['.key']).remove();
       }
   }
 };
@@ -152,7 +156,7 @@ ul {
   text-align: center;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr 1fr;
   margin-top: .3em;
 }
 main {
