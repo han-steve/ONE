@@ -28,12 +28,17 @@
         },
         methods: {
             login() {
-                if (users.orderByChild("username").equalTo(this.LoginModel.username)
-                    && users.orderByChild("password").equalTo(this.LoginModel.password)) {
-                    Window.states.username = this.LoginModel.username;
-                    this.$router.push({path: '/dashboard'});
+                var found = false;
+                console.log(this.LoginModel.username + ";" + this.LoginModel.password);
+                for(var i = 0; i < this.names.length; i++) {
+                    console.log(this.names[i].username + ":" + this.names[i].password);
+                    if(this.names[i].username === this.LoginModel.username && this.names[i].password === this.LoginModel.password) {
+                        found = true;
+                        Window.states.username = this.LoginModel.username;
+                        this.$router.push({path: '/dashboard'});
+                    }
                 }
-                else {
+                if(!found) {
                     alert("Wrong username or password!");
                 }
             },

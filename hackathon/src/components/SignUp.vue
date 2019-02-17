@@ -12,7 +12,7 @@
 <script>
     import {users} from '../firebase';
     export default {
-        name: 'login',
+        name: 'signup',
         data() {
             return {
                 SignUpModel: {
