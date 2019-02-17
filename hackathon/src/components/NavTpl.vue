@@ -83,6 +83,7 @@
     margin: 0 auto;
   }
   #subtitle {
+    margin-top: .7em;
     text-align: center;
     font-size: 1.3em;
     font-weight: 600;

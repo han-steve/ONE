@@ -31,7 +31,7 @@
           <hr/>
           <li>
             <div class="rows">
-              <div class="date"></div>
+              <div id="sum">Sum:</div>
               <div class="amount">${{this.sum.toFixed(2)}}</div>
               <div class="account"></div>
               <div class="category"></div>
@@ -84,7 +84,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.container {
+  padding: 0;
+}
 label {
   font-weight: 500;
   font-size: 1.1em;
@@ -99,7 +102,7 @@ label {
   background-color: white;
   border-radius: 10px;
   box-shadow: -5px 29px 162px -54px grey;
-  padding-bottom: 4px;
+  padding-bottom: 15px;
 }
 .table-heading {
   text-align: center;
@@ -109,6 +112,10 @@ label {
 }
 #heading {
   margin-bottom: 10px;
+}
+#sum {
+  margin: 0;
+  padding: 0;
 }
 ul {
   list-style-type: none;
@@ -120,11 +127,13 @@ ul {
   width: 100%;
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr;
+  margin-top: .3em;
 }
 main {
   background-color: #f7f7fc;
   padding: 3em;
   padding-left: 4em;
+  height: 100vh;
 }
 h2 {
   font-size: 2em;
