@@ -5,7 +5,7 @@
       <p class="subtitle">overview of your financial life</p>
       <div id="search-bar">
         <label>Search by Category:</label>
-        <input type="text" v-model="search">        
+        <input type="text" v-model="search">
       </div>
       <div id="navPage">
         <i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>
@@ -24,30 +24,32 @@
           <div class="table-heading">Memo</div>
         </div>
         <hr/>
-        <ul>
-          <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
-            <div class="rows">
-              <div class="date">{{transaction.date}}</div>
-              <div class="amount">{{transaction.amount}}</div>
-              <div class="account">{{transaction.account}}</div>
-              <div class="category">{{transaction.category}}</div>
-              <div class="payee">{{transaction.payee}}</div>
-              <div class="memo">{{transaction.memo}}</div>
-              <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
+          <ul>
+            <div style="height: 15em;overflow:scroll;background-color: ghostwhite">
+              <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
+                <div class="rows">
+                  <div class="date">{{transaction.date}}</div>
+                  <div class="amount">{{transaction.amount}}</div>
+                  <div class="account">{{transaction.account}}</div>
+                  <div class="category">{{transaction.category}}</div>
+                  <div class="payee">{{transaction.payee}}</div>
+                  <div class="memo">{{transaction.memo}}</div>
+                  <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
+                </div>
+              </li>
             </div>
-          </li>
-          <hr/>
-          <li>
-            <div class="rows">
-              <div id="sum">Sum:</div>
-              <div class="amount">${{this.sum.toFixed(2)}}</div>
-              <div class="account"></div>
-              <div class="category"></div>
-              <div class="payee"></div>
-              <div class="memo"></div>
-            </div>
-          </li>
-        </ul>
+            <hr/>
+            <li>
+              <div class="rows">
+                <div id="sum">Sum:</div>
+                <div class="amount">${{this.sum.toFixed(2)}}</div>
+                <div class="account"></div>
+                <div class="category"></div>
+                <div class="payee"></div>
+                <div class="memo"></div>
+              </div>
+            </li>
+          </ul>
       </div>
     </main>
   </div>
