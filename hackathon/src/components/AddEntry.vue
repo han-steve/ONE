@@ -102,7 +102,7 @@ export default {
   methods: {
     submit() {
       var curr = this.EntryModel;
-      if (curr.username !== "" && curr.amount !== "" && curr.account !== "") {
+      if (curr.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
         transactions.push(curr);
         this.EntryModel = {
           username: Window.states.username,
@@ -115,7 +115,7 @@ export default {
         };
         alert("Transaction recorded!");
       } else {
-        alert("Make sure you fill in amount AND account!");
+        alert("Make sure you fill in amount, account, AND proper date!");
       }
     }
   }

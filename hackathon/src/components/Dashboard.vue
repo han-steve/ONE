@@ -5,7 +5,7 @@
       <p class="subtitle">overview of your financial life</p>
       <div id="search-bar">
         <label>Search by Category:</label>
-        <input type="text" v-model="search">        
+        <input type="text" v-model="search">
       </div>
       <div id="navPage">
         <i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>
@@ -23,29 +23,33 @@
           <div class="table-heading">Payee</div>
           <div class="table-heading">Memo</div>
         </div>
-        <ul>
-          <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
-            <div class="rows">
-              <div class="date">{{transaction.date}}</div>
-              <div class="amount">{{transaction.amount}}</div>
-              <div class="account">{{transaction.account}}</div>
-              <div class="category">{{transaction.category}}</div>
-              <div class="payee">{{transaction.payee}}</div>
-              <div class="memo">{{transaction.memo}}</div>
+        <hr/>
+          <ul>
+            <div style="height: 15em;overflow:scroll;background-color: ghostwhite">
+              <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
+                <div class="rows">
+                  <div class="date">{{transaction.date}}</div>
+                  <div class="amount">{{transaction.amount}}</div>
+                  <div class="account">{{transaction.account}}</div>
+                  <div class="category">{{transaction.category}}</div>
+                  <div class="payee">{{transaction.payee}}</div>
+                  <div class="memo">{{transaction.memo}}</div>
+                  <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
+                </div>
+              </li>
             </div>
-          </li>
-          <hr/>
-          <li>
-            <div class="rows">
-              <div id="sum">Sum:</div>
-              <div class="amount">${{this.sum.toFixed(2)}}</div>
-              <div class="account"></div>
-              <div class="category"></div>
-              <div class="payee"></div>
-              <div class="memo"></div>
-            </div>
-          </li>
-        </ul>
+            <hr/>
+            <li>
+              <div class="rows">
+                <div id="sum">Sum:</div>
+                <div class="amount">${{this.sum.toFixed(2)}}</div>
+                <div class="account"></div>
+                <div class="category"></div>
+                <div class="payee"></div>
+                <div class="memo"></div>
+              </div>
+            </li>
+          </ul>
       </div>
     </main>
   </div>
@@ -78,7 +82,7 @@ export default {
       this.sum = 0;
       this.max = Math.ceil(this.list.length/10);
       var final = [];
-      for (let i = 0; i < Math.min((this.list.length - (this.page - 1) * 10), 10); i++) {
+      for (let i = (this.page - 1) * 10; i < (this.page - 1) * 10 + Math.min((this.list.length - (this.page - 1) * 10), 10); i++) {
         if (
           this.list[i].username === this.user &&
           this.list[i].category.toLowerCase().match(this.search.toLowerCase())
@@ -104,6 +108,9 @@ export default {
       },
       last() {
         this.page = this.max;
+      },
+      rm(elm) {
+        transactions.child(elm['.key']).remove();
       }
   }
 };
@@ -151,7 +158,7 @@ ul {
   text-align: center;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr 1fr;
   margin-top: .3em;
 }
 main {
