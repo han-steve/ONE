@@ -25,7 +25,7 @@
         </div>
         <hr/>
           <ul>
-            <div style="height: 15em;overflow:scroll;background-color: ghostwhite">
+            <div style="height: 50vh;overflow:scroll;background-color: ghostwhite">
               <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
                 <div class="rows">
                   <div class="date">{{transaction.date}}</div>
