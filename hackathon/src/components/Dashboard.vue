@@ -8,7 +8,10 @@
       <button @click="submitName()">Submit</button>
       <div>
         <ul>
-          <li v-for="name of names" v-bind:key="name['.key']">{{name.name}}</li>
+          <li v-for="name of names" v-bind:key="name['.key']">
+            <p>{{name.name}}</p>
+            <button @click="remove(name['.key'])">Remove</button>
+          </li>
         </ul>
       </div>
     </main>
@@ -30,6 +33,9 @@
     methods: {
       submitName() {
         namesRef.push({name: this.name, edit: false})
+      },
+      remove(key) {
+        namesRef.child(key).remove(); 
       }
     }
   };
