@@ -22,7 +22,7 @@
       <div>
         <a class="navbar-brand" @click="addEntry()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Entry</a>
       </div>
-      <div>
+      <div onload="refresh()">
         <a id="in" class="navbar-brand" @click="signin()"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
         <a id="out" style="display: none" class="navbar-brand" @click="signout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
       </div>
@@ -33,15 +33,8 @@
 <script>
   export default {
     name: 'navTpl',
-    computed() {
-        if(Window.states.username === '') {
-            document.getElementById("in").style.display = "block";
-            document.getElementById("out").style.display = "none";
-        }
-        else {
-            document.getElementById("in").style.display = "none";
-            document.getElementById("out").style.display = "block";
-        }
+    mounted() {
+        this.refresh();
     },
     methods: {
         dashboard() {
@@ -68,6 +61,20 @@
         signout() {
             Window.states.username = '';
             this.$router.push({path: '/'});
+        },
+        refresh() {
+            setInterval(function(){
+                var out = Window.states.username === '';
+                console.log(out + ": " + Window.states.username);
+                if (out) {
+                    document.getElementById("in").style.display = "block";
+                    document.getElementById("out").style.display = "none";
+                }
+                else {
+                    document.getElementById("in").style.display = "none";
+                    document.getElementById("out").style.display = "block";
+                }
+            }, 100);
         }
     }
   };
