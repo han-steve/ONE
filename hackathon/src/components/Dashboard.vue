@@ -79,8 +79,8 @@ export default {
     return {
       user: "",
       search: "",
-      begin: new Date().getDate(),
-      end: new Date().getDate(),
+      begin: new Date(0),
+      end: new Date(Date.now()),
       sum: 0,
       page: 1,
       max: 1
@@ -99,17 +99,21 @@ export default {
       this.max = Math.ceil(this.list.length/10);
       var final = [];
       var sorted = this.reverseOrder(this.list);
-      var start = (this.page - 1) * 10;
-      var end = (this.page - 1) * 10 + Math.min((sorted.length - (this.page - 1) * 10), 10);
       for (let i = 0; i < sorted.length; i++) {
-        if (
-            sorted[i].username === this.user &&
-            sorted[i].category.toLowerCase().match(this.search.toLowerCase())
-        ) {
-          final.push(sorted[i]);
-          this.sum += new Number(sorted[i].amount);
-        }
+          if(sorted[i].username === this.user) {
+              if(sorted[i].category.toLowerCase().match(this.search.toLowerCase())) {
+                  console.log("Date: " + sorted[i].date + ", Start: " + this.begin + ", End: " + this.end + ", " + (new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
+                      && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())));
+                  if(new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
+                      && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())) {
+                      final.push(sorted[i]);
+                      this.sum += new Number(sorted[i].amount);
+                  }
+              }
+          }
       }
+      // this.begin = null;
+      // this.end = null;
       return final;
     }
   },
@@ -156,6 +160,9 @@ label {
 /*#search-bar input {*/
   /*margin-left: 20px;*/
 /*}*/
+.checkbox {
+  margin: .5em;
+}
 .search {
   width: 76%;
   display: inline-block;
