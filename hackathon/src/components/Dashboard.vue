@@ -23,6 +23,7 @@
           <div class="table-heading">Payee</div>
           <div class="table-heading">Memo</div>
         </div>
+        <hr/>
         <ul>
           <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
             <div class="rows">
@@ -78,7 +79,7 @@ export default {
       this.sum = 0;
       this.max = Math.ceil(this.list.length/10);
       var final = [];
-      for (let i = 0; i < Math.min((this.list.length - (this.page - 1) * 10), 10); i++) {
+      for (let i = (this.page - 1) * 10; i < (this.page - 1) * 10 + Math.min((this.list.length - (this.page - 1) * 10), 10); i++) {
         if (
           this.list[i].username === this.user &&
           this.list[i].category.toLowerCase().match(this.search.toLowerCase())
