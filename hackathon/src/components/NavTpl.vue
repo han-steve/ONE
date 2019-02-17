@@ -13,9 +13,9 @@
       <!--<div>-->
         <!--<a class="navbar-brand" :href="`#/`"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Transactions </a>-->
       <!--</div>-->
-      <!--<div>-->
-        <!--<a class="navbar-brand" :href="`#/`"><i class="fa fa-line-chart" aria-hidden="true"></i> Goals </a>-->
-      <!--</div>-->
+      <div>
+        <a class="navbar-brand" :href="`#/`"><i class="fa fa-line-chart" aria-hidden="true"></i> Goals </a>
+      </div>
       <div>
         <a class="navbar-brand" @click="account()"><i class="fa fa-users" aria-hidden="true"></i> Accounts </a>
       </div>
@@ -23,7 +23,8 @@
         <a class="navbar-brand" @click="addEntry()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Entry</a>
       </div>
       <div>
-        <a class="navbar-brand" @click="signinout()"><i class="fa fa-sign-out" aria-hidden="true"></i> <span id="toggle">Sign In</span></a>
+        <a id="in" class="navbar-brand" @click="signin()"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+        <a id="out" style="display: none" class="navbar-brand" @click="signout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
       </div>
     </div>
   </div>
@@ -32,16 +33,15 @@
 <script>
   export default {
     name: 'navTpl',
-    data() {
-        return {
-            out: false
-        }
-    },
     computed() {
-        if(Window.states.username === '')
-          document.getElementById("toggle").innerText = "Sign In";
-        else
-          document.getElementById("toggle").innerText = "Sign Out";
+        if(Window.states.username === '') {
+            document.getElementById("in").style.display = "block";
+            document.getElementById("out").style.display = "none";
+        }
+        else {
+            document.getElementById("in").style.display = "none";
+            document.getElementById("out").style.display = "block";
+        }
     },
     methods: {
         dashboard() {
@@ -62,10 +62,11 @@
             else
                 this.$router.push({path: '/add'});
         },
-        signinout() {
-            if(this.out)
-              Window.states.username = '';
-            this.out = !this.out;
+        signin() {
+            this.$router.push({path: '/'});
+        },
+        signout() {
+            Window.states.username = '';
             this.$router.push({path: '/'});
         }
     }

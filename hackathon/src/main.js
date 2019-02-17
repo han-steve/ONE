@@ -11,7 +11,7 @@ require("font-awesome/css/font-awesome.css");
 Vue.use(VueFire);
 
 Window.states = {
-    username: ""
+    username: "",
 };
 
 Vue.config.productionTip = false;
