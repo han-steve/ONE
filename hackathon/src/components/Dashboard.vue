@@ -3,14 +3,12 @@
     <main>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
-      <label>Name:</label>
-      <input type="text" v-model="name">
-      <button @click="submitName()">Submit</button>
+      <label>Search by Category: </label>
+      <input type="text" v-model="search">
       <div>
         <ul>
-          <li v-for="name of names" v-bind:key="name['.key']">
-            <p>{{name.name}}</p>
-            <button @click="remove(name['.key'])">Remove</button>
+          <li v-for="transaction of list" v-bind:key="transaction['.key']">
+            <p>{{transaction.amount}}</p>
           </li>
         </ul>
       </div>
@@ -19,25 +17,32 @@
 </template>
 
 <script>
+  var user = "Timo";
+  import {transactions} from '../firebase';
   import {users} from '../firebase';
   export default {
     name: 'dashboard',
     data(){
       return{
-        name: 'Paul'
+        search: ''
       }
     }, 
     firebase: {
-      names: users
+      list: transactions.orderByChild("username").equalTo(user)
     },
     methods: {
-      submitName() {
-        namesRef.push({name: this.name, edit: false})
-      },
-      remove(key) {
-        namesRef.child(key).remove(); 
-      }
-    }
+      
+      // remove(key) {
+      //   namesRef.child(key).remove(); 
+      // }
+    },
+    // computed: {
+    //   filteredList: function() {
+    //     return list.filter((transaction) => {
+    //       return list.category.match(this.search)
+    //     })
+    //   }
+    // } 
   };
 </script>
 
