@@ -82,13 +82,14 @@ export default {
       this.sum = 0;
       this.max = Math.ceil(this.list.length/10);
       var final = [];
-      for (let i = (this.page - 1) * 10; i < (this.page - 1) * 10 + Math.min((this.list.length - (this.page - 1) * 10), 10); i++) {
+      var sorted = this.reverseOrder(this.list);
+      for (let i = (this.page - 1) * 10; i < (this.page - 1) * 10 + Math.min((sorted.length - (this.page - 1) * 10), 10); i++) {
         if (
-          this.list[i].username === this.user &&
-          this.list[i].category.toLowerCase().match(this.search.toLowerCase())
+            sorted[i].username === this.user &&
+            sorted[i].category.toLowerCase().match(this.search.toLowerCase())
         ) {
-          final.push(this.list[i]);
-          this.sum += new Number(this.list[i].amount);
+          final.push(sorted[i]);
+          this.sum += new Number(sorted[i].amount);
         }
       }
       return final;
@@ -111,6 +112,13 @@ export default {
       },
       rm(elm) {
         transactions.child(elm['.key']).remove();
+      },
+      reverseOrder(l) {
+          var reversed = [];
+          for(var i = l.length - 1; i >= 0; i--) {
+              reversed.push(l[i]);
+          }
+          return reversed;
       }
   }
 };

@@ -5,7 +5,7 @@
       <h1>ONE</h1>
       <div id="rectangle"></div>
     </div>
-    <p id="subtitle">your personal financial manager</p>
+    <p id="subtitle">your personal<br/>financial manager</p>
     <div id="nav">
       <div>
         <a class="navbar-brand" @click="dashboard()"><i class="fa fa-home"></i> Dashboard </a>
@@ -116,7 +116,7 @@
     color: #ccc;
   }
   #nav{
-    margin-top: 3em;
+    margin-top: 5%;
     display: grid;
     grid-template-rows: repeat(auto);
     height: 20em;
