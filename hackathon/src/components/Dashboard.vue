@@ -3,17 +3,31 @@
     <main>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
-      <div id="search-bar">
-        <label>Search by Category:</label>
-        <input type="text" v-model="search">
+      <div id="filter">
+        <div id="search-bar">
+          <label>Search by Category:</label>
+          <input type="text" class="search form-control" v-model="search">
+        </div>
+        <div id="time-bar">
+          <label>Search by Date Range:</label>
+          <input type="date" class="datepicker form-control margin-bottom"
+                 required="true"
+                 autofocus="true"
+                 name="date" v-model="begin">
+          <label> to </label>
+          <input type="date" class="datepicker form-control margin-bottom"
+                 required="true"
+                 autofocus="true"
+                 name="date" v-model="end">
+        </div>
       </div>
-      <div id="navPage">
-        <i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>
-        <i class="fa fa-step-backward" aria-hidden="true" @click="prev()"></i>
-        <span id="page">Page {{this.page}} of {{this.max}}</span>
-        <i class="fa fa-step-forward" aria-hidden="true" @click="next()"></i>
-        <i class="fa fa-fast-forward" aria-hidden="true" @click="last()"></i>
-      </div>
+      <!--<div id="navPage">-->
+        <!--<i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>-->
+        <!--<i class="fa fa-step-backward" aria-hidden="true" @click="prev()"></i>-->
+        <!--<span id="page">Page {{this.page}} of {{this.max}}</span>-->
+        <!--<i class="fa fa-step-forward" aria-hidden="true" @click="next()"></i>-->
+        <!--<i class="fa fa-fast-forward" aria-hidden="true" @click="last()"></i>-->
+      <!--</div>-->
       <div id="table">
         <div id="heading" class="rows">
           <div class="table-heading">Date</div>
@@ -65,6 +79,8 @@ export default {
     return {
       user: "",
       search: "",
+      begin: new Date().getDate(),
+      end: new Date().getDate(),
       sum: 0,
       page: 1,
       max: 1
@@ -83,7 +99,9 @@ export default {
       this.max = Math.ceil(this.list.length/10);
       var final = [];
       var sorted = this.reverseOrder(this.list);
-      for (let i = (this.page - 1) * 10; i < (this.page - 1) * 10 + Math.min((sorted.length - (this.page - 1) * 10), 10); i++) {
+      var start = (this.page - 1) * 10;
+      var end = (this.page - 1) * 10 + Math.min((sorted.length - (this.page - 1) * 10), 10);
+      for (let i = 0; i < sorted.length; i++) {
         if (
             sorted[i].username === this.user &&
             sorted[i].category.toLowerCase().match(this.search.toLowerCase())
@@ -132,11 +150,23 @@ label {
   font-weight: 500;
   font-size: 1.1em;
 }
-#search-bar {
-  margin: 30px auto;
+/*#search-bar {*/
+  /*margin: 30px auto;*/
+/*}*/
+/*#search-bar input {*/
+  /*margin-left: 20px;*/
+/*}*/
+.search {
+  width: 76%;
+  display: inline-block;
+  padding: 1%;
+  margin: .5em;
 }
-#search-bar input {
-  margin-left: 20px;
+.datepicker {
+  width: 35%;
+  display: inline-block;
+  padding: 1%;
+  margin: .5em;
 }
 #table {
   background-color: white;
