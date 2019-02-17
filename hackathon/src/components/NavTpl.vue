@@ -23,7 +23,7 @@
         <a class="navbar-brand" @click="addEntry()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Entry</a>
       </div>
       <div>
-        <a class="navbar-brand" @click="signout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
+        <a class="navbar-brand" @click="signinout()"><i class="fa fa-sign-out" aria-hidden="true"></i> <span id="toggle">Sign In</span></a>
       </div>
     </div>
   </div>
@@ -32,6 +32,17 @@
 <script>
   export default {
     name: 'navTpl',
+    data() {
+        return {
+            out: false
+        }
+    },
+    computed() {
+        if(Window.states.username === '')
+          document.getElementById("toggle").innerText = "Sign In";
+        else
+          document.getElementById("toggle").innerText = "Sign Out";
+    },
     methods: {
         dashboard() {
             if(Window.states.username === '')
@@ -51,8 +62,10 @@
             else
                 this.$router.push({path: '/add'});
         },
-        signout() {
-            Window.states.username = '';
+        signinout() {
+            if(this.out)
+              Window.states.username = '';
+            this.out = !this.out;
             this.$router.push({path: '/'});
         }
     }

@@ -7,7 +7,13 @@
         <label>Search by Category:</label>
         <input type="text" v-model="search">        
       </div>
-
+      <div id="navPage">
+        <i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>
+        <i class="fa fa-step-backward" aria-hidden="true" @click="prev()"></i>
+        <span id="page">Page {{this.page}} of {{this.max}}</span>
+        <i class="fa fa-step-forward" aria-hidden="true" @click="next()"></i>
+        <i class="fa fa-fast-forward" aria-hidden="true" @click="last()"></i>
+      </div>
       <div id="table">
         <div id="heading" class="rows">
           <div class="table-heading">Date</div>
@@ -55,7 +61,9 @@ export default {
     return {
       user: "",
       search: "",
-      sum: 0
+      sum: 0,
+      page: 1,
+      max: 1
     };
   },
   mounted() {
@@ -67,8 +75,10 @@ export default {
   },
   computed: {
     filteredList: function() {
+      this.sum = 0;
+      this.max = Math.ceil(this.list.length/10);
       var final = [];
-      for (let i = 0; i < Math.min(this.list.length, 10); i++) {
+      for (let i = 0; i < Math.min((this.list.length - (this.page - 1) * 10), 10); i++) {
         if (
           this.list[i].username === this.user &&
           this.list[i].category.toLowerCase().match(this.search.toLowerCase())
@@ -80,6 +90,22 @@ export default {
       }
       return final;
     },
+  },
+  methods: {
+      first() {
+        this.page = 1;
+      },
+      prev() {
+          if(this.page > 1)
+            this.page--;
+      },
+      next() {
+          if(this.page < this.max)
+              this.page++;
+      },
+      last() {
+        this.page = this.max;
+      }
   }
 };
 </script>
@@ -130,6 +156,12 @@ h2 {
   font-size: 2em;
   margin-top: 0;
   margin-bottom: 0;
+}
+i {
+  margin: 1.5%;
+}
+#navPage {
+  margin-left: 75%;
 }
 .subtitle {
   margin: 0;
