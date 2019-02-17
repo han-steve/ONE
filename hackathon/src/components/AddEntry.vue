@@ -32,17 +32,17 @@
 
 <script>
   import navTpl from "@/components/NavTpl"
+  import {users} from '../firebase';
+  import {transactions} from '../firebase';
 
   export default {
     name: 'entry',
     components: {navTpl},
-    props: {
-      loginFailed: false
-    },
     data() {
       return {
         EntryModel: {
-          date: new Date(),
+          username: Window.states.username,
+          date: new Date().getDate(),
           category: '',
           payee: '',
           amount: '',
@@ -54,24 +54,21 @@
     methods: {
       submit() {
         var curr = this.EntryModel;
-        if(curr.amount !== '' && curr.account !== '') {
-          this.$socket.emit('record', this.EntryModel);
+        if(curr.username !== '' && curr.amount !== '' && curr.account !== '') {
+          transactions.push(curr);
+          this.EntryModel = {
+              username: Window.states.username,
+              date: new Date().getDate(),
+              category: '',
+              payee: '',
+              amount: '',
+              memo: '',
+              account: ''
+          };
           alert("Transaction recorded!");
         }
         else {
           alert("Make sure you fill in amount AND account!");
-        }
-      }
-    },
-    sockets: {
-      connection(msg) {
-        if(msg == 'Successfully logged on!') {
-          this.$root.user.name = this.EntryModel.name;
-          console.log(this.EntryModel.name + ' logged on');
-          this.$router.push({path: '/chat'});
-        }
-        else {
-          alert("Username taken.");
         }
       }
     }

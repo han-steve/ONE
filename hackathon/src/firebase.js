@@ -9,4 +9,5 @@ const app = initializeApp({
 });
 
 export const db = app.database();
-export const namesRef = db.ref("names");
+export const users = db.ref("users");
+export const transactions = db.ref("transactions");

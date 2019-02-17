@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import {namesRef} from '../firebase';
+  import {users} from '../firebase';
   export default {
     name: 'dashboard',
     data(){
@@ -28,7 +28,7 @@
       }
     }, 
     firebase: {
-      names: namesRef
+      names: users
     },
     methods: {
       submitName() {

@@ -8,7 +8,7 @@
     <p id="subtitle">your personal financial manager</p>
     <div id="nav">
       <div>
-        <a class="navbar-brand" :href="`#/`"><i class="fa fa-home"></i> Dashboard </a>
+        <a class="navbar-brand" :href="`#/dashboard`"><i class="fa fa-home"></i> Dashboard </a>
       </div>
       <div>
         <a class="navbar-brand" :href="`#/`"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Transactions </a>
