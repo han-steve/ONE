@@ -47,7 +47,8 @@ const chartData = {
   },
    options: {
          legend: {
-            display: false
+            display: true,
+            position: 'right'
          }
 }
 }
@@ -140,5 +141,16 @@ h2 {
   padding: 4em;
   border-radius: 2em;
   box-shadow: -5px 29px 162px -54px grey;
+}
+@media only screen and (max-width: 1100px) {
+  main{
+    height: 85vh;
+    border-radius: 1em;
+    padding: 0 5%;
+    margin: 0 5vw;
+    background-color: transparent;
+  }
+  #myChart{
+  }
 }
 </style>

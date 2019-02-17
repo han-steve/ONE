@@ -155,5 +155,17 @@ h1 {
 button {
   margin: 1em auto;
 }
+@media only screen and (max-width: 1100px) {
+  #background{
+    height: 85vh;
+    border-radius: 1em;
+    margin: 0 5vw;
+    background-color: transparent;
+  }
+  .container {
+    height: 85vh;
+  }
+}
+
 
 </style>
