@@ -3,13 +3,35 @@
     <main>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
+      <label>Name:</label>
+      <input type="text" v-model="name">
+      <button @click="submitName()">Submit</button>
+      <div>
+        <ul>
+          <li v-for="name of names" v-bind:key="name['.key']">{{name.name}}</li>
+        </ul>
+      </div>
     </main>
   </div>
 </template>
 
 <script>
+  import {namesRef} from '../firebase';
   export default {
-    name: 'dashboard'
+    name: 'dashboard',
+    data(){
+      return{
+        name: 'Paul'
+      }
+    }, 
+    firebase: {
+      names: namesRef
+    },
+    methods: {
+      submitName() {
+        namesRef.push({name: this.name, edit: false})
+      }
+    }
   };
 </script>
 
