@@ -25,7 +25,7 @@
         </div>
         <hr/>
           <ul>
-            <div style="height: 50vh;overflow:scroll;background-color: ghostwhite">
+            <div style="height: 38vh;overflow:scroll;background-color: ghostwhite">
               <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
                 <div class="rows">
                   <div class="date">{{transaction.date}}</div>
@@ -75,7 +75,7 @@ export default {
     this.user = Window.states.username;
   },
   firebase: {
-    list: transactions
+    list: transactions.orderByChild("date")
   },
   computed: {
     filteredList: function() {
