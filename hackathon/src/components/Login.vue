@@ -2,8 +2,11 @@
     <div>
         <main>
             <h2>Login</h2>
-            <input type="text" placeholder="Username" v-model=LoginModel.username>
-            <button @click="login()">Submit</button>
+            <input type="text" placeholder="Username" v-model=LoginModel.username><br/>
+            <input type="password" placeholder="Password" @keyup.enter="login()" v-model=LoginModel.password><br/>
+            <button @click="login()">Submit</button><br/>
+            <button @click="signup()">Sign Up</button>
+
         </main>
     </div>
 </template>
@@ -15,7 +18,8 @@
         data() {
             return {
                 LoginModel: {
-                    username: ''
+                    username: '',
+                    password: ''
                 }
             }
         },
@@ -24,8 +28,17 @@
         },
         methods: {
             login() {
-                Window.states.username = this.LoginModel.username;
-                this.$router.push({path: '/dashboard'});
+                if (users.orderByChild("username").equalTo(this.LoginModel.username)
+                    && users.orderByChild("password").equalTo(this.LoginModel.password)) {
+                    Window.states.username = this.LoginModel.username;
+                    this.$router.push({path: '/dashboard'});
+                }
+                else {
+                    alert("Wrong username or password!");
+                }
+            },
+            signup() {
+                this.$router.push({path: '/signup'});
             }
         }
     };
