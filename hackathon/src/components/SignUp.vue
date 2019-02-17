@@ -44,9 +44,12 @@ export default {
 
 <style scoped>
 main {
-  background-color: #f7f7fc;
-  height: 100vh;
-  padding: 200px 6em 3em 6em;
+  background-color: #F7F7FC;
+        display: grid;
+        height: 100vh;
+        align-content: center;
+        align-items: center;
+        padding: 0 15%;
 }
 h2 {
   font-size: 2em;

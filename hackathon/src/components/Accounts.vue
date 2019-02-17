@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div class="container-1">
+        <main>
+            <div id="container-2">
         <h2>Select an account below: </h2>
         <select id="selection" @change="chosen()">
             <option>Select an account</option>
@@ -9,9 +11,11 @@
             <option>Total</option>
         </select>
         <div id="display" style="visibility: hidden">
-        <h2 id="title"></h2>
+        <h3 id="title"></h3>
         <h4 id="balance"></h4>
         </div>
+    </div>
+        </main>
     </div>
 </template>
 
@@ -61,3 +65,46 @@
         }
     }
 </script>
+
+<style scoped>
+    main {
+        background-color: #F7F7FC;
+        display: grid;
+        height: 100vh;
+        align-content: center;
+        align-items: center;
+        padding: 0 15%;
+    }
+    #display {
+        display: grid;
+        grid-template-columns: auto 7em;
+        align-content: center;
+        align-items: center;
+        margin-top: 2em;
+    }
+    h3 {
+        font-weight:400;
+    }
+    #balance {
+        color: rgba(62,105,221,1);
+        font-size: 2em;
+        font-weight: 800
+    }
+    h2 {
+        font-size: 2em;
+        margin-top: 0;
+        margin-bottom: 1em;
+    }
+    .container-1 {
+        display: grid; 
+        align-items: center;
+        align-content: center;
+    }
+    #container-2 {
+        background-color: white;
+        padding: 4em;
+        border-radius: 2em;
+          box-shadow: -5px 29px 162px -54px grey;
+
+    }
+</style>
