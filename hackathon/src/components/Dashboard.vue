@@ -6,17 +6,16 @@
       <div id="filter">
         <div id="search-bar">
           <label>Search by Category:</label>
-          <input type="text" class="search form-control" v-model="search">
+          <input type="text" class="search form-control"
+                 autofocus="true" v-model="search">
         </div>
         <div id="time-bar">
           <label>Search by Date Range:</label>
           <input type="date" class="datepicker form-control margin-bottom"
-                 required="true"
                  autofocus="true"
                  name="date" v-model="begin">
           <label> to </label>
           <input type="date" class="datepicker form-control margin-bottom"
-                 required="true"
                  autofocus="true"
                  name="date" v-model="end">
         </div>
@@ -112,8 +111,6 @@ export default {
               }
           }
       }
-      // this.begin = null;
-      // this.end = null;
       return final;
     }
   },
