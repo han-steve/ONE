@@ -6,6 +6,7 @@ import Dashboard from "@/components/Dashboard";
 import Accounts from "@/components/Accounts";
 import AddEntry from "@/components/AddEntry";
 import spendingchart from "@/components/SpendingChart";
+import LineChart from "@/components/LineChart";
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: "/spendingchart",
       name: "chart",
       component: spendingchart
+    },
+    {
+        path: "/linechart",
+        name: "line",
+        component: LineChart
     },
     {
         path: "/accounts",

@@ -20,7 +20,12 @@
         <!--</div>-->
         <div class="nav-options">
           <a class="navbar-brand" @click="chart()">
-            <i class="fa fa-line-chart" aria-hidden="true"></i> Chart
+            <i class="fa fa-line-chart" aria-hidden="true"></i> Pie
+          </a>
+        </div>
+        <div class="nav-options">
+          <a class="navbar-brand" @click="line()">
+            <i class="fa fa-line-chart" aria-hidden="true"></i> Line
           </a>
         </div>
         <div class="nav-options">
@@ -60,6 +65,10 @@ export default {
     chart() {
       if (Window.states.username === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/spendingchart" });
+    },
+    line() {
+        if (Window.states.username === "") this.$router.push({ path: "/" });
+        else this.$router.push({ path: "/linechart" });
     },
     account() {
       if (Window.states.username === "") this.$router.push({ path: "/" });
