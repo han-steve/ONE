@@ -39,7 +39,7 @@
         <hr/>
           <ul>
             <div id="data">
-              <li v-for="transaction of filteredList" v-bind:key="transaction['.key']">
+              <li v-for="transaction of filteredList" :sorted="filteredList" v-bind:key="transaction['.key']">
                 <div class="rows">
                   <div class="date">{{transaction.date}}</div>
                   <div class="amount">{{transaction.amount}}</div>
@@ -66,18 +66,24 @@
             </li>
           </ul>
       </div>
+        <spending-chart :sorted="filteredList"></spending-chart>
     </main>
   </div>
 </template>
 
 <script>
-var user = "";
+import SpendingChart from "@/components/SpendingChart";
 import edit from "@/components/EditEntry";
 import { transactions } from "../firebase";
 import { users } from "../firebase";
+var user = "";
+
 export default {
   name: "dashboard",
-  components: { edit },
+  components: {
+      SpendingChart,
+      edit
+  },
   data() {
     return {
       user: "",
@@ -105,8 +111,6 @@ export default {
       for (let i = 0; i < sorted.length; i++) {
           if(sorted[i].username === this.user) {
               if(sorted[i].category.toLowerCase().match(this.search.toLowerCase())) {
-                  console.log("Date: " + sorted[i].date + ", Start: " + this.begin + ", End: " + this.end + ", " + (new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
-                      && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())));
                   if(new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
                       && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())) {
                       final.push(sorted[i]);
@@ -115,7 +119,6 @@ export default {
               }
           }
       }
-      console.log(final);
       return final;
     }
   },
@@ -151,6 +154,8 @@ export default {
 <style scoped>
 .container {
   padding: 0;
+  height: 100vh;
+  overflow: scroll;
 }
 label {
   font-weight: 500;
@@ -235,6 +240,7 @@ i {
   height: 38vh;
   overflow:scroll;
 }
+
 
 @media only screen and (max-width: 1100px) {
   main{

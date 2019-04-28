@@ -5,8 +5,9 @@ import SignUp from "@/components/SignUp";
 import Dashboard from "@/components/Dashboard";
 import Accounts from "@/components/Accounts";
 import AddEntry from "@/components/AddEntry";
-import spendingchart from "@/components/SpendingChart";
 import LineChart from "@/components/LineChart";
+import HorzBarChart from "@/components/Budget";
+
 
 Vue.use(Router);
 
@@ -28,14 +29,14 @@ export default new Router({
       component: Dashboard
     },
     {
-      path: "/spendingchart",
-      name: "chart",
-      component: spendingchart
-    },
-    {
         path: "/linechart",
         name: "line",
         component: LineChart
+    },
+    {
+        path: "/budget",
+        name: "budget",
+        component: HorzBarChart
     },
     {
         path: "/accounts",

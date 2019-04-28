@@ -15,19 +15,16 @@
             <i class="fa fa-home"></i> Dashboard
           </a>
         </div>
-        <!--<div>-->
-        <!--<a class="navbar-brand" :href="`#/`"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Transactions </a>-->
-        <!--</div>-->
-        <div class="nav-options">
-          <a class="navbar-brand" @click="chart()">
-            <i class="fa fa-line-chart" aria-hidden="true"></i> Pie
-          </a>
-        </div>
         <div class="nav-options">
           <a class="navbar-brand" @click="line()">
-            <i class="fa fa-line-chart" aria-hidden="true"></i> Line
+            <i class="fa fa-line-chart" aria-hidden="true"></i> This Month
           </a>
         </div>
+          <div class="nav-options">
+              <a class="navbar-brand" @click="budget()">
+                  <i class="fa fa-calculator" aria-hidden="true"></i> Budget
+              </a>
+          </div>
         <div class="nav-options">
           <a class="navbar-brand" @click="account()">
             <i class="fa fa-users" aria-hidden="true"></i> Accounts
@@ -62,13 +59,13 @@ export default {
       if (Window.states.username === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/dashboard" });
     },
-    chart() {
-      if (Window.states.username === "") this.$router.push({ path: "/" });
-      else this.$router.push({ path: "/spendingchart" });
-    },
     line() {
         if (Window.states.username === "") this.$router.push({ path: "/" });
         else this.$router.push({ path: "/linechart" });
+    },
+    budget() {
+        if (Window.states.username === "") this.$router.push({ path: "/" });
+        else this.$router.push({ path: "/budget" });
     },
     account() {
       if (Window.states.username === "") this.$router.push({ path: "/" });

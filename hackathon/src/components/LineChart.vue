@@ -2,7 +2,7 @@
   <div class="container-1">
     <main>
       <div id="container-2">
-        <h2>Chart</h2>
+        <h2>This Month</h2>
         <div class="chart">
           <line-chart :width="400" :height="350" id="myChart" :chart-data="datacollection" :options="chartOptions"></line-chart>
         </div>
@@ -27,7 +27,12 @@
                     scales: {
                         xAxes: [{
                             type: 'time',
-                            distribution: 'series'
+                            distribution: 'linear',
+                            time: {
+                                unit: 'day',
+                                min: this.getFirstDay(),
+                                max: this.getLastDay()
+                            }
                         }]
                     },
                     maintainAspectRatio:false
@@ -37,7 +42,7 @@
         methods: {
             getFirstDay() {
                 var date = new Date();
-                var firstDay = new Date(date.getFullYear(), date.getMonth(), 0);
+                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
                 return firstDay;
             },
             getLastDay() {
@@ -57,6 +62,7 @@
             list: transactions.orderByChild("date")
         },
         mounted() {
+            console.log("I'm mounted!");
             this.user = Window.states.username;
         },
         computed: {
@@ -65,18 +71,21 @@
                     return null;
                 } else {
                     return {
+                        // labels: this.getDaysOfMonth,
                         datasets: [
                             {
                                 label: "Earnings",
                                 data: this.earnings,
                                 fill: false,
                                 borderColor: "#53f442"
+                                // backgroundColor: "#53f442"
                             },
                             {
                                 label: "Spendings",
                                 data: this.spendings,
                                 fill: false,
                                 borderColor: "#e82929"
+                                // backgroundColor: "#e82929"
                             }
                             ,
                             {
@@ -84,6 +93,7 @@
                                 data: this.balance,
                                 fill: false,
                                 borderColor: "#000000"
+                                // backgroundColor: "#e82929"
                             }
                         ]
                     };
@@ -131,6 +141,7 @@
                         balance.push({x: new Date(sorted[i].date), y: sum});
                     }
                 }
+                console.log(balance);
                 return balance;
             }
         }

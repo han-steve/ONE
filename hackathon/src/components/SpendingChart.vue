@@ -2,7 +2,7 @@
   <div class="container-1">
     <main>
       <div id="container-2">
-        <h2>Chart</h2>
+        <h2>Spendings</h2>
         <div class="chart">
           <pie-chart id="myChart" :chart-data="datacollection" :options="chartOptions"></pie-chart>
         </div>
@@ -19,7 +19,8 @@ export default {
   name: "chart",
   components: {
       PieChart
-},
+  },
+  props: ['sorted'],
   data() {
     return {
       user: null,
@@ -72,12 +73,12 @@ export default {
     },
     filteredNames1: function() {
       var final = [];
-      for (let i = 0; i < this.list.length; i++) {
+      for (let i = 0; i < this.sorted.length; i++) {
         if (
-          this.list[i].username === this.user &&
-          !final.includes(this.list[i].category)
+            this.sorted[i].username === this.user &&
+          !final.includes(this.sorted[i].category)
         ) {
-          final.push(this.list[i].category);
+          final.push(this.sorted[i].category);
         }
       }
       return final;
@@ -90,12 +91,12 @@ export default {
         final.push(0);
       }
       for (let j = 0; j < arr.length; j++) {
-        for (let i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.sorted.length; i++) {
           if (
-            this.list[i].category === arr[j] &&
-            this.list[i].username === this.user
+            this.sorted[i].category === arr[j] &&
+            this.sorted[i].username === this.user
           ) {
-            final[j] += parseFloat(this.list[i].amount);
+            final[j] += parseFloat(this.sorted[i].amount);
           }
         }
       }
@@ -124,12 +125,12 @@ export default {
         final.push(0);
       }
       for (let j = 0; j < arr.length; j++) {
-        for (let i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.sorted.length; i++) {
           if (
-            this.list[i].category === arr[j] &&
-            this.list[i].username === this.user
+            this.sorted[i].category === arr[j] &&
+            this.sorted[i].username === this.user
           ) {
-            final[j] += parseFloat(Math.abs(this.list[i].amount));
+            final[j] += parseFloat(Math.abs(this.sorted[i].amount));
           }
         }
       }
@@ -142,8 +143,8 @@ export default {
 
 <style scoped>
 main {
-  background-color: #f7f7fc;
-  display: grid;
+  /*background-color: #f7f7fc;*/
+  /*display: grid;*/
   height: 100vh;
   align-content: center;
   align-items: center;
@@ -158,12 +159,13 @@ h2 {
   margin-left: 1%;
 }
 .container-1 {
-  display: grid;
+  /*display: grid;*/
   align-items: center;
   align-content: center;
+  padding: 2%;
 }
 #container-2 {
-  background-color: white;
+  background-color: #f7f7fc;
   padding: 4em;
   border-radius: 2em;
   box-shadow: -5px 29px 162px -54px grey;
@@ -175,8 +177,6 @@ h2 {
     padding: 0 5%;
     margin: 0 5vw;
     background-color: transparent;
-  }
-  #myChart {
   }
 }
 </style>
