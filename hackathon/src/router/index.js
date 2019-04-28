@@ -5,7 +5,7 @@ import SignUp from "@/components/SignUp";
 import Dashboard from "@/components/Dashboard";
 import Accounts from "@/components/Accounts";
 import AddEntry from "@/components/AddEntry";
-import Chart from "@/components/Chart";
+import spendingchart from "@/components/SpendingChart";
 
 Vue.use(Router);
 
@@ -27,9 +27,9 @@ export default new Router({
       component: Dashboard
     },
     {
-      path: "/chart",
+      path: "/spendingchart",
       name: "chart",
-      component: Chart
+      component: spendingchart
     },
     {
         path: "/accounts",

@@ -59,7 +59,7 @@ export default {
     },
     chart() {
       if (Window.states.username === "") this.$router.push({ path: "/" });
-      else this.$router.push({ path: "/chart" });
+      else this.$router.push({ path: "/spendingchart" });
     },
     account() {
       if (Window.states.username === "") this.$router.push({ path: "/" });
