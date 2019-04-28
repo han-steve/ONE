@@ -129,7 +129,7 @@ export default {
           if (sorted[i].category === arr[j] && sorted[i].username === this.user
               && new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
               && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())) {
-              console.log(parseFloat(sorted[i].amount) + sorted[i].category);
+              console.log( parseFloat(sorted[i].amount) + sorted[i].category);
             final[j] += parseFloat(sorted[i].amount);
           }
         }
