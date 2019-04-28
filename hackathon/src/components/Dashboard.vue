@@ -48,8 +48,8 @@
                   <div class="payee">{{transaction.payee}}</div>
                   <div class="memo">{{transaction.memo}}</div>
                   <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
-                  <edit :date="transaction.date" :amount="transaction.amount" :account="transaction.account"
-                  :category="transaction.category" :payee="transaction.payee" :memo="transaction.memo"></edit>
+                  <!--<edit :id= "transaction.get" :date="transaction.date" :amount="transaction.amount" :account="transaction.account"-->
+                  <!--:category="transaction.category" :payee="transaction.payee" :memo="transaction.memo"></edit>-->
                 </div>
               </li>
             </div>
@@ -115,6 +115,7 @@ export default {
               }
           }
       }
+      console.log(final);
       return final;
     }
   },

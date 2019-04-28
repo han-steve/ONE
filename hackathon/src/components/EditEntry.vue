@@ -85,35 +85,46 @@
         firebase: {
             names: users
         },
-        props: ['date', 'amount', 'account', 'category', 'payee', 'memo'],
+        props: ['id', 'date', 'amount', 'account', 'category', 'payee', 'memo'],
         data() {
             return {
                 EditModel: {
                     username: Window.states.username,
-                    date: new Date().getDate(),
-                    category: "",
-                    payee: "",
-                    amount: "",
-                    memo: "",
-                    account: ""
+                    edit: {
+                        id: this.id,
+                        date: this.date,
+                        category: this.category,
+                        payee: this.payee,
+                        amount: this.amount,
+                        memo: this.memo,
+                        account: this.account
+                    }
                 }
             };
         },
         methods: {
             submit() {
                 var curr = this.EditModel;
-                if (curr.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
+                console.log(curr.edit);
+                if (curr.username !== "" && curr.edit.amount !== "" && curr.edit.account !== "" && curr.edit.date.toString().split("-").length === 3) {
+                    var updates = {};
+                    updates['transactions/' + this.id] = curr.edit;
+                    firebase.database().ref().update(updates);
+                    //db.ref("transactions/" + )
                     transactions.push(curr);
                     this.EditModel = {
                         username: Window.states.username,
-                        date: new Date().getDate(),
-                        category: "",
-                        payee: "",
-                        amount: "",
-                        memo: "",
-                        account: ""
+                        edit: {
+                            id: this.id,
+                            date: this.date,
+                            category: this.category,
+                            payee: this.payee,
+                            amount: this.amount,
+                            memo: this.memo,
+                            account: this.account
+                        }
                     };
-                    alert("Transaction recorded!");
+                    alert("Transaction updated!");
                 } else {
                     alert("Make sure you fill in amount, account, AND proper date!");
                 }
