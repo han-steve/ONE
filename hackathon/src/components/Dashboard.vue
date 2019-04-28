@@ -48,6 +48,8 @@
                   <div class="payee">{{transaction.payee}}</div>
                   <div class="memo">{{transaction.memo}}</div>
                   <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
+                  <edit :date="transaction.date" :amount="transaction.amount" :account="transaction.account"
+                  :category="transaction.category" :payee="transaction.payee" :memo="transaction.memo"></edit>
                 </div>
               </li>
             </div>
@@ -70,10 +72,12 @@
 
 <script>
 var user = "";
+import edit from "@/components/EditEntry";
 import { transactions } from "../firebase";
 import { users } from "../firebase";
 export default {
   name: "dashboard",
+  components: { edit },
   data() {
     return {
       user: "",
