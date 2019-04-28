@@ -2,17 +2,7 @@
   <div class="container-1">
     <main>
       <div id="container-2">
-        <h2>Chart</h2>
-        <div id="time-bar">
-          <label>Search by Date Range:</label>
-          <input type="date" class="datepicker form-control margin-bottom"
-                 autofocus="true"
-                 name="date" v-model="begin">
-          <label> to </label>
-          <input type="date" class="datepicker form-control margin-bottom"
-                 autofocus="true"
-                 name="date" v-model="end">
-        </div>
+        <h2>Line Graph</h2>
         <div class="chart">
           <canvas id="myChart"></canvas>
         </div>

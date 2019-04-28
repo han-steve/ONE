@@ -12,6 +12,7 @@
         </select>
         <div id="display" style="visibility: hidden">
         <h3 id="title"></h3>
+        <br/>
         <h4 id="balance"></h4>
         </div>
     </div>
@@ -83,7 +84,7 @@
         margin-top: 2em;
     }
     h3 {
-        font-weight:400;
+        font-weight:348;
     }
     #balance {
         color: rgba(62,105,221,1);
