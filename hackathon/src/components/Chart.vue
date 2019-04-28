@@ -3,16 +3,6 @@
     <main>
       <div id="container-2">
         <h2>Chart</h2>
-        <div id="time-bar">
-          <label>Search by Date Range:</label>
-          <input type="date" class="datepicker form-control margin-bottom"
-                 autofocus="true"
-                 name="date" v-model="begin">
-          <label> to </label>
-          <input type="date" class="datepicker form-control margin-bottom"
-                 autofocus="true"
-                 name="date" v-model="end">
-        </div>
         <div class="chart">
           <canvas id="myChart"></canvas>
         </div>
@@ -68,9 +58,7 @@ export default {
   data() {
     return {
       chartData: chartData,
-      user: "",
-      begin: new Date(0),
-      end: new Date(Date.now())
+      user: ""
     };
   },
   methods: {
@@ -81,56 +69,42 @@ export default {
         data: chartData.data,
         options: chartData.options
       });
-    },
-      updateChart() {
-          this.chartData.data.labels = this.filteredNames;
-          this.chartData.data.datasets[0].data = this.filteredAmount;
-          console.log("updated data: " + this.chartData.data.datasets[0].data)
-          this.createChart("myChart", this.chartData);
-      },
-      reverseOrder(l) {
-          var reversed = [];
-          for(var i = l.length - 1; i >= 0; i--) {
-              reversed.push(l[i]);
-          }
-          return reversed;
-      }
+    }
   },
   firebase: {
-    list: transactions.orderByChild("date")
+    list: transactions
   },
   mounted() {
     console.log("I'm mounted!");
     this.user = Window.states.username;
-    setInterval(this.updateChart(), 200);
+    this.chartData.data.labels = this.filteredNames;
+    this.chartData.data.datasets[0].data = this.filteredAmount;
+    this.createChart("myChart", this.chartData);
   },
   computed: {
-      filteredNames: function() {
-        var final = [];
-        var sorted = this.reverseOrder(this.list);
-          for (let i = 0; i < sorted.length; i++) {
-            if (sorted[i].username === this.user && !final.includes(sorted[i].category)) {
-                final.push(sorted[i].category);
-            }
+    filteredNames: function() {
+      var final = [];
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.list[i].username === this.user && !final.includes(this.list[i].category)) {
+          final.push(this.list[i].category);
         }
-        console.log("final: ", final)
-        return final;
+      }
+            console.log("final: ", final)
+
+      return final;
     },
     filteredAmount: function() {
-      var arr = this.filteredNames;
-        var sorted = this.reverseOrder(this.list);
-        var final = [];
+        var arr = this.filteredNames;
+      var final = [];
       for(let z = 0; z < arr.length; z ++) {
           final.push(0);
       }
-      // console.log(final);
+      console.log(final);
       for (let j = 0; j < arr.length; j++) {
-        for (let i = 0; i < sorted.length; i++) {
-          if (sorted[i].category === arr[j] && sorted[i].username === this.user
-              && new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
-              && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())) {
-              console.log( parseFloat(sorted[i].amount) + sorted[i].category);
-            final[j] += parseFloat(sorted[i].amount);
+        for (let i = 0; i < this.list.length; i++) {
+          if (this.list[i].category === arr[j] && this.list[i].username === this.user) {
+              console.log(parseFloat(this.list[i].amount) + this.list[i].category);
+            final[j] += parseFloat(this.list[i].amount);
           }
         }
       }
@@ -178,15 +152,5 @@ h2 {
   }
   #myChart{
   }
-    .datepicker {
-        width: 35%;
-        display: inline-block;
-        padding: 1%;
-        margin: .5em;
-    }
-}
-label {
-    font-weight: 500;
-    font-size: 1.1em;
 }
 </style>
