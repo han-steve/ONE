@@ -249,7 +249,7 @@ main {
   background-color: #f7f7fc;
   padding: 3em;
   padding-left: 4em;
-  height: 100vh;
+  /* height: 100vh; */
 }
 h2 {
   font-size: 2em;
