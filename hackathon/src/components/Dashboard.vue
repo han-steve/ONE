@@ -216,8 +216,8 @@ label {
 }
 #table {
   background-color: white;
-  border-radius: 10px;
-  box-shadow: -5px 29px 162px -54px grey;
+  border-radius: 30px;
+  /* box-shadow: -5px 29px 162px -54px grey; */
   padding-bottom: 15px;
 }
 .table-heading {
