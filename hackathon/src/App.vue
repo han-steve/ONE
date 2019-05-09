@@ -20,7 +20,7 @@
     padding: 0;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     display: grid;
-    grid-template-columns: 20em auto;
+    grid-template-columns: 17em auto;
     grid-template-areas: "navTpl dashboard"; 
   }
   

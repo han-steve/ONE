@@ -1,14 +1,14 @@
 <template>
-  <div class="container-1">
-    <main>
+
+    <div id="main">
       <div id="container-2">
-        <h2>Spendings</h2>
+        <h2>Spendings Chart</h2>
         <div class="chart">
-          <pie-chart id="myChart" :chart-data="datacollection" :options="chartOptions"></pie-chart>
+          <pie-chart id="myChart" :chart-data="datacollection" :options="chartOptions" :width="220" :height="300"></pie-chart>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+
 </template>
 
 <script>
@@ -26,9 +26,10 @@ export default {
       user: null,
       chartOptions: {
         legend: {
-          display: true,
-          position: "right"
-        }
+          display: false,
+          position: "bottom"
+        },
+        maintainAspectRatio:false
       }
     };
   },
@@ -142,33 +143,27 @@ export default {
 </script>
 
 <style scoped>
-main {
+#main {
   /*background-color: #f7f7fc;*/
   /*display: grid;*/
-  height: 100vh;
   align-content: center;
   align-items: center;
-  padding: 0 15%;
+  padding: 0;
+  background-color: none;
 }
 h2 {
-  font-size: 2em;
+  font-size: 1.4em;
   margin-top: 0;
-  margin-bottom: 1em;
+  margin-bottom: .5em;
 }
 #signupButton {
   margin-left: 1%;
 }
-.container-1 {
-  /*display: grid;*/
-  align-items: center;
-  align-content: center;
-  padding: 2%;
-}
 #container-2 {
-  background-color: #f7f7fc;
-  padding: 4em;
+  background-color: white;
+  padding: 2em;
   border-radius: 2em;
-  box-shadow: -5px 29px 162px -54px grey;
+  padding-top: 1.3em;
 }
 @media only screen and (max-width: 1100px) {
   main {

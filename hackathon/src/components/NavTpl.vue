@@ -142,7 +142,7 @@ export default {
   display: grid;
   align-content: center;
   padding: auto;
-  padding-left: 15%;
+  padding-left: 9%;
   font-size: 1.7em;
   text-align: left;
   font-weight: 600;

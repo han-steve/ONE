@@ -6,27 +6,38 @@
       <div id="filter">
         <div id="search-bar">
           <label>Search by Category:</label>
-          <input type="text" class="search form-control"
-                 autofocus="true" v-model="search">
+          <input type="text" class="search form-control" autofocus="true" v-model="search">
         </div>
         <div id="time-bar">
           <label>Search by Date Range:</label>
-          <input type="date" class="datepicker form-control margin-bottom"
-                 autofocus="true"
-                 name="date" v-model="begin">
-          <label> to </label>
-          <input type="date" class="datepicker form-control margin-bottom"
-                 autofocus="true"
-                 name="date" v-model="end">
+          <input
+            type="date"
+            class="datepicker form-control margin-bottom"
+            autofocus="true"
+            name="date"
+            v-model="begin"
+          >
+          <label>to</label>
+          <input
+            type="date"
+            class="datepicker form-control margin-bottom"
+            autofocus="true"
+            name="date"
+            v-model="end"
+          >
         </div>
       </div>
       <!--<div id="navPage">-->
-        <!--<i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>-->
-        <!--<i class="fa fa-step-backward" aria-hidden="true" @click="prev()"></i>-->
-        <!--<span id="page">Page {{this.page}} of {{this.max}}</span>-->
-        <!--<i class="fa fa-step-forward" aria-hidden="true" @click="next()"></i>-->
-        <!--<i class="fa fa-fast-forward" aria-hidden="true" @click="last()"></i>-->
+      <!--<i class="fa fa-fast-backward" aria-hidden="true" @click="first()"></i>-->
+      <!--<i class="fa fa-step-backward" aria-hidden="true" @click="prev()"></i>-->
+      <!--<span id="page">Page {{this.page}} of {{this.max}}</span>-->
+      <!--<i class="fa fa-step-forward" aria-hidden="true" @click="next()"></i>-->
+      <!--<i class="fa fa-fast-forward" aria-hidden="true" @click="last()"></i>-->
       <!--</div>-->
+      <div id="charts">
+        <spending-chart :sorted="filteredList"></spending-chart>
+        <spending-line-chart :sorted="filteredList"></spending-line-chart>
+      </div>
       <div id="table">
         <div id="heading" class="rows">
           <div class="table-heading">Date</div>
@@ -36,43 +47,47 @@
           <div class="table-heading">Payee</div>
           <div class="table-heading">Memo</div>
         </div>
-        <hr/>
-          <ul>
-            <div id="data">
-              <li v-for="transaction of filteredList" :sorted="filteredList" v-bind:key="transaction['.key']">
-                <div class="rows">
-                  <div class="date">{{transaction.date}}</div>
-                  <div class="amount">{{transaction.amount}}</div>
-                  <div class="account">{{transaction.account}}</div>
-                  <div class="category">{{transaction.category}}</div>
-                  <div class="payee">{{transaction.payee}}</div>
-                  <div class="memo">{{transaction.memo}}</div>
-                  <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
-                  <!--<edit :id= "transaction.get" :date="transaction.date" :amount="transaction.amount" :account="transaction.account"-->
-                  <!--:category="transaction.category" :payee="transaction.payee" :memo="transaction.memo"></edit>-->
-                </div>
-              </li>
-            </div>
-            <hr/>
-            <li>
+        <hr>
+        <ul>
+          <div id="data">
+            <li
+              v-for="transaction of filteredList"
+              :sorted="filteredList"
+              v-bind:key="transaction['.key']"
+            >
               <div class="rows">
-                <div id="sum">Sum:</div>
-                <div class="amount">${{this.sum.toFixed(2)}}</div>
-                <div class="account"></div>
-                <div class="category"></div>
-                <div class="payee"></div>
-                <div class="memo"></div>
+                <div class="date">{{transaction.date}}</div>
+                <div class="amount">{{transaction.amount}}</div>
+                <div class="account">{{transaction.account}}</div>
+                <div class="category">{{transaction.category}}</div>
+                <div class="payee">{{transaction.payee}}</div>
+                <div class="memo">{{transaction.memo}}</div>
+                <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
+                <!--<edit :id= "transaction.get" :date="transaction.date" :amount="transaction.amount" :account="transaction.account"-->
+                <!--:category="transaction.category" :payee="transaction.payee" :memo="transaction.memo"></edit>-->
               </div>
             </li>
-          </ul>
+          </div>
+          <hr>
+          <li>
+            <div class="rows">
+              <div id="sum">Sum:</div>
+              <div class="amount">${{this.sum.toFixed(2)}}</div>
+              <div class="account"></div>
+              <div class="category"></div>
+              <div class="payee"></div>
+              <div class="memo"></div>
+            </div>
+          </li>
+        </ul>
       </div>
-        <spending-chart :sorted="filteredList"></spending-chart>
     </main>
   </div>
 </template>
 
 <script>
 import SpendingChart from "@/components/SpendingChart";
+import SpendingLineChart from "@/components/SpendingLineChart";
 import edit from "@/components/EditEntry";
 import { transactions } from "../firebase";
 import { users } from "../firebase";
@@ -81,8 +96,9 @@ var user = "";
 export default {
   name: "dashboard",
   components: {
-      SpendingChart,
-      edit
+    SpendingChart,
+    edit, 
+    SpendingLineChart
   },
   data() {
     return {
@@ -105,48 +121,52 @@ export default {
   computed: {
     filteredList: function() {
       this.sum = 0;
-      this.max = Math.ceil(this.list.length/10);
+      this.max = Math.ceil(this.list.length / 10);
       var final = [];
       var sorted = this.reverseOrder(this.list);
       for (let i = 0; i < sorted.length; i++) {
-          if(sorted[i].username === this.user) {
-              if(sorted[i].category.toLowerCase().match(this.search.toLowerCase())) {
-                  if(new Date(sorted[i].date.toString()) >= new Date(this.begin.toString())
-                      && new Date(sorted[i].date.toString()) <= new Date(this.end.toString())) {
-                      final.push(sorted[i]);
-                      this.sum += new Number(sorted[i].amount);
-                  }
-              }
+        if (sorted[i].username === this.user) {
+          if (
+            sorted[i].category.toLowerCase().match(this.search.toLowerCase())
+          ) {
+            if (
+              new Date(sorted[i].date.toString()) >=
+                new Date(this.begin.toString()) &&
+              new Date(sorted[i].date.toString()) <=
+                new Date(this.end.toString())
+            ) {
+              final.push(sorted[i]);
+              this.sum += new Number(sorted[i].amount);
+            }
           }
+        }
       }
       return final;
     }
   },
   methods: {
-      first() {
-        this.page = 1;
-      },
-      prev() {
-          if(this.page > 1)
-            this.page--;
-      },
-      next() {
-          if(this.page < this.max)
-              this.page++;
-      },
-      last() {
-        this.page = this.max;
-      },
-      rm(elm) {
-        transactions.child(elm['.key']).remove();
-      },
-      reverseOrder(l) {
-          var reversed = [];
-          for(var i = l.length - 1; i >= 0; i--) {
-              reversed.push(l[i]);
-          }
-          return reversed;
+    first() {
+      this.page = 1;
+    },
+    prev() {
+      if (this.page > 1) this.page--;
+    },
+    next() {
+      if (this.page < this.max) this.page++;
+    },
+    last() {
+      this.page = this.max;
+    },
+    rm(elm) {
+      transactions.child(elm[".key"]).remove();
+    },
+    reverseOrder(l) {
+      var reversed = [];
+      for (var i = l.length - 1; i >= 0; i--) {
+        reversed.push(l[i]);
       }
+      return reversed;
+    }
   }
 };
 </script>
@@ -156,31 +176,43 @@ export default {
   padding: 0;
   height: 100vh;
   overflow: scroll;
+  max-width: none;
 }
 label {
   font-weight: 500;
   font-size: 1.1em;
 }
 /*#search-bar {*/
-  /*margin: 30px auto;*/
+/*margin: 30px auto;*/
 /*}*/
 /*#search-bar input {*/
-  /*margin-left: 20px;*/
+/*margin-left: 20px;*/
 /*}*/
 .checkbox {
-  margin: .5em;
+  margin: 0.5em;
+}
+#filter {
+  display: flex;
+  flex-wrap: wrap;
 }
 .search {
-  width: 76%;
+  width: 9em;
   display: inline-block;
   padding: 1%;
-  margin: .5em;
+  margin: 0.5em;
+  margin-right: 1.5em;
 }
 .datepicker {
-  width: 35%;
+  width: 11em;
   display: inline-block;
   padding: 1%;
-  margin: .5em;
+  margin: 0.5em;
+}
+#charts{
+  display: grid; 
+  height: 395px;
+  overflow: hidden;
+  grid-template-columns: 1fr 2fr;
 }
 #table {
   background-color: white;
@@ -211,7 +243,7 @@ ul {
   width: 100%;
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr 1fr;
-  margin-top: .3em;
+  margin-top: 0.3em;
 }
 main {
   background-color: #f7f7fc;
@@ -236,14 +268,13 @@ i {
   font-size: 1.2em;
   color: #878b9d;
 }
-#data{
+#data {
   height: 38vh;
-  overflow:scroll;
+  overflow: scroll;
 }
 
-
 @media only screen and (max-width: 1100px) {
-  main{
+  main {
     height: 85vh;
     border-radius: 1em;
     margin: 0 5vw;
@@ -253,12 +284,12 @@ i {
     margin: 0;
   }
   .datepicker {
-  width: auto;
+    width: auto;
   }
   .search {
-  width: auto;
+    width: auto;
   }
-  #data{
+  #data {
     height: 35vh;
   }
 }
