@@ -1,6 +1,8 @@
 <template>
   <div class="container">
+    <edit-entry ref = "edit" id="edit" style="visibility: hidden;" v-bind:transaction="TransactionEditModel" ></edit-entry>
     <main>
+      <h1>Welcome {{ this.$store.state.username }}!</h1>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
       <div id="filter">
@@ -56,15 +58,14 @@
               v-bind:key="transaction['.key']"
             >
               <div class="rows">
-                <div class="date">{{transaction.date}}</div>
+                <div class="date">{{ transaction.transaction_date }}</div>
                 <div class="amount">{{transaction.amount}}</div>
                 <div class="account">{{transaction.account}}</div>
                 <div class="category">{{transaction.category}}</div>
                 <div class="payee">{{transaction.payee}}</div>
                 <div class="memo">{{transaction.memo}}</div>
+                <button type="button" class="btn btn-success" @click="edit(transaction)">Edit</button>
                 <button type="button" class="btn btn-danger" @click="rm(transaction)">Remove</button>
-                <!--<edit :id= "transaction.get" :date="transaction.date" :amount="transaction.amount" :account="transaction.account"-->
-                <!--:category="transaction.category" :payee="transaction.payee" :memo="transaction.memo"></edit>-->
               </div>
             </li>
           </div>
@@ -86,18 +87,18 @@
 </template>
 
 <script>
-import SpendingChart from "@/components/SpendingChart";
-import SpendingLineChart from "@/components/SpendingLineChart";
-import edit from "@/components/EditEntry";
-import { transactions } from "../firebase";
-import { users } from "../firebase";
-var user = "";
+import SpendingChart from "../components/SpendingChart";
+import SpendingLineChart from "../components/SpendingLineChart";
+import EditEntry from "../components/EditEntry";
+
+import { httpDeleteOptions } from "../lib/http";
+import Vue from "vue";
 
 export default {
   name: "dashboard",
   components: {
     SpendingChart,
-    edit, 
+    EditEntry,
     SpendingLineChart
   },
   data() {
@@ -108,64 +109,72 @@ export default {
       end: new Date(Date.now()),
       sum: 0,
       page: 1,
-      max: 1
+      max: 1,
+      TransactionEditModel: {
+        username: this.$store.state.username,
+        transaction_date: null,
+        category: "",
+        payee: "",
+        amount: 0,
+        memo: "",
+        account: ""
+      }
     };
   },
   mounted() {
-    console.log("áctivated!");
-    this.user = Window.states.username;
-  },
-  firebase: {
-    list: transactions.orderByChild("date")
+    this.user = this.$store.state.username;
   },
   computed: {
     filteredList: function() {
       this.sum = 0;
-      this.max = Math.ceil(this.list.length / 10);
-      var final = [];
-      var sorted = this.reverseOrder(this.list);
-      for (let i = 0; i < sorted.length; i++) {
-        if (sorted[i].username === this.user) {
-          if (
-            sorted[i].category.toLowerCase().match(this.search.toLowerCase())
-          ) {
+      let final = [];
+      let list = this.$store.state.transactions;
+      for (let i = 0; i < list.length; i++) {
+          if (list[i].category.toLowerCase().match(this.search.toLowerCase())) {
             if (
-              new Date(sorted[i].date.toString()) >=
-                new Date(this.begin.toString()) &&
-              new Date(sorted[i].date.toString()) <=
-                new Date(this.end.toString())
+                    new Date(list[i].transaction_date).getTime()  >=
+                    new Date(this.begin).getTime() &&
+                    new Date(list[i].transaction_date).getTime() <=
+                    new Date(this.end).getTime()
             ) {
-              final.push(sorted[i]);
-              this.sum += new Number(sorted[i].amount);
+              final.push(list[i]);
+              this.sum += new Number(list[i].amount);
             }
           }
-        }
       }
       return final;
-    }
+    },
+    // transactionEditModel: function() {
+    //   return this.TransactionEditModel;
+    // }
   },
+  // computed: {
+  //
+  // },
   methods: {
-    first() {
-      this.page = 1;
+    rm(transaction) {
+      fetch("http://127.0.0.1:8080/transactions", httpDeleteOptions(transaction))
+              .then(res => res.json())
+              .then(response => {
+                console.log("response" + response)
+              })
+              .catch(error => console.error('Error:', error));
+      this.$store.dispatch("removeTransactionAction", transaction)
     },
-    prev() {
-      if (this.page > 1) this.page--;
+    edit(transaction) {
+      this.TransactionEditModel.transaction_date = transaction.transaction_date;
+      this.TransactionEditModel.category = transaction.category;
+      this.TransactionEditModel.payee = transaction.payee;
+      this.TransactionEditModel.amount = transaction.amount;
+      this.TransactionEditModel.memo = transaction.memo;
+      this.TransactionEditModel.account = transaction.account;
+      this.openEditEntry();
     },
-    next() {
-      if (this.page < this.max) this.page++;
+    openEditEntry() {
+      document.getElementById("edit").style.visibility = "visible";
     },
-    last() {
-      this.page = this.max;
-    },
-    rm(elm) {
-      transactions.child(elm[".key"]).remove();
-    },
-    reverseOrder(l) {
-      var reversed = [];
-      for (var i = l.length - 1; i >= 0; i--) {
-        reversed.push(l[i]);
-      }
-      return reversed;
+    closeEditEntry() {
+      document.getElementById("edit").style.visibility = "hidden";
     }
   }
 };
@@ -177,6 +186,7 @@ export default {
   height: 100vh;
   overflow: scroll;
   max-width: none;
+  width: 100%;
 }
 label {
   font-weight: 500;
@@ -242,7 +252,7 @@ ul {
   text-align: center;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr .5fr .5fr;
   margin-top: 0.3em;
 }
 main {

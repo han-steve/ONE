@@ -4,6 +4,7 @@ import Login from "@/components/Login";
 import SignUp from "@/components/SignUp";
 import Dashboard from "@/components/Dashboard";
 import Accounts from "@/components/Accounts";
+import EditEntry from "@/components/EditEntry";
 import AddEntry from "@/components/AddEntry";
 import LineChart from "@/components/LineChart";
 import HorzBarChart from "@/components/Budget";
@@ -47,6 +48,11 @@ export default new Router({
       path: "/add",
       name: "addEntry",
       component: AddEntry
-    }
+    },
+    {
+        path: "/edit",
+        name: "editEntry",
+        component: EditEntry
+      }
   ]
 });

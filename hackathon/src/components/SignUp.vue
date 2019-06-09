@@ -3,7 +3,12 @@
     <main>
       <div id="container-2">
         <h2>SignUp</h2>
-        <input type="text" class="form-control" placeholder="Username" v-model="SignUpModel.username">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Username"
+          v-model="SignUpModel.username"
+        >
         <input
           type="password"
           placeholder="Password"
@@ -18,7 +23,8 @@
 </template>
 
 <script>
-import { users } from "../firebase";
+import { httpPostOptions } from "../lib/http";
+
 export default {
   name: "signup",
   data() {
@@ -29,14 +35,21 @@ export default {
       }
     };
   },
-  firebase: {
-    names: users
-  },
   methods: {
     signup() {
-      Window.states.username = this.SignUpModel.username.trim();
-      users.push(this.SignUpModel);
+      const model = {
+        username: this.SignUpModel.username,
+        password: this.SignUpModel.password
+      };
+      fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
+      .then(res => res.json())
+      .then(response => console.log('Success:', JSON.stringify(response)))
+.catch(error => console.error('Error:', error));
+      this.setCurrentUser(this.SignUpModel.username.trim())
       this.$router.push({ path: "/dashboard" });
+    },
+    setCurrentUser(username) {
+      this.$store.dispatch('setCurrentUserAction', username);
     }
   }
 };

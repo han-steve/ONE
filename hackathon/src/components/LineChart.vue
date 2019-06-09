@@ -62,8 +62,7 @@
             list: transactions.orderByChild("date")
         },
         mounted() {
-            console.log("I'm mounted!");
-            this.user = Window.states.username;
+            this.user = this.$store.state.username;
         },
         computed: {
             datacollection: function() {
@@ -105,7 +104,6 @@
                 var sorted = this.list;
                 var earnings = [];
                 for(var i = 0; i < sorted.length; i++) {
-                    console.log(sorted[i].date);
                     if(sorted[i].username === this.user
                         && new Date(sorted[i].date.toString()) >= firstDay && new Date(sorted[i].date.toString()) <= lastDay
                         && sorted[i].amount > 0) {
@@ -141,7 +139,6 @@
                         balance.push({x: new Date(sorted[i].date), y: sum});
                     }
                 }
-                console.log(balance);
                 return balance;
             }
         }

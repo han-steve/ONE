@@ -76,20 +76,19 @@
 </template>
 
 <script>
-import navTpl from "@/components/NavTpl";
+import { httpPostOptions } from '../lib/http';
+
 import { users } from "../firebase";
 import { transactions } from "../firebase";
 
 export default {
   name: "entry",
-  components: { navTpl },
   firebase: {
     names: users
   },
   data() {
     return {
       EntryModel: {
-        username: Window.states.username,
         date: new Date().getDate(),
         category: "",
         payee: "",
@@ -102,10 +101,27 @@ export default {
   methods: {
     submit() {
       var curr = this.EntryModel;
-      if (curr.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
-        transactions.push(curr);
+      console.log("Current user: " + this.$store.state.username);
+      if (this.$store.state.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
+        // transactions.push(curr);
+        console.log(this.EntryModel.date)
+        const model = {
+          username: this.$store.state.username,
+          transaction_date: this.EntryModel.date,
+          category: this.EntryModel.category,
+          payee: this.EntryModel.payee,
+          amount: Number(this.EntryModel.amount),
+          memo: this.EntryModel.memo,
+          account: this.EntryModel.account
+        };
+        fetch("http://127.0.0.1:8080/transactions", httpPostOptions(model))
+        .then(res => res.json())
+        .then(response => {
+          this.$store.dispatch("addTransactionAction", model);
+          console.log('Success:', JSON.stringify(response))
+        })
+        .catch(error => console.error('Error:', error));
         this.EntryModel = {
-          username: Window.states.username,
           date: new Date().getDate(),
           category: "",
           payee: "",

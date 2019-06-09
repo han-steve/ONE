@@ -76,7 +76,7 @@ export default {
   },
   mounted() {
     console.log("I'm mounted!");
-    this.user = Window.states.username;
+    this.user = this.$store.username;
     this.chartData.data.labels = this.filteredNames2;
     this.chartData.data.datasets[0].data = this.filteredAmount2;
     this.createChart("myChart", this.chartData);

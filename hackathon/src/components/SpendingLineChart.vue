@@ -35,7 +35,10 @@ export default {
           xAxes: [
             {
               type: "time",
-              distribution: "linear",
+              time: {
+                format: "YYYY-MM-DD"
+              },
+              distribution: "linear"
             }
           ]
         },
@@ -43,18 +46,18 @@ export default {
       }
     };
   },
-  firebase: {
-    list: transactions
-  },
+  // firebase: {
+  //   list: transactions
+  // },
   mounted() {
-    console.log("LineChart is Mounted!");
-    this.user = Window.states.username;
+    this.user = this.$store.username;
   },
   computed: {
     datacollection: function() {
-      if (!this.user) {
-        return null;
-      } else {
+      // console.log(this.$store.username)
+      // if (!this.$store.username) {
+      //   return null;
+      // } else {
         return {
           // labels: this.getDaysOfMonth,
           datasets: [
@@ -81,41 +84,45 @@ export default {
             }
           ]
         };
-      }
+      // }
     },
     earnings: function() {
-      var earnings = [];
-      for (var i = 0; i < this.sorted.length; i++) {
-        console.log(this.sorted[i].date);
+      let earnings = [];
+      for (let i = 0; i < this.sorted.length; i++) {
         if (this.sorted[i].amount > 0) {
           earnings.push({
-            x: new Date(this.sorted[i].date),
+            x: this.sorted[i].transaction_date,
             y: this.sorted[i].amount
           });
         }
       }
+      earnings.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
       return earnings;
     },
     spendings: function() {
-      var spendings = [];
-      for (var i = 0; i < this.sorted.length; i++) {
+      let spendings = [];
+      for (let i = 0; i < this.sorted.length; i++) {
         if (this.sorted[i].amount < 0) {
           spendings.push({
-            x: new Date(this.sorted[i].date),
+            x: this.sorted[i].transaction_date,
             y: Math.abs(this.sorted[i].amount)
           });
         }
       }
+      spendings.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
       return spendings;
     },
     balance: function() {
-      var balance = [];
-      var sum = 0;
-      for (var i = 0; i < this.sorted.length; i++) {
+      let balance = [];
+      let sum = 0;
+      for (let i = 0; i < this.sorted.length; i++) {
         sum += parseFloat(this.sorted[i].amount);
-        balance.push({ x: new Date(this.sorted[i].date), y: sum });
+        balance.push({
+          x: this.sorted[i].transaction_date,
+          y: sum
+        });
       }
-      console.log(balance);
+      balance.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
       return balance;
     }
   }

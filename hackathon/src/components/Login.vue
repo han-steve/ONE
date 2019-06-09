@@ -17,7 +17,8 @@
 </template>
 
 <script>
-    import {users} from '../firebase';
+    import { httpGetOptions } from "../lib/http";
+
     export default {
         name: 'login',
         data() {
@@ -28,25 +29,50 @@
                 }
             }
         },
-        firebase: {
-            names: users
+        computed: {
+            getCurrentUser() {
+                return this.$store.state.username;
+            }
         },
         methods: {
             login() {
-                var found = false;
-                for(var i = 0; i < this.names.length; i++) {
-                    if(this.names[i].username.trim() === this.LoginModel.username.trim() && this.names[i].password.trim() === this.LoginModel.password.trim()) {
-                        found = true;
-                        Window.states.username = this.LoginModel.username;
-                        this.$router.push({path: '/dashboard'});
-                    }
-                }
-                if(!found) {
-                    alert("Wrong username or password!");
-                }
+                fetch("http://127.0.0.1:8080/users", httpGetOptions())
+                    .then(res => res.json())
+                    .then(response => {
+                        var users = response.users;
+                        var found = false;
+                        for(var i = 0; i < users.length; i++) {
+                            if(users[i].username.trim() === this.LoginModel.username.trim() && users[i].password.trim() === this.LoginModel.password.trim()) {
+                                found = true;
+                                this.setCurrentUser(this.LoginModel.username.trim());
+                                this.$store.dispatch("clearCurrentStoredTransactionsAction");
+                                console.log("Set username in store: " + this.getCurrentUser);
+                                this.getData();
+                            }
+                        }
+                        if(!found) {
+                            alert("Wrong username or password!");
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            },
+            getData() {
+                fetch("http://127.0.0.1:8080/transactions/" + this.$store.state.username, httpGetOptions())
+                    .then(res => res.json())
+                    .then(response => {
+                        var transactions = response.transactions;
+                        for(var i = 0; i < transactions.length; i++) {
+                            this.$store.dispatch("addTransactionAction", transactions[i]);
+                        }
+                        this.$router.push({path: '/dashboard'})
+                    })
+                    .catch(error => console.error('Error:', error));
             },
             signup() {
                 this.$router.push({path: '/signup'});
+            },
+            setCurrentUser(username) {
+                this.$store.dispatch('setCurrentUserAction', username);
             }
         }
     };

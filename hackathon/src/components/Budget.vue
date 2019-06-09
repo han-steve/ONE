@@ -86,8 +86,7 @@
             list: transactions.orderByChild("date")
         },
         mounted() {
-            console.log("I'm mounted!");
-            this.user = Window.states.username;
+            this.user = this.$store.state.username;
         },
         computed: {
             datacollection: function() {
@@ -113,7 +112,6 @@
                         spendings.push({label: sorted[i].memo, data: [Math.abs(sorted[i].amount)], backgroundColor: this.randoColor()});
                     }
                 }
-                console.log(spendings);
                 return spendings;
             }
         }

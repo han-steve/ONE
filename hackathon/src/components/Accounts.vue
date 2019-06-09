@@ -39,7 +39,7 @@
         mounted() {
             list = this.transactionList;
             for(var i = 0; i < list.length; i++) {
-                if(list[i].username === Window.states.username) {
+                if(list[i].username === this.$store.username) {
                     this.account.push(list[i].account);
                 }
             }
@@ -49,8 +49,7 @@
                 var sum = 0;
                 this.chosenAccount = document.getElementById("selection").value;
                 for(var i = 0; i < list.length; i++) {
-                    if(list[i].username === Window.states.username) {
-                        console.log()
+                    if(list[i].username === this.$store.username) {
                         if(this.chosenAccount === "Total") {
                             sum += new Number(list[i].amount);
                         }

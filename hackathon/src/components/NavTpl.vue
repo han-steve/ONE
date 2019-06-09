@@ -1,4 +1,3 @@
-
 <template>
   <div id="background">
     <div id="nav-bar">
@@ -52,48 +51,57 @@
 export default {
   name: "navTpl",
   mounted() {
-    this.refresh();
+    // this.refresh();
+  },
+  computed: {
+    getCurrentUser() {
+      return this.$store.state.username;
+    }
   },
   methods: {
+    setCurrentUser(username) {
+      this.$store.dispatch('setCurrentUserAction', username);
+    },
     dashboard() {
-      if (Window.states.username === "") this.$router.push({ path: "/" });
+      if (this.getCurrentUser === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/dashboard" });
     },
     line() {
-        if (Window.states.username === "") this.$router.push({ path: "/" });
+        if (this.getCurrentUser === "") this.$router.push({ path: "/" });
         else this.$router.push({ path: "/linechart" });
     },
     budget() {
-        if (Window.states.username === "") this.$router.push({ path: "/" });
+        if (this.getCurrentUser === "") this.$router.push({ path: "/" });
         else this.$router.push({ path: "/budget" });
     },
     account() {
-      if (Window.states.username === "") this.$router.push({ path: "/" });
+      if (this.getCurrentUser === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/accounts" });
     },
     addEntry() {
-      if (Window.states.username === "") this.$router.push({ path: "/" });
+      if (this.getCurrentUser === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/add" });
     },
     signin() {
       this.$router.push({ path: "/" });
     },
     signout() {
-      Window.states.username = "";
+      this.setCurrentUser("");
       this.$router.push({ path: "/" });
     },
-    refresh() {
-      setInterval(function() {
-        var out = Window.states.username === "";
-        if (out) {
-          document.getElementById("in").style.display = "block";
-          document.getElementById("out").style.display = "none";
-        } else {
-          document.getElementById("in").style.display = "none";
-          document.getElementById("out").style.display = "block";
-        }
-      }, 100);
-    }
+    // refresh() {
+    //   setInterval(function() {
+    //     console.log("Stored username: " + this.$store.state.username);
+    //     const out = this.getCurrentUser === "";
+    //     if (out) {
+    //       document.getElementById("in").style.display = "block";
+    //       document.getElementById("out").style.display = "none";
+    //     } else {
+    //       document.getElementById("in").style.display = "none";
+    //       document.getElementById("out").style.display = "block";
+    //     }
+    //   }, 100);
+    // }
   }
 };
 </script>

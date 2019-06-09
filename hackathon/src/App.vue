@@ -21,14 +21,14 @@
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     display: grid;
     grid-template-columns: 17em auto;
-    grid-template-areas: "navTpl dashboard"; 
+    grid-template-areas: "navTpl dashboard";
   }
-  
+
   @media only screen and (max-width: 1100px) {
   #app {
-    grid-template-columns: auto; 
+    grid-template-columns: auto;
     grid-template-rows: 6em auto;
-    grid-template-areas: "navTpl" 
+    grid-template-areas: "navTpl"
                         "dashboard";
   }
 }

@@ -38,8 +38,7 @@ export default {
     list: transactions
   },
   mounted() {
-    console.log("I'm mounted!");
-    this.user = Window.states.username;
+    this.user = this.$store.state.username;
   },
   computed: {
     datacollection: function() {
@@ -47,10 +46,10 @@ export default {
         return null;
       } else {
         return {
-          labels: this.filteredNames2,
+          labels: this.filteredNames1,
           datasets: [
             {
-              data: this.filteredAmount2,
+              data: this.filteredAmount1,
               backgroundColor: [
                 "#CD5C5C",
                 "#F08080",
@@ -75,9 +74,7 @@ export default {
     filteredNames1: function() {
       var final = [];
       for (let i = 0; i < this.sorted.length; i++) {
-        if (
-            this.sorted[i].username === this.user &&
-          !final.includes(this.sorted[i].category)
+        if (!final.includes(this.sorted[i].category)
         ) {
           final.push(this.sorted[i].category);
         }
@@ -85,7 +82,6 @@ export default {
       return final;
     },
     filteredAmount1: function() {
-      console.log("filteredAmount1");
       var arr = this.filteredNames1;
       var final = [];
       for (let z = 0; z < arr.length; z++) {
@@ -93,10 +89,7 @@ export default {
       }
       for (let j = 0; j < arr.length; j++) {
         for (let i = 0; i < this.sorted.length; i++) {
-          if (
-            this.sorted[i].category === arr[j] &&
-            this.sorted[i].username === this.user
-          ) {
+          if (this.sorted[i].category === arr[j]) {
             final[j] += parseFloat(this.sorted[i].amount);
           }
         }
@@ -104,22 +97,17 @@ export default {
       return final;
     },
     filteredNames2: function() {
-      console.log("filteredNames2");
       var cat = this.filteredNames1;
-      console.log("cat: " + cat);
       var amounts = this.filteredAmount1;
-      console.log("amounts: " + amounts.length);
       var final = [];
       for (let i = 0; i < amounts.length; i++) {
         if (amounts[i] < 0) {
           final.push(cat[i]);
         }
       }
-      console.log("final cats: ", final);
-      return final;
+        return final;
     },
     filteredAmount2: function() {
-      console.log("filteredNames2");
       var arr = this.filteredNames2;
       var final = [];
       for (let z = 0; z < arr.length; z++) {
@@ -135,8 +123,7 @@ export default {
           }
         }
       }
-      console.log("filteredAmounts2: " + final);
-      return final;
+        return final;
     }
   }
 };
