@@ -4,7 +4,7 @@ import java.sql.ResultSet
 
 import akka.actor.{ Actor, ActorLogging, Props }
 
-final case class User(username: String, password: String)
+final case class User(username: String, email: String, password: String)
 final case class Users(users: Seq[User])
 
 object UserRegistryActor {
@@ -26,7 +26,7 @@ class UserRegistryActor extends Actor with ActorLogging {
     case GetUsers(users) => {
       var dbUsers = Set.empty[User]
       while (users.next()) {
-        dbUsers += new User(users.getString("username"), users.getString("password"))
+        dbUsers += new User(users.getString("username"), users.getString("email"), users.getString("password"))
       }
       sender() ! Users(dbUsers.toSeq)
     }

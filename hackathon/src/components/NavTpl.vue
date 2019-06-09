@@ -63,23 +63,23 @@ export default {
       this.$store.dispatch('setCurrentUserAction', username);
     },
     dashboard() {
-      if (this.getCurrentUser === "") this.$router.push({ path: "/" });
+      if (this.$store.state.username === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/dashboard" });
     },
     line() {
-        if (this.getCurrentUser === "") this.$router.push({ path: "/" });
+        if (this.$store.state.username === "") this.$router.push({ path: "/" });
         else this.$router.push({ path: "/linechart" });
     },
     budget() {
-        if (this.getCurrentUser === "") this.$router.push({ path: "/" });
+        if (this.$store.state.username === "") this.$router.push({ path: "/" });
         else this.$router.push({ path: "/budget" });
     },
     account() {
-      if (this.getCurrentUser === "") this.$router.push({ path: "/" });
+      if (this.$store.state.username === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/accounts" });
     },
     addEntry() {
-      if (this.getCurrentUser === "") this.$router.push({ path: "/" });
+      if (this.$store.state.username === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/add" });
     },
     signin() {

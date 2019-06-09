@@ -1,6 +1,9 @@
 package com.example
 
+import java.nio.charset.StandardCharsets
 import java.sql.{ DriverManager, ResultSet }
+import java.security.MessageDigest
+//import org.apache.commons.codec.digest.DigestUtils
 
 import akka.actor.{ ActorRef, ActorSystem }
 import akka.event.Logging
@@ -52,7 +55,7 @@ trait Routes extends JsonSupport with CORSHandler {
                 val userCreated: Future[UserActionPerformed] =
                   (userRegistryActor ? CreateUser(user)).mapTo[UserActionPerformed]
                 onSuccess(userCreated) { performed =>
-                  val query = "insert into users values ('" + user.username + "', '" + user.password + "');"
+                  val query = "insert into users values ('" + user.username + "', '" + user.password + "', '" + user.email + "');"
                   println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   log.info("Created user [{}]: {}", user.username, performed.description)
@@ -151,4 +154,8 @@ trait Routes extends JsonSupport with CORSHandler {
             complete(s"Unmatched: '$remaining'")
         }
       })
+  //  private val sfSalt = "9e107d9d372bb6826bd81d3542a419d6"
+  //  def encrypt(theText: String): String = {
+  //    DigestUtils.md5Hex(theText + sfSalt)
+  //  }
 }

@@ -7,13 +7,22 @@
           type="text"
           class="form-control"
           placeholder="Username"
+          required="true"
           v-model="SignUpModel.username"
+        >
+        <input
+                type="text"
+                class="form-control"
+                placeholder="Email Address"
+                required="true"
+                v-model="SignUpModel.email"
         >
         <input
           type="password"
           placeholder="Password"
           class="form-control"
           @keyup.enter="signup()"
+          required="true"
           v-model="SignUpModel.password"
         >
         <button class="btn btn-md btn-success float-center" @click="signup()">Sign Up</button>
@@ -31,22 +40,26 @@ export default {
     return {
       SignUpModel: {
         username: "",
+        email: "",
         password: ""
       }
     };
   },
   methods: {
     signup() {
-      const model = {
-        username: this.SignUpModel.username,
-        password: this.SignUpModel.password
-      };
-      fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
-      .then(res => res.json())
-      .then(response => console.log('Success:', JSON.stringify(response)))
-.catch(error => console.error('Error:', error));
-      this.setCurrentUser(this.SignUpModel.username.trim())
-      this.$router.push({ path: "/dashboard" });
+      if(this.SignUpModel.username !== "" && this.SignUpModel.email.match("@") && this.SignUpModel.password.trim().length >= 6) {
+        const model = {
+          username: this.SignUpModel.username,
+          email: this.SignUpModel.email,
+          password: this.SignUpModel.password
+        };
+        fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
+            .then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+        this.setCurrentUser(this.SignUpModel.username.trim())
+        this.$router.push({ path: "/dashboard" });
+      }
     },
     setCurrentUser(username) {
       this.$store.dispatch('setCurrentUserAction', username);

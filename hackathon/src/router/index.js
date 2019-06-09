@@ -7,7 +7,7 @@ import Accounts from "@/components/Accounts";
 import EditEntry from "@/components/EditEntry";
 import AddEntry from "@/components/AddEntry";
 import LineChart from "@/components/LineChart";
-import HorzBarChart from "@/components/Budget";
+import Budget from "@/components/Budget";
 
 
 Vue.use(Router);
@@ -37,7 +37,7 @@ export default new Router({
     {
         path: "/budget",
         name: "budget",
-        component: HorzBarChart
+        component: Budget
     },
     {
         path: "/accounts",

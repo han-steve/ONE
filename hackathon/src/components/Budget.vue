@@ -13,16 +13,18 @@
 
 <script>
     import HorzBarChart from "../HorzBarChart.js";
-    import { transactions } from "../firebase";
 
     export default {
         name: "budget",
         components: {
             HorzBarChart
         },
+        mounted() {
+            if(this.$store.state.username === "")
+                this.$router.push({ path: "/" });
+        },
         data() {
             return {
-                user: null,
                 chartOptions: {
                     scales: {
                         xAxes: [{
@@ -63,34 +65,21 @@
         methods: {
             getFirstDay() {
                 var date = new Date();
-                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
                 return firstDay;
             },
             getLastDay() {
                 var date = new Date();
-                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime();
                 return lastDay;
-            },
-            reverseOrder(l) {
-                var reversed = [];
-                for(var i = l.length - 1; i >= 0; i--) {
-                    reversed.push(l[i]);
-                }
-                return reversed;
             },
             randoColor() {
                 return "rgba( " + Math.floor(Math.random()*256) + "," + Math.floor(Math.random()*256) + "," + Math.floor(Math.random()*256) + ",1)";
             }
         },
-        firebase: {
-            list: transactions.orderByChild("date")
-        },
-        mounted() {
-            this.user = this.$store.state.username;
-        },
         computed: {
             datacollection: function() {
-                if (!this.user) {
+                if (this.$store.state.username === "") {
                     return null;
                 } else {
                     return {
@@ -101,13 +90,12 @@
                 }
             },
             spendings: function() {
-                var firstDay = this.getFirstDay();
-                var lastDay = this.getLastDay();
-                var sorted = this.list;
-                var spendings = [];
-                for(var i = 0; i < sorted.length; i++) {
-                    if(sorted[i].username === this.user
-                        && new Date(sorted[i].date) >= firstDay && new Date(sorted[i].date) <= lastDay
+                let firstDay = this.getFirstDay();
+                let lastDay = this.getLastDay();
+                let sorted = this.$store.state.transactions;
+                let spendings = [];
+                for(let i = 0; i < sorted.length; i++) {
+                    if(new Date(sorted[i].transaction_date).getTime() >= firstDay && new Date(sorted[i].transaction_date).getTime() <= lastDay
                         && sorted[i].amount < 0) {
                         spendings.push({label: sorted[i].memo, data: [Math.abs(sorted[i].amount)], backgroundColor: this.randoColor()});
                     }

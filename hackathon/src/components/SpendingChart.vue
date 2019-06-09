@@ -13,7 +13,6 @@
 
 <script>
 import PieChart from "../PieChart.js";
-import { transactions } from "../firebase";
 
 export default {
   name: "chart",
@@ -32,10 +31,6 @@ export default {
         maintainAspectRatio:false
       }
     };
-  },
-  methods: {},
-  firebase: {
-    list: transactions
   },
   mounted() {
     this.user = this.$store.state.username;

@@ -19,7 +19,6 @@
 
 <script>
 import LineChart from "../LineChart.js";
-import { transactions } from "../firebase";
 
 export default {
   name: "line",
@@ -46,18 +45,15 @@ export default {
       }
     };
   },
-  // firebase: {
-  //   list: transactions
-  // },
   mounted() {
-    this.user = this.$store.username;
+    if(this.$store.state.username === "")
+      this.$router.push({ path: "/" });
   },
   computed: {
     datacollection: function() {
-      // console.log(this.$store.username)
-      // if (!this.$store.username) {
-      //   return null;
-      // } else {
+      if (this.$store.username === "") {
+        return null;
+      } else {
         return {
           // labels: this.getDaysOfMonth,
           datasets: [
@@ -84,7 +80,7 @@ export default {
             }
           ]
         };
-      // }
+      }
     },
     earnings: function() {
       let earnings = [];

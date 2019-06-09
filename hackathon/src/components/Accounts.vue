@@ -22,41 +22,33 @@
 
 <script>
     var list = [];
-    import navTpl from "@/components/NavTpl"
-    import {transactions} from '../firebase';
     export default {
         name: 'accounts',
-        components: {navTpl},
         data() {
             return {
                 account: [],
                 chosenAccount: ''
             }
         },
-        firebase: {
-            transactionList: transactions
-        },
         mounted() {
-            list = this.transactionList;
-            for(var i = 0; i < list.length; i++) {
-                if(list[i].username === this.$store.username) {
+            if(this.$store.state.username === "")
+                this.$router.push({ path: "/" });
+            list = this.$store.state.transactions;
+            for(let i = 0; i < list.length; i++) {
                     this.account.push(list[i].account);
-                }
             }
         },
         methods: {
             chosen() {
-                var sum = 0;
+                let sum = 0;
                 this.chosenAccount = document.getElementById("selection").value;
-                for(var i = 0; i < list.length; i++) {
-                    if(list[i].username === this.$store.username) {
+                for(let i = 0; i < list.length; i++) {
                         if(this.chosenAccount === "Total") {
                             sum += new Number(list[i].amount);
                         }
                         else if(list[i].account === this.chosenAccount) {
                             sum += new Number(list[i].amount);
                         }
-                    }
                 }
                 document.getElementById("title").innerText = "Your total balance spent on " + this.chosenAccount + " is: ";
                 document.getElementById("balance").innerText = "\t$" + sum.toFixed(2);

@@ -78,13 +78,11 @@
 <script>
 import { httpPostOptions } from '../lib/http';
 
-import { users } from "../firebase";
-import { transactions } from "../firebase";
-
 export default {
   name: "entry",
-  firebase: {
-    names: users
+  mounted() {
+    if(this.$store.state.username === "")
+      this.$router.push({ path: "/" });
   },
   data() {
     return {

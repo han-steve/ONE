@@ -92,7 +92,6 @@ import SpendingLineChart from "../components/SpendingLineChart";
 import EditEntry from "../components/EditEntry";
 
 import { httpDeleteOptions } from "../lib/http";
-import Vue from "vue";
 
 export default {
   name: "dashboard",
@@ -100,6 +99,10 @@ export default {
     SpendingChart,
     EditEntry,
     SpendingLineChart
+  },
+  mounted() {
+    if(this.$store.state.username === "")
+      this.$router.push({ path: "/" });
   },
   data() {
     return {
@@ -121,9 +124,6 @@ export default {
       }
     };
   },
-  mounted() {
-    this.user = this.$store.state.username;
-  },
   computed: {
     filteredList: function() {
       this.sum = 0;
@@ -144,13 +144,7 @@ export default {
       }
       return final;
     },
-    // transactionEditModel: function() {
-    //   return this.TransactionEditModel;
-    // }
   },
-  // computed: {
-  //
-  // },
   methods: {
     rm(transaction) {
       fetch("http://127.0.0.1:8080/transactions", httpDeleteOptions(transaction))

@@ -13,12 +13,15 @@
 
 <script>
     import LineChart from "../LineChart.js";
-    import { transactions } from "../firebase";
 
     export default {
         name: "line",
         components: {
             LineChart
+        },
+        mounted() {
+          if(this.$store.state.username === "")
+            this.$router.push({ path: "/" });
         },
         data() {
             return {
@@ -29,6 +32,7 @@
                             type: 'time',
                             distribution: 'linear',
                             time: {
+                                format: "YYYY-MM-DD",
                                 unit: 'day',
                                 min: this.getFirstDay(),
                                 max: this.getLastDay()
@@ -42,105 +46,90 @@
         methods: {
             getFirstDay() {
                 var date = new Date();
-                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
                 return firstDay;
             },
             getLastDay() {
                 var date = new Date();
-                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getTime();
                 return lastDay;
-            },
-            reverseOrder(l) {
-                var reversed = [];
-                for(var i = l.length - 1; i >= 0; i--) {
-                    reversed.push(l[i]);
-                }
-                return reversed;
             }
-        },
-        firebase: {
-            list: transactions.orderByChild("date")
-        },
-        mounted() {
-            this.user = this.$store.state.username;
         },
         computed: {
-            datacollection: function() {
-                if (!this.user) {
-                    return null;
-                } else {
-                    return {
-                        // labels: this.getDaysOfMonth,
-                        datasets: [
-                            {
-                                label: "Earnings",
-                                data: this.earnings,
-                                fill: false,
-                                borderColor: "#53f442"
-                                // backgroundColor: "#53f442"
-                            },
-                            {
-                                label: "Spendings",
-                                data: this.spendings,
-                                fill: false,
-                                borderColor: "#e82929"
-                                // backgroundColor: "#e82929"
-                            }
-                            ,
-                            {
-                                label: "Balance",
-                                data: this.balance,
-                                fill: false,
-                                borderColor: "#000000"
-                                // backgroundColor: "#e82929"
-                            }
-                        ]
-                    };
-                }
-            },
-            earnings: function() {
-                var firstDay = this.getFirstDay();
-                var lastDay = this.getLastDay();
-                var sorted = this.list;
-                var earnings = [];
-                for(var i = 0; i < sorted.length; i++) {
-                    if(sorted[i].username === this.user
-                        && new Date(sorted[i].date.toString()) >= firstDay && new Date(sorted[i].date.toString()) <= lastDay
-                        && sorted[i].amount > 0) {
-                        earnings.push({x: new Date(sorted[i].date), y: sorted[i].amount});
-                    }
-                }
-                return earnings;
-            },
-            spendings: function() {
-                var firstDay = this.getFirstDay();
-                var lastDay = this.getLastDay();
-                var sorted = this.list;
-                var spendings = [];
-                for(var i = 0; i < sorted.length; i++) {
-                    if(sorted[i].username === this.user
-                        && new Date(sorted[i].date) >= firstDay && new Date(sorted[i].date) <= lastDay
-                        && sorted[i].amount < 0) {
-                        spendings.push({x: new Date(sorted[i].date), y: Math.abs(sorted[i].amount)});
-                    }
-                }
-                return spendings;
-            },
-            balance: function() {
-                var firstDay = this.getFirstDay();
-                var lastDay = this.getLastDay();
-                var sorted = this.list;
-                var balance = [];
-                var sum = 0;
-                for(var i = 0; i < sorted.length; i++) {
-                    if(sorted[i].username === this.user
-                        && new Date(sorted[i].date) >= firstDay && new Date(sorted[i].date) <= lastDay) {
-                        sum += parseFloat(sorted[i].amount);
-                        balance.push({x: new Date(sorted[i].date), y: sum});
-                    }
-                }
-                return balance;
+          datacollection: function() {
+            if (this.$store.username === "") {
+              return null;
+            } else {
+              return {
+                // labels: this.getDaysOfMonth,
+                datasets: [
+                  {
+                    label: "Earnings",
+                    data: this.earnings,
+                    fill: false,
+                    borderColor: "#53f442"
+                    // backgroundColor: "#53f442"
+                  },
+                  {
+                    label: "Spendings",
+                    data: this.spendings,
+                    fill: false,
+                    borderColor: "#e82929"
+                    // backgroundColor: "#e82929"
+                  },
+                  {
+                    label: "Balance",
+                    data: this.balance,
+                    fill: false,
+                    borderColor: "#000000"
+                    // backgroundColor: "#e82929"
+                  }
+                ]
+              };
             }
+          },
+          earnings: function() {
+            let earnings = [];
+            let sorted = this.$store.state.transactions
+            for (let i = 0; i < sorted.length; i++) {
+              if (sorted[i].amount > 0) {
+                earnings.push({
+                  x: sorted[i].transaction_date,
+                  y: sorted[i].amount
+                });
+              }
+            }
+            earnings.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
+            return earnings;
+          },
+          spendings: function() {
+            let spendings = [];
+            let sorted = this.$store.state.transactions
+            for (let i = 0; i < sorted.length; i++) {
+              if (sorted[i].amount < 0) {
+                spendings.push({
+                  x: sorted[i].transaction_date,
+                  y: Math.abs(sorted[i].amount)
+                });
+              }
+            }
+            spendings.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
+            return spendings;
+          },
+          balance: function() {
+            let balance = [];
+            let sorted = this.$store.state.transactions
+            let sum = 0;
+            for (let i = 0; i < sorted.length; i++) {
+              sum += parseFloat(sorted[i].amount);
+              balance.push({
+                x: sorted[i].transaction_date,
+                y: sum
+              });
+            }
+            balance.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime());
+            return balance;
+          }
         }
     };
 </script>
