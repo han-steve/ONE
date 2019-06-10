@@ -29,6 +29,9 @@
                 }
             }
         },
+        mounted() {
+            this.resetCurrentUser("")
+        },
         computed: {
             getCurrentUser() {
                 return this.$store.state.username;
@@ -44,11 +47,10 @@
                         for(var i = 0; i < users.length; i++) {
                             if(users[i].username.trim() === this.LoginModel.username.trim() && users[i].password.trim() === this.LoginModel.password.trim()) {
                                 found = true;
-                                this.setCurrentUser(this.LoginModel.username.trim());
-                                this.$store.dispatch("clearCurrentStoredTransactionsAction");
-                                console.log("Set username in store: " + this.getCurrentUser);
-                                this.getData();
+                                this.resetCurrentUser(this.LoginModel.username.trim());
+                                this.$store.dispatch('updateProfileMutation', users[i]);
                             }
+                            this.$router.push({path: '/dashboard'})
                         }
                         if(!found) {
                             alert("Wrong username or password!");
@@ -56,23 +58,12 @@
                     })
                     .catch(error => console.error('Error:', error));
             },
-            getData() {
-                fetch("http://127.0.0.1:8080/transactions/" + this.$store.state.username, httpGetOptions())
-                    .then(res => res.json())
-                    .then(response => {
-                        var transactions = response.transactions;
-                        for(var i = 0; i < transactions.length; i++) {
-                            this.$store.dispatch("addTransactionAction", transactions[i]);
-                        }
-                        this.$router.push({path: '/dashboard'})
-                    })
-                    .catch(error => console.error('Error:', error));
-            },
             signup() {
                 this.$router.push({path: '/signup'});
             },
-            setCurrentUser(username) {
+            resetCurrentUser(username) {
                 this.$store.dispatch('setCurrentUserAction', username);
+                this.$store.dispatch('clearCurrentStoredTransactionsAction');
             }
         }
     };

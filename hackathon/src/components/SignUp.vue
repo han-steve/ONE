@@ -7,14 +7,15 @@
           type="text"
           class="form-control"
           placeholder="Username"
+          @keyup.enter="signup()"
           required="true"
           v-model="SignUpModel.username"
         >
         <input
-                type="text"
+                type="email"
                 class="form-control"
                 placeholder="Email Address"
-                required="true"
+                @keyup.enter="signup()"
                 v-model="SignUpModel.email"
         >
         <input
@@ -24,6 +25,13 @@
           @keyup.enter="signup()"
           required="true"
           v-model="SignUpModel.password"
+        >
+        <input
+                type="number"
+                placeholder="Phone Number"
+                class="form-control"
+                @keyup.enter="signup()"
+                v-model="SignUpModel.phoneNumber"
         >
         <button class="btn btn-md btn-success float-center" @click="signup()">Sign Up</button>
       </div>
@@ -41,27 +49,37 @@ export default {
       SignUpModel: {
         username: "",
         email: "",
-        password: ""
+        password: "",
+        phoneNumber: ""
       }
     };
   },
   methods: {
     signup() {
       if(this.SignUpModel.username !== "" && this.SignUpModel.email.match("@") && this.SignUpModel.password.trim().length >= 6) {
+        if(this.SignUpModel.phoneNumber !== "" && this.SignUpModel.phoneNumber.trim().length !== 10) {
+          this.SignUpModel.phoneNumber = "";
+        }
         const model = {
           username: this.SignUpModel.username,
           email: this.SignUpModel.email,
-          password: this.SignUpModel.password
+          password: this.SignUpModel.password,
+          phoneNumber: this.SignUpModel.phoneNumber
         };
         fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
             .then(res => res.json())
-            .then(response => console.log('Success:', JSON.stringify(response)))
-            .catch(error => console.error('Error:', error));
-        this.setCurrentUser(this.SignUpModel.username.trim())
-        this.$router.push({ path: "/dashboard" });
+            .then(response => {
+              console.log('Success:', JSON.stringify(response))
+              this.resetCurrentUser(this.SignUpModel.username.trim())
+              this.$router.push({path: "/dashboard"});
+            }).catch(error => {
+          console.error('Error:', error)
+          alert("This username or email has been taken.")
+          });
+
       }
     },
-    setCurrentUser(username) {
+    resetCurrentUser(username) {
       this.$store.dispatch('setCurrentUserAction', username);
     }
   }

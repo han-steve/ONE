@@ -6,6 +6,7 @@ import Dashboard from "@/components/Dashboard";
 import Accounts from "@/components/Accounts";
 import EditEntry from "@/components/EditEntry";
 import AddEntry from "@/components/AddEntry";
+import Profile from "@/components/Profile";
 import LineChart from "@/components/LineChart";
 import Budget from "@/components/Budget";
 
@@ -49,6 +50,11 @@ export default new Router({
       name: "addEntry",
       component: AddEntry
     },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile
+      },
     {
         path: "/edit",
         name: "editEntry",

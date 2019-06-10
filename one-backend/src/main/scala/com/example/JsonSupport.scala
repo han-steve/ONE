@@ -11,7 +11,8 @@ trait JsonSupport extends SprayJsonSupport {
   // import the default encoders for primitive types (Int, String, Lists etc)
   import DefaultJsonProtocol._
 
-  implicit val userJsonFormat = jsonFormat3(User)
+  implicit val userJsonFormat = jsonFormat4(User)
+  implicit val userUpdateJsonFormat = jsonFormat8(UserUpdate)
   implicit val usersJsonFormat = jsonFormat1(Users)
 
   implicit val userActionPerformedJsonFormat = jsonFormat1(UserActionPerformed)

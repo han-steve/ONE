@@ -34,7 +34,12 @@
             <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Entry
           </a>
         </div>
-        <div onload="refresh()">
+        <div class="nav-options">
+          <a class="navbar-brand" @click="updateProfile()">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Profile
+          </a>
+        </div>
+        <div>
           <a id="in" class="navbar-brand" @click="signin()">
             <i class="fa fa-sign-in" aria-hidden="true"></i> Sign In
           </a>
@@ -59,7 +64,7 @@ export default {
     }
   },
   methods: {
-    setCurrentUser(username) {
+    resetCurrentUser(username) {
       this.$store.dispatch('setCurrentUserAction', username);
     },
     dashboard() {
@@ -82,26 +87,17 @@ export default {
       if (this.$store.state.username === "") this.$router.push({ path: "/" });
       else this.$router.push({ path: "/add" });
     },
+    updateProfile() {
+      if (this.$store.state.username === "") this.$router.push({ path: "/" });
+      else this.$router.push({ path: "/profile" });
+    },
     signin() {
       this.$router.push({ path: "/" });
     },
     signout() {
-      this.setCurrentUser("");
+      this.resetCurrentUser("");
       this.$router.push({ path: "/" });
-    },
-    // refresh() {
-    //   setInterval(function() {
-    //     console.log("Stored username: " + this.$store.state.username);
-    //     const out = this.getCurrentUser === "";
-    //     if (out) {
-    //       document.getElementById("in").style.display = "block";
-    //       document.getElementById("out").style.display = "none";
-    //     } else {
-    //       document.getElementById("in").style.display = "none";
-    //       document.getElementById("out").style.display = "block";
-    //     }
-    //   }, 100);
-    // }
+    }
   }
 };
 </script>

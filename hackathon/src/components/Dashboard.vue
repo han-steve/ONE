@@ -91,7 +91,7 @@ import SpendingChart from "../components/SpendingChart";
 import SpendingLineChart from "../components/SpendingLineChart";
 import EditEntry from "../components/EditEntry";
 
-import { httpDeleteOptions } from "../lib/http";
+import {httpDeleteOptions, httpGetOptions} from "../lib/http";
 
 export default {
   name: "dashboard",
@@ -103,6 +103,24 @@ export default {
   mounted() {
     if(this.$store.state.username === "")
       this.$router.push({ path: "/" });
+      fetch("http://127.0.0.1:8080/transactions/" + this.$store.state.username, httpGetOptions())
+              .then(res => res.json())
+              .then(response => {
+                this.$store.dispatch("clearCurrentStoredTransactionsAction");
+                let transactions = response.transactions;
+                for(let i = 0; i < transactions.length; i++) {
+                  this.$store.dispatch("addTransactionAction", transactions[i]);
+                }
+              })
+              .catch(error => console.error('Error:', error));
+    fetch("http://127.0.0.1:8080/users/" + this.$store.state.username, httpGetOptions())
+            .then(res => res.json())
+            .then(response => {
+              let user = response;
+              console.log(user)
+                this.$store.dispatch("updateProfileAction", user);
+            })
+            .catch(error => console.error('Error:', error));
   },
   data() {
     return {
@@ -214,7 +232,7 @@ label {
 }
 #charts{
   display: grid; 
-  height: 395px;
+  height: 43vh;
   overflow: hidden;
   grid-template-columns: 1fr 2fr;
 }
@@ -251,8 +269,8 @@ ul {
 }
 main {
   background-color: #f7f7fc;
-  padding: 3em;
-  padding-left: 4em;
+  padding: 1.3em;
+  padding-left: 2.5em;
   /* height: 100vh; */
 }
 h2 {
@@ -273,7 +291,7 @@ i {
   color: #878b9d;
 }
 #data {
-  height: 38vh;
+  height: 17vh;
   overflow: scroll;
 }
 

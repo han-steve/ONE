@@ -6,6 +6,9 @@ Vue.use(Vuex);
 
 const state = {
     username: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
     transactions: []
 }
 
@@ -19,11 +22,18 @@ const mutations = {
     setCurrentUserMutations: function(state, nextUsername) {
         state.username = nextUsername;
     },
+    updateProfileMutation: function(state, model) {
+        state.username = model.username;
+        state.email = model.email;
+        state.password = model.password;
+        state.phoneNumber = model.phoneNumber;
+    },
     clearCurrentStoredTransactionsMutation: function(state) {
         state.transactions = []
     },
     addTransactionMutation: function(state, transaction) {
         state.transactions.push(transaction);
+        state.transactions.sort((a, b) => new Date(b.transaction_date).getTime() - new Date(a.transaction_date).getTime());
     },
     editTransactionMutation: function(state, transaction) {
         for(let i = 0; i < state.transactions.length; i++) {
@@ -51,6 +61,9 @@ const mutations = {
 const actions = {
     setCurrentUserAction: function(context, username) {
         context.commit('setCurrentUserMutations', username);
+    },
+    updateProfileAction: function(context, model) {
+        context.commit('updateProfileMutation', model);
     },
     clearCurrentStoredTransactionsAction: function(context) {
         context.commit("clearCurrentStoredTransactionsMutation");

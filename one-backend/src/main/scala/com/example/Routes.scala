@@ -55,14 +55,45 @@ trait Routes extends JsonSupport with CORSHandler {
                 val userCreated: Future[UserActionPerformed] =
                   (userRegistryActor ? CreateUser(user)).mapTo[UserActionPerformed]
                 onSuccess(userCreated) { performed =>
-                  val query = "insert into users values ('" + user.username + "', '" + user.password + "', '" + user.email + "');"
+                  val query = "insert into users values ('" + user.username + "', '" + user.password + "', '" + user.email + "', '" + user.phoneNumber + "');"
                   println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   log.info("Created user [{}]: {}", user.username, performed.description)
                   complete((StatusCodes.Created, performed))
                 }
               }
+            } ~
+            put {
+              entity(as[UserUpdate]) { user =>
+                val userUpdate: Future[UserActionPerformed] =
+                  (userRegistryActor ? UpdateUser(user)).mapTo[UserActionPerformed]
+                onSuccess(userUpdate) { performed =>
+                  val query = "update users set " +
+                    "username = '" + user.username_after + "', " +
+                    "email = '" + user.email_after + "', " +
+                    "\"password\" = '" + user.password_after + "', " +
+                    "\"phoneNumber\" = '" + user.phoneNumber_after + "' " +
+                    "where username = '" + user.username_before + "';"
+                  println("QUERY: " + query)
+                  sql_connection.createStatement().executeUpdate(query)
+                  sql_connection.createStatement().executeUpdate("update transactions set username = '" + user.username_after + "' where username = '" + user.username_before + "';")
+                  log.info("User update complete [{}]: {}", user.username_after, performed.description)
+                  complete((StatusCodes.Created, performed))
+                }
+              }
             }
+        } ~ extractUnmatchedPath { remaining =>
+          val str = s"$remaining";
+          if (str.length() != 0) {
+            val username = str.substring(1);
+            val query = "select * from users where username = '" + username + "';"
+            println("[QUERY] " + query)
+            val result = sql_connection.createStatement().executeQuery(query)
+            val user: Future[User] =
+              (userRegistryActor ? GetUser(result)).mapTo[User]
+            complete(201, user)
+          } else
+            complete(s"Unmatched: '$remaining'")
         }
       } ~ pathPrefix("transactions") {
         pathEnd {
@@ -112,9 +143,7 @@ trait Routes extends JsonSupport with CORSHandler {
               }
             } ~
             put {
-              println("entered put")
               entity(as[TransactionUpdate]) { transaction =>
-                println("entered inside")
                 println(transaction)
                 val transactionMade: Future[TransactionActionPerformed] =
                   (transactionActor ? UpdateTransaction(transaction)).mapTo[TransactionActionPerformed]
