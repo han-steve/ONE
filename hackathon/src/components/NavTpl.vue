@@ -40,10 +40,10 @@
           </a>
         </div>
         <div>
-          <a id="in" class="navbar-brand" @click="signin()">
+          <a v-show="this.$store.state.username === ''" id="in" class="navbar-brand" @click="signin()">
             <i class="fa fa-sign-in" aria-hidden="true"></i> Sign In
           </a>
-          <a id="out" style="display: none" class="navbar-brand" @click="signout()">
+          <a v-show="this.$store.state.username !== ''" id="out" class="navbar-brand" @click="signout()">
             <i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out
           </a>
         </div>

@@ -28,7 +28,6 @@ export default {
   },
   data() {
     return {
-      user: null,
       chartOptions: {
         scales: {
           xAxes: [

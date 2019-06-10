@@ -58,7 +58,7 @@ trait Routes extends JsonSupport with CORSHandler {
                   val query = "insert into users values ('" + user.username + "', '" + user.password + "', '" + user.email + "', '" + user.phoneNumber + "');"
                   println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
-                  log.info("Created user [{}]: {}", user.username, performed.description)
+                  //                  log.info("Created user [{}]: {}", user.username, performed.description)
                   complete((StatusCodes.Created, performed))
                 }
               }
@@ -74,7 +74,7 @@ trait Routes extends JsonSupport with CORSHandler {
                     "\"password\" = '" + user.password_after + "', " +
                     "\"phoneNumber\" = '" + user.phoneNumber_after + "' " +
                     "where username = '" + user.username_before + "';"
-                  println("QUERY: " + query)
+                  println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   sql_connection.createStatement().executeUpdate("update transactions set username = '" + user.username_after + "' where username = '" + user.username_before + "';")
                   log.info("User update complete [{}]: {}", user.username_after, performed.description)
@@ -114,7 +114,7 @@ trait Routes extends JsonSupport with CORSHandler {
                     transaction.amount + ", '" +
                     transaction.memo + "', '" +
                     transaction.account + "')";
-                  println("QUERY: " + query)
+                  println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
                   complete((StatusCodes.Created, performed))
@@ -135,7 +135,7 @@ trait Routes extends JsonSupport with CORSHandler {
                     "amount = " + transaction.amount + " and " +
                     "memo = '" + transaction.memo + "' and " +
                     "account = '" + transaction.account + "'";
-                  println("QUERY: " + query)
+                  println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
                   complete((StatusCodes.Created, performed))
@@ -162,7 +162,7 @@ trait Routes extends JsonSupport with CORSHandler {
                     "amount = " + transaction.amount_before + " and " +
                     "memo = '" + transaction.memo_before + "' and " +
                     "account = '" + transaction.account_before + "'"
-                  println("QUERY: " + query)
+                  println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
                   complete((StatusCodes.Created, performed))
@@ -183,8 +183,8 @@ trait Routes extends JsonSupport with CORSHandler {
             complete(s"Unmatched: '$remaining'")
         }
       })
-  //  private val sfSalt = "9e107d9d372bb6826bd81d3542a419d6"
-  //  def encrypt(theText: String): String = {
-  //    DigestUtils.md5Hex(theText + sfSalt)
-  //  }
+  //    private val sfSalt = "9e107d9d372bb6826bd81d3542a419d6"
+  //    def encrypt(theText: String): String = {
+  //      DigestUtils.md5Hex(theText + sfSalt)
+  //    }
 }
