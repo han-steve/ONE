@@ -68,10 +68,15 @@ export default {
         };
         fetch("http://127.0.0.1:8080/users", httpPutOptions(model))
             .then(res => res.json())
-            .then(response => console.log('Success:', JSON.stringify(response)))
-            .catch(error => console.error('Error:', error));
-        this.updateProfile(this.ProfileModel)
-        alert("Successfully updated profile!")
+            .then(response => {
+              this.updateProfile(this.ProfileModel)
+              alert("Successfully updated profile!")
+              console.log('Success:', JSON.stringify(response))
+            }).catch(error => {
+              alert("The username or email has been taken.")
+              console.error('Error:', error)
+            });
+
       }
     },
     updateProfile(model) {

@@ -76,7 +76,9 @@ trait Routes extends JsonSupport with CORSHandler {
                     "where username = '" + user.username_before + "';"
                   println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
-                  sql_connection.createStatement().executeUpdate("update transactions set username = '" + user.username_after + "' where username = '" + user.username_before + "';")
+                  val updateTransactionsQuery = "update transactions set username = '" + user.username_after + "' where username = '" + user.username_before + "';"
+                  println("[QUERY] " + updateTransactionsQuery)
+                  sql_connection.createStatement().executeUpdate(updateTransactionsQuery)
                   log.info("User update complete [{}]: {}", user.username_after, performed.description)
                   complete((StatusCodes.Created, performed))
                 }
@@ -107,8 +109,8 @@ trait Routes extends JsonSupport with CORSHandler {
                 val transactionMade: Future[TransactionActionPerformed] =
                   (transactionActor ? MakeTransaction(transaction)).mapTo[TransactionActionPerformed]
                 onSuccess(transactionMade) { performed =>
-                  val query = "insert into transactions values ('" + transaction.username + "', " +
-                    transaction.transaction_date + ", '" +
+                  val query = "insert into transactions values ('" + transaction.username + "', '" +
+                    transaction.transaction_date + "', '" +
                     transaction.category + "', '" +
                     transaction.payee + "', " +
                     transaction.amount + ", '" +
@@ -123,7 +125,6 @@ trait Routes extends JsonSupport with CORSHandler {
             } ~
             delete {
               entity(as[Transaction]) { transaction =>
-                println(transaction)
                 val transactionMade: Future[TransactionActionPerformed] =
                   (transactionActor ? DeleteTransaction(transaction)).mapTo[TransactionActionPerformed]
                 onSuccess(transactionMade) { performed =>
@@ -144,7 +145,6 @@ trait Routes extends JsonSupport with CORSHandler {
             } ~
             put {
               entity(as[TransactionUpdate]) { transaction =>
-                println(transaction)
                 val transactionMade: Future[TransactionActionPerformed] =
                   (transactionActor ? UpdateTransaction(transaction)).mapTo[TransactionActionPerformed]
                 onSuccess(transactionMade) { performed =>

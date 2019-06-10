@@ -29,6 +29,7 @@ class TransactionActor extends Actor with ActorLogging {
     case GetTransactions(transactions) => {
       var dbTransactions = Set.empty[Transaction]
       while (transactions.next()) {
+        println(transactions.getString("id"))
         dbTransactions += new Transaction(transactions.getString("username"), transactions.getString("transaction_date"), transactions.getString("category"),
           transactions.getString("payee"), transactions.getDouble("amount"), transactions.getString("memo"), transactions.getString("account"))
       }

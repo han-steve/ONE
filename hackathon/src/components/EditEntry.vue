@@ -3,6 +3,11 @@
         <div class="container">
             <div class="inner-container">
                 <h1>Edit Transaction</h1>
+                <div id="transactionType">
+                    <label>Earned</label>
+                    <input v-model="transactionValue" type="range" min="0" max="1">
+                    <label>Spent</label>
+                </div>
                 <div id="grid">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                     <input
@@ -27,7 +32,7 @@
                     <input
                             type="text"
                             class="form-control margin-bottom"
-                            placeholder="Payee"
+                            :placeholder="payerPayee"
                             required="true"
                             autofocus="true"
                             name="payee"
@@ -88,23 +93,39 @@
     export default {
         name: "edit",
         props: ["transaction"],
+        data() {
+            return {
+                transactionValue: this.editModel.computedTransactionValue
+            }
+        },
         computed: {
             editModel() {
                 return {
                     username: this.transaction.username,
+                    computedTransactionValue: function() {
+                        if(this.transaction.amount > 0)
+                            return "0";
+                        return "1";
+                    },
                     transaction_date: this.transaction.transaction_date,
                     category: this.transaction.category,
                     payee: this.transaction.payee,
-                    amount: this.transaction.amount,
+                    amount: Math.abs(this.transaction.amount),
                     memo: this.transaction.memo,
                     account: this.transaction.account
                 }
+            },
+            payerPayee() {
+                if(this.transactionValue === "0") return "Payer";
+                return "Payee";
             }
         },
         methods: {
             submit() {
                 var curr = this.editModel;
                 if (curr.amount !== "" && curr.account !== "" && curr.transaction_date.toString().split("-").length === 3) {
+                    var factor = 1;
+                    if(this.transactionValue === "1") factor = -1;
                     var model = {
                         username: this.editModel.username,
                         transaction_date_before: this.transaction.transaction_date,
@@ -116,10 +137,11 @@
                         transaction_date_after: curr.transaction_date,
                         category_after: curr.category,
                         payee_after: curr.payee,
-                        amount_after: Number(curr.amount),
+                        amount_after: Number(Math.abs(curr.amount)) * factor,
                         memo_after: curr.memo,
                         account_after: curr.account,
                     };
+                    console.log(model)
                     fetch("http://127.0.0.1:8080/transactions", httpPutOptions(model))
                         .then(res => res.json())
                         .then(response => {

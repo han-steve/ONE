@@ -3,6 +3,11 @@
     <div class="container">
       <div class="inner-container">
         <h1>Add Transaction</h1>
+        <div id="transactionType">
+          <label>Earned</label>
+          <input v-model="EntryModel.transactionValue" type="range" min="0" max="1">
+          <label>Spent</label>
+        </div>
         <div id="grid">
           <i class="fa fa-calendar" aria-hidden="true"></i>
           <input
@@ -27,7 +32,7 @@
           <input
             type="text"
             class="form-control margin-bottom"
-            placeholder="Payee"
+            :placeholder="payerPayee"
             required="true"
             autofocus="true"
             name="payee"
@@ -87,6 +92,7 @@ export default {
   data() {
     return {
       EntryModel: {
+        transactionValue: "0",
         date: new Date().getDate(),
         category: "",
         payee: "",
@@ -96,19 +102,24 @@ export default {
       }
     };
   },
+  computed: {
+    payerPayee() {
+      if(this.EntryModel.transactionValue === "0") return "Payer";
+      return "Payee";
+    }
+  },
   methods: {
     submit() {
       var curr = this.EntryModel;
-      console.log("Current user: " + this.$store.state.username);
       if (this.$store.state.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
-        // transactions.push(curr);
-        console.log(this.EntryModel.date)
+        var factor = 1;
+        if(this.EntryModel.transactionValue === "1") factor = -1;
         const model = {
           username: this.$store.state.username,
           transaction_date: this.EntryModel.date,
           category: this.EntryModel.category,
           payee: this.EntryModel.payee,
-          amount: Number(this.EntryModel.amount),
+          amount: Number(Math.abs(this.EntryModel.amount)) * factor,
           memo: this.EntryModel.memo,
           account: this.EntryModel.account
         };
@@ -180,6 +191,4 @@ button {
     height: 85vh;
   }
 }
-
-
 </style>
