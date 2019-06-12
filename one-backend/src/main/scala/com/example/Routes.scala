@@ -1,9 +1,9 @@
 package com.example
 
-import java.nio.charset.StandardCharsets
 import java.sql.{ DriverManager, ResultSet }
 import java.security.MessageDigest
-//import org.apache.commons.codec.digest.DigestUtils
+import java.security.NoSuchAlgorithmException
+import java.math.BigInteger
 
 import akka.actor.{ ActorRef, ActorSystem }
 import akka.event.Logging
@@ -52,26 +52,39 @@ trait Routes extends JsonSupport with CORSHandler {
           } ~
             post {
               entity(as[User]) { user =>
-                val userCreated: Future[UserActionPerformed] =
-                  (userRegistryActor ? CreateUser(user)).mapTo[UserActionPerformed]
-                onSuccess(userCreated) { performed =>
-                  val query = "insert into users values ('" + user.username + "', '" + user.password + "', '" + user.email + "', '" + user.phoneNumber + "');"
-                  println("[QUERY] " + query)
-                  sql_connection.createStatement().executeUpdate(query)
-                  //                  log.info("Created user [{}]: {}", user.username, performed.description)
-                  complete((StatusCodes.Created, performed))
+                val encrypted = getMd5(user.password)
+                if (user.email.equals("")) {
+                  val userExistQuery = "select * from users where username = '" + user.username + "';"
+                  println("[QUERY] " + userExistQuery)
+                  val result = sql_connection.createStatement().executeQuery(userExistQuery)
+                  result.next()
+                  if (encrypted.equals(result.getString("password"))) {
+                    complete(true + "")
+                  } else {
+                    complete(false + "")
+                  }
+                } else {
+                  val userCreated: Future[UserActionPerformed] =
+                    (userRegistryActor ? CreateUser(user)).mapTo[UserActionPerformed]
+                  onSuccess(userCreated) { performed =>
+                    val query = "insert into users values ('" + user.username + "', '" + encrypted + "', '" + user.email + "', '" + user.phoneNumber + "');"
+                    println("[QUERY] " + query)
+                    sql_connection.createStatement().execute(query)
+                    complete((StatusCodes.Created, performed))
+                  }
                 }
               }
             } ~
             put {
               entity(as[UserUpdate]) { user =>
+                val encrypted = getMd5(user.password_after)
                 val userUpdate: Future[UserActionPerformed] =
                   (userRegistryActor ? UpdateUser(user)).mapTo[UserActionPerformed]
                 onSuccess(userUpdate) { performed =>
                   val query = "update users set " +
                     "username = '" + user.username_after + "', " +
                     "email = '" + user.email_after + "', " +
-                    "\"password\" = '" + user.password_after + "', " +
+                    "\"password\" = '" + encrypted + "', " +
                     "\"phoneNumber\" = '" + user.phoneNumber_after + "' " +
                     "where username = '" + user.username_before + "';"
                   println("[QUERY] " + query)
@@ -85,9 +98,10 @@ trait Routes extends JsonSupport with CORSHandler {
               }
             }
         } ~ extractUnmatchedPath { remaining =>
-          val str = s"$remaining";
+          val str = s"$remaining"
+          println("[PATH] " + str)
           if (str.length() != 0) {
-            val username = str.substring(1);
+            val username = str.substring(1)
             val query = "select * from users where username = '" + username + "';"
             println("[QUERY] " + query)
             val result = sql_connection.createStatement().executeQuery(query)
@@ -115,11 +129,14 @@ trait Routes extends JsonSupport with CORSHandler {
                     transaction.payee + "', " +
                     transaction.amount + ", '" +
                     transaction.memo + "', '" +
-                    transaction.account + "')";
+                    transaction.account + "') returning id;"
                   println("[QUERY] " + query)
-                  sql_connection.createStatement().executeUpdate(query)
+                  val sql_statement = sql_connection.createStatement()
+                  sql_statement.execute(query)
+                  val result = sql_statement.getResultSet()
+                  result.next()
                   log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
-                  complete((StatusCodes.Created, performed))
+                  complete((StatusCodes.Created, "" + result.getInt("id")))
                 }
               }
             } ~
@@ -135,7 +152,7 @@ trait Routes extends JsonSupport with CORSHandler {
                     "payee = '" + transaction.payee + "' and " +
                     "amount = " + transaction.amount + " and " +
                     "memo = '" + transaction.memo + "' and " +
-                    "account = '" + transaction.account + "'";
+                    "account = '" + transaction.account + "'"
                   println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
                   log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
@@ -146,33 +163,27 @@ trait Routes extends JsonSupport with CORSHandler {
             put {
               entity(as[TransactionUpdate]) { transaction =>
                 val transactionMade: Future[TransactionActionPerformed] =
-                  (transactionActor ? UpdateTransaction(transaction)).mapTo[TransactionActionPerformed]
+                  (transactionActor ? UpdateTransaction()).mapTo[TransactionActionPerformed]
                 onSuccess(transactionMade) { performed =>
                   val query = "update transactions set " +
-                    "transaction_date = '" + transaction.transaction_date_after + "', " +
-                    "category = '" + transaction.category_after + "', " +
-                    "payee = '" + transaction.payee_after + "', " +
-                    "amount = " + transaction.amount_after + ", " +
-                    "memo = '" + transaction.memo_after + "', " +
-                    "account = '" + transaction.account_after + "' " +
-                    "where username = '" + transaction.username + "' and " +
-                    "transaction_date = '" + transaction.transaction_date_before + "' and " +
-                    "category = '" + transaction.category_before + "' and " +
-                    "payee = '" + transaction.payee_before + "' and " +
-                    "amount = " + transaction.amount_before + " and " +
-                    "memo = '" + transaction.memo_before + "' and " +
-                    "account = '" + transaction.account_before + "'"
+                    "transaction_date = '" + transaction.transaction_date + "', " +
+                    "category = '" + transaction.category + "', " +
+                    "payee = '" + transaction.payee + "', " +
+                    "amount = " + transaction.amount + ", " +
+                    "memo = '" + transaction.memo + "', " +
+                    "account = '" + transaction.account + "' " +
+                    "where id = " + transaction.id + ";"
                   println("[QUERY] " + query)
                   sql_connection.createStatement().executeUpdate(query)
-                  log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
+                  //                  log.info("Transaction complete [{}]: {}", transaction.username, performed.description)
                   complete((StatusCodes.Created, performed))
                 }
               }
             }
         } ~ extractUnmatchedPath { remaining =>
-          val str = s"$remaining";
+          val str = s"$remaining"
           if (str.length() != 0) {
-            val username = str.substring(1);
+            val username = str.substring(1)
             val query = "select * from transactions where username = '" + username + "' order by transaction_date desc;"
             println("[QUERY] " + query)
             val result = sql_connection.createStatement().executeQuery(query)
@@ -183,8 +194,23 @@ trait Routes extends JsonSupport with CORSHandler {
             complete(s"Unmatched: '$remaining'")
         }
       })
-  //    private val sfSalt = "9e107d9d372bb6826bd81d3542a419d6"
-  //    def encrypt(theText: String): String = {
-  //      DigestUtils.md5Hex(theText + sfSalt)
-  //    }
+  private val sfSalt = "9e107d9d372bb6826bd81d3542a419d6"
+
+  def getMd5(input: String): String = try { // Static getInstance method is called with hashing MD5
+    val md = MessageDigest.getInstance("MD5")
+    // digest() method is called to calculate message digest
+    //  of an input digest() return array of byte
+    val messageDigest = md.digest((input + sfSalt).getBytes)
+    // Convert byte array into signum representation
+    val no = new BigInteger(1, messageDigest)
+    // Convert message digest into hex value
+    var hashtext = no.toString(16)
+    while ({
+      hashtext.length < 32
+    }) hashtext = "0" + hashtext
+    hashtext
+  } catch {
+    case e: NoSuchAlgorithmException =>
+      throw new RuntimeException(e)
+  } // For specifying wrong message digest algorithms
 }

@@ -3,11 +3,7 @@
     <div class="container">
       <div class="inner-container">
         <h1>Add Transaction</h1>
-        <div id="transactionType">
-          <label>Earned</label>
-          <input v-model="EntryModel.transactionValue" type="range" min="0" max="1">
-          <label>Spent</label>
-        </div>
+        <toggle-button v-model="EntryModel.toggle" :value="false" :labels="{checked: 'Earned', unchecked: 'Spent'}" :color="{checked: '#3DD721', unchecked: '#FF5733'}" :width=150 />
         <div id="grid">
           <i class="fa fa-calendar" aria-hidden="true"></i>
           <input
@@ -92,7 +88,8 @@ export default {
   data() {
     return {
       EntryModel: {
-        transactionValue: "0",
+        toggle: false,
+        // transactionValue: "0",
         date: new Date().getDate(),
         category: "",
         payee: "",
@@ -104,7 +101,7 @@ export default {
   },
   computed: {
     payerPayee() {
-      if(this.EntryModel.transactionValue === "0") return "Payer";
+      if(this.EntryModel.toggle) return "Payer";
       return "Payee";
     }
   },
@@ -112,9 +109,10 @@ export default {
     submit() {
       var curr = this.EntryModel;
       if (this.$store.state.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
-        var factor = 1;
-        if(this.EntryModel.transactionValue === "1") factor = -1;
+        var factor = -1;
+        if(this.EntryModel.toggle) factor = 1;
         const model = {
+          id: -1,
           username: this.$store.state.username,
           transaction_date: this.EntryModel.date,
           category: this.EntryModel.category,
@@ -126,6 +124,7 @@ export default {
         fetch("http://127.0.0.1:8080/transactions", httpPostOptions(model))
         .then(res => res.json())
         .then(response => {
+          model.id = Number(response);
           this.$store.dispatch("addTransactionAction", model);
           console.log('Success:', JSON.stringify(response))
         })

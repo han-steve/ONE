@@ -23,8 +23,6 @@ object UserRegistryActor {
 class UserRegistryActor extends Actor with ActorLogging {
   import UserRegistryActor._
 
-  var users = Set.empty[User]
-
   def receive: Receive = {
     case GetUsers(users) => {
       var dbUsers = Set.empty[User]
@@ -38,10 +36,10 @@ class UserRegistryActor extends Actor with ActorLogging {
       sender() ! Users(dbUsers.toSeq)
     }
     case CreateUser(user) =>
-      println(user)
-      users += user
+      println("[CREATED USER] " + user)
       sender() ! UserActionPerformed(s"User ${user.username} with password ${user.password} created.")
     case UpdateUser(user) =>
+      println("[UPDATED USER] " + user)
       sender() ! UserActionPerformed(s"User ${user.username_after} updated profile")
     case GetUser(user) =>
       user.next();
@@ -50,7 +48,6 @@ class UserRegistryActor extends Actor with ActorLogging {
         phone_Number = user.getString("phoneNumber")
       sender() ! new User(user.getString("username"), user.getString("email"), user.getString("password"), phone_Number)
     case DeleteUser(name) =>
-      users.find(_.username == name) foreach { user => users -= user }
       sender() ! UserActionPerformed(s"User ${name} deleted.")
   }
 }

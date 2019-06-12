@@ -3,11 +3,7 @@
         <div class="container">
             <div class="inner-container">
                 <h1>Edit Transaction</h1>
-                <div id="transactionType">
-                    <label>Earned</label>
-                    <input v-model="transactionValue" type="range" min="0" max="1">
-                    <label>Spent</label>
-                </div>
+                <toggle-button @change="updateToggle" :sync="true" :value="editModel.toggle" :labels="{checked: 'Earned', unchecked: 'Spent'}" :color="{checked: '#3DD721', unchecked: '#FF5733'}" :width=150 />
                 <div id="grid">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                     <input
@@ -94,19 +90,16 @@
         name: "edit",
         props: ["transaction"],
         data() {
-            return {
-                transactionValue: this.editModel.computedTransactionValue
-            }
+          return {
+              spent: null
+          }
         },
         computed: {
             editModel() {
                 return {
+                    id: this.transaction.id,
                     username: this.transaction.username,
-                    computedTransactionValue: function() {
-                        if(this.transaction.amount > 0)
-                            return "0";
-                        return "1";
-                    },
+                    toggle: this.transaction.amount > 0,
                     transaction_date: this.transaction.transaction_date,
                     category: this.transaction.category,
                     payee: this.transaction.payee,
@@ -116,32 +109,25 @@
                 }
             },
             payerPayee() {
-                if(this.transactionValue === "0") return "Payer";
+                if(this.editModel.toggle) return "Payer";
                 return "Payee";
             }
         },
         methods: {
             submit() {
-                var curr = this.editModel;
+                let curr = this.editModel;
                 if (curr.amount !== "" && curr.account !== "" && curr.transaction_date.toString().split("-").length === 3) {
-                    var factor = 1;
-                    if(this.transactionValue === "1") factor = -1;
-                    var model = {
-                        username: this.editModel.username,
-                        transaction_date_before: this.transaction.transaction_date,
-                        category_before: this.transaction.category,
-                        payee_before: this.transaction.payee,
-                        amount_before: this.transaction.amount,
-                        memo_before: this.transaction.memo,
-                        account_before: this.transaction.account,
-                        transaction_date_after: curr.transaction_date,
-                        category_after: curr.category,
-                        payee_after: curr.payee,
-                        amount_after: Number(Math.abs(curr.amount)) * factor,
-                        memo_after: curr.memo,
-                        account_after: curr.account,
+                    let factor = 1;
+                    if(this.spent !== null && !this.spent) factor = -1;
+                    let model = {
+                        id: curr.id,
+                        transaction_date: curr.transaction_date,
+                        category: curr.category,
+                        payee: curr.payee,
+                        amount: Number(Math.abs(curr.amount)) * factor,
+                        memo: curr.memo,
+                        account: curr.account,
                     };
-                    console.log(model)
                     fetch("http://127.0.0.1:8080/transactions", httpPutOptions(model))
                         .then(res => res.json())
                         .then(response => {
@@ -156,7 +142,11 @@
                 }
             },
             close() {
+                this.spent = null;
                 Dashboard.methods.closeEditEntry();
+            },
+            updateToggle(event) {
+                this.spent = event.value;
             }
         }
     };

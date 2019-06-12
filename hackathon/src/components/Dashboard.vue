@@ -117,7 +117,6 @@ export default {
             .then(res => res.json())
             .then(response => {
               let user = response;
-              console.log(user)
                 this.$store.dispatch("updateProfileAction", user);
             })
             .catch(error => console.error('Error:', error));
@@ -132,6 +131,7 @@ export default {
       page: 1,
       max: 1,
       TransactionEditModel: {
+        id: -1,
         username: this.$store.state.username,
         transaction_date: null,
         category: "",
@@ -174,6 +174,7 @@ export default {
       this.$store.dispatch("removeTransactionAction", transaction)
     },
     edit(transaction) {
+      this.TransactionEditModel.id = transaction.id;
       this.TransactionEditModel.transaction_date = transaction.transaction_date;
       this.TransactionEditModel.category = transaction.category;
       this.TransactionEditModel.payee = transaction.payee;

@@ -3,36 +3,43 @@
     <main>
       <div id="container-2">
         <h2>SignUp</h2>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Username"
-          @keyup.enter="signup()"
-          required="true"
-          v-model="SignUpModel.username"
-        >
-        <input
-                type="email"
-                class="form-control"
-                placeholder="Email Address"
-                @keyup.enter="signup()"
-                v-model="SignUpModel.email"
-        >
-        <input
-          type="password"
-          placeholder="Password"
-          class="form-control"
-          @keyup.enter="signup()"
-          required="true"
-          v-model="SignUpModel.password"
-        >
-        <input
-                type="number"
-                placeholder="Phone Number"
-                class="form-control"
-                @keyup.enter="signup()"
-                v-model="SignUpModel.phoneNumber"
-        >
+        <div id="grid">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Username"
+                  @keyup.enter="signup()"
+                  required="true"
+                  v-model="SignUpModel.username"
+          >
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email Address"
+                  @keyup.enter="signup()"
+                  v-model="SignUpModel.email"
+          >
+          <i class="fa fa-lock" aria-hidden="true"></i>
+          <input
+                  type="password"
+                  placeholder="Password"
+                  class="form-control"
+                  @keyup.enter="signup()"
+                  required="true"
+                  v-model="SignUpModel.password"
+          >
+          <i class="fa fa-phone" aria-hidden="true"></i>
+          <input
+                  type="number"
+                  step="1"
+                  placeholder="Phone Number"
+                  class="form-control"
+                  @keyup.enter="signup()"
+                  v-model="SignUpModel.phoneNumber"
+          >
+        </div>
         <button class="btn btn-md btn-success float-center" @click="signup()">Sign Up</button>
       </div>
     </main>
@@ -41,6 +48,7 @@
 
 <script>
 import { httpPostOptions } from "../lib/http";
+import MD5 from "crypto-js/md5";
 
 export default {
   name: "signup",
@@ -63,7 +71,7 @@ export default {
         const model = {
           username: this.SignUpModel.username,
           email: this.SignUpModel.email,
-          password: this.SignUpModel.password,
+          password: MD5(this.SignUpModel.password).toString(),
           phoneNumber: this.SignUpModel.phoneNumber
         };
         fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
@@ -76,8 +84,9 @@ export default {
           console.error('Error:', error)
           alert("This username or email has been taken.")
           });
-
       }
+      else
+        alert("Make sure the inputted email is properly formatted and includes '@'")
     },
     resetCurrentUser(username) {
       this.$store.dispatch('setCurrentUserAction', username);
@@ -100,8 +109,15 @@ h2 {
   margin-top: 0;
   margin-bottom: 1em;
 }
-#signupButton {
-  margin-left: 1%;
+#grid {
+  display: grid;
+  grid-template-columns: 3em auto;
+  grid-template-rows: repeat(4, 3em);
+  grid-column-gap: 1em;
+}
+i {
+  font-size: 2em;
+  text-align: center;
 }
 .container-1 {
   display: grid;

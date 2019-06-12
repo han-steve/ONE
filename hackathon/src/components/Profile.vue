@@ -3,6 +3,8 @@
     <main>
       <div id="container-2">
         <h2>My Profile</h2>
+        <div id="grid">
+        <i class="fa fa-user" aria-hidden="true"></i>
         <input
           type="text"
           class="form-control"
@@ -10,12 +12,14 @@
           required="true"
           v-model="ProfileModel.username"
         >
+        <i class="fa fa-envelope" aria-hidden="true"></i>
         <input
                 type="email"
                 class="form-control"
                 placeholder="Email Address"
                 v-model="ProfileModel.email"
         >
+        <i class="fa fa-lock" aria-hidden="true"></i>
         <input
           type="password"
           placeholder="Password"
@@ -23,12 +27,14 @@
           required="true"
           v-model="ProfileModel.password"
         >
+        <i class="fa fa-phone" aria-hidden="true"></i>
         <input
                 type="number"
                 placeholder="Phone Number"
                 class="form-control"
                 v-model="ProfileModel.phoneNumber"
         >
+        </div>
         <button class="btn btn-md btn-success float-center" @click="update()">Update Profile</button>
       </div>
     </main>
@@ -37,9 +43,14 @@
 
 <script>
 import { httpPutOptions } from "../lib/http";
+import MD5 from "crypto-js/md5";
 
 export default {
   name: "profile",
+  mounted() {
+    if(this.$store.state.username === "")
+      this.$router.push({ path: "/" });
+  },
   data() {
     return {
       ProfileModel: {
@@ -63,7 +74,7 @@ export default {
           phoneNumber_before: this.$store.state.phoneNumber,
           username_after: this.ProfileModel.username,
           email_after: this.ProfileModel.email,
-          password_after: this.ProfileModel.password,
+          password_after: MD5(this.ProfileModel.password).toString(),
           phoneNumber_after: this.ProfileModel.phoneNumber
         };
         fetch("http://127.0.0.1:8080/users", httpPutOptions(model))
@@ -99,6 +110,16 @@ h2 {
   font-size: 2em;
   margin-top: 0;
   margin-bottom: 1em;
+}
+#grid {
+  display: grid;
+  grid-template-columns: 3em auto;
+  grid-template-rows: repeat(4, 3em);
+  grid-column-gap: 1em;
+}
+i {
+  font-size: 2em;
+  text-align: center;
 }
 #signupButton {
   margin-left: 1%;

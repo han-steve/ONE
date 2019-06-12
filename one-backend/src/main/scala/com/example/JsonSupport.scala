@@ -17,8 +17,8 @@ trait JsonSupport extends SprayJsonSupport {
 
   implicit val userActionPerformedJsonFormat = jsonFormat1(UserActionPerformed)
 
-  implicit val transactionJsonFormat = jsonFormat7(Transaction)
-  implicit val transactionUpdateJsonFormat = jsonFormat13(TransactionUpdate)
+  implicit val transactionJsonFormat = jsonFormat8(Transaction)
+  implicit val transactionUpdateJsonFormat = jsonFormat7(TransactionUpdate)
   implicit val transactionsJsonFormat = jsonFormat1(Transactions)
 
   implicit val transactionActionPerformedJsonFormat = jsonFormat1(TransactionActionPerformed)

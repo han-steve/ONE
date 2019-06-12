@@ -38,15 +38,13 @@ const mutations = {
     editTransactionMutation: function(state, transaction) {
         for(let i = 0; i < state.transactions.length; i++) {
             let current = state.transactions[i];
-            if(current.transaction_date === transaction.transaction_date_before && current.category === transaction.category_before &&
-                current.payee === transaction.payee_before && current.amount === transaction.amount_before && current.memo === transaction.memo_before &&
-                current.account === transaction.account_before) {
-                state.transactions[i].transaction_date = transaction.transaction_date_after;
-                state.transactions[i].category = transaction.category_after;
-                state.transactions[i].payee = transaction.payee_after;
-                state.transactions[i].amount = transaction.amount_after;
-                state.transactions[i].memo = transaction.memo_after;
-                state.transactions[i].account = transaction.account_after;
+            if(current.id === transaction.id) {
+                state.transactions[i].transaction_date = transaction.transaction_date;
+                state.transactions[i].category = transaction.category;
+                state.transactions[i].payee = transaction.payee;
+                state.transactions[i].amount = transaction.amount;
+                state.transactions[i].memo = transaction.memo;
+                state.transactions[i].account = transaction.account;
             }
         }
         state.transactions.sort((a, b) => new Date(b.transaction_date).getTime() - new Date(a.transaction_date).getTime());

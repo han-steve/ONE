@@ -36,7 +36,7 @@
         </div>
         <div class="nav-options">
           <a class="navbar-brand" @click="updateProfile()">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i> Profile
+            <i class="fa fa-user" aria-hidden="true"></i> Profile
           </a>
         </div>
         <div>
