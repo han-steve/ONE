@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <edit-entry ref = "edit" id="edit" style="visibility: hidden;" v-bind:transaction="TransactionEditModel" ></edit-entry>
+    <edit-entry
+      ref="edit"
+      id="edit"
+      style="visibility: hidden;"
+      v-bind:transaction="TransactionEditModel"
+    ></edit-entry>
     <main>
       <h1>Welcome {{ this.$store.state.username }}!</h1>
       <h2>Dashboard</h2>
@@ -8,7 +13,7 @@
       <div id="filter">
         <div id="search-bar">
           <label>Search by Category:</label>
-          <input type="text" class="search form-control" autofocus="true" v-model="search">
+          <input type="text" class="search form-control" autofocus="true" v-model="search" />
         </div>
         <div id="time-bar">
           <label>Search by Date Range:</label>
@@ -18,7 +23,7 @@
             autofocus="true"
             name="date"
             v-model="begin"
-          >
+          />
           <label>to</label>
           <input
             type="date"
@@ -26,7 +31,7 @@
             autofocus="true"
             name="date"
             v-model="end"
-          >
+          />
         </div>
       </div>
       <!--<div id="navPage">-->
@@ -49,7 +54,7 @@
           <div class="table-heading">Payee</div>
           <div class="table-heading">Memo</div>
         </div>
-        <hr>
+        <hr />
         <ul>
           <div id="data">
             <li
@@ -69,7 +74,7 @@
               </div>
             </li>
           </div>
-          <hr>
+          <hr />
           <li>
             <div class="rows">
               <div id="sum">Sum:</div>
@@ -91,7 +96,7 @@ import SpendingChart from "../components/SpendingChart";
 import SpendingLineChart from "../components/SpendingLineChart";
 import EditEntry from "../components/EditEntry";
 
-import {httpDeleteOptions, httpGetOptions} from "../lib/http";
+import { httpDeleteOptions, httpGetOptions } from "../lib/http";
 
 export default {
   name: "dashboard",
@@ -101,25 +106,30 @@ export default {
     SpendingLineChart
   },
   mounted() {
-    if(this.$store.state.username === "")
-      this.$router.push({ path: "/" });
-      fetch("http://127.0.0.1:8080/transactions/" + this.$store.state.username, httpGetOptions())
-              .then(res => res.json())
-              .then(response => {
-                this.$store.dispatch("clearCurrentStoredTransactionsAction");
-                let transactions = response.transactions;
-                for(let i = 0; i < transactions.length; i++) {
-                  this.$store.dispatch("addTransactionAction", transactions[i]);
-                }
-              })
-              .catch(error => console.error('Error:', error));
-    fetch("http://127.0.0.1:8080/users/" + this.$store.state.username, httpGetOptions())
-            .then(res => res.json())
-            .then(response => {
-              let user = response;
-                this.$store.dispatch("updateProfileAction", user);
-            })
-            .catch(error => console.error('Error:', error));
+    if (this.$store.state.username === "") this.$router.push({ path: "/" });
+    fetch(
+      "http://127.0.0.1:8080/transactions/" + this.$store.state.username,
+      httpGetOptions()
+    )
+      .then(res => res.json())
+      .then(response => {
+        this.$store.dispatch("clearCurrentStoredTransactionsAction");
+        let transactions = response.transactions;
+        for (let i = 0; i < transactions.length; i++) {
+          this.$store.dispatch("addTransactionAction", transactions[i]);
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    fetch(
+      "http://127.0.0.1:8080/users/" + this.$store.state.username,
+      httpGetOptions()
+    )
+      .then(res => res.json())
+      .then(response => {
+        let user = response;
+        this.$store.dispatch("updateProfileAction", user);
+      })
+      .catch(error => console.error("Error:", error));
   },
   data() {
     return {
@@ -148,30 +158,33 @@ export default {
       let final = [];
       let list = this.$store.state.transactions;
       for (let i = 0; i < list.length; i++) {
-          if (list[i].category.toLowerCase().match(this.search.toLowerCase())) {
-            if (
-                    new Date(list[i].transaction_date).getTime()  >=
-                    new Date(this.begin).getTime() &&
-                    new Date(list[i].transaction_date).getTime() <=
-                    new Date(this.end).getTime()
-            ) {
-              final.push(list[i]);
-              this.sum += new Number(list[i].amount);
-            }
+        if (list[i].category.toLowerCase().match(this.search.toLowerCase())) {
+          if (
+            new Date(list[i].transaction_date).getTime() >=
+              new Date(this.begin).getTime() &&
+            new Date(list[i].transaction_date).getTime() <=
+              new Date(this.end).getTime()
+          ) {
+            final.push(list[i]);
+            this.sum += new Number(list[i].amount);
           }
+        }
       }
       return final;
-    },
+    }
   },
   methods: {
     rm(transaction) {
-      fetch("http://127.0.0.1:8080/transactions", httpDeleteOptions(transaction))
-              .then(res => res.json())
-              .then(response => {
-                console.log("response" + response)
-              })
-              .catch(error => console.error('Error:', error));
-      this.$store.dispatch("removeTransactionAction", transaction)
+      fetch(
+        "http://127.0.0.1:8080/transactions",
+        httpDeleteOptions(transaction)
+      )
+        .then(res => res.json())
+        .then(response => {
+          console.log("response" + response);
+        })
+        .catch(error => console.error("Error:", error));
+      this.$store.dispatch("removeTransactionAction", transaction);
     },
     edit(transaction) {
       this.TransactionEditModel.id = transaction.id;
@@ -231,8 +244,8 @@ label {
   padding: 1%;
   margin: 0.5em;
 }
-#charts{
-  display: grid; 
+#charts {
+  display: grid;
   height: 43vh;
   overflow: hidden;
   grid-template-columns: 1fr 2fr;
@@ -265,7 +278,7 @@ ul {
   text-align: center;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr .5fr .5fr;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr 0.5fr 0.5fr;
   margin-top: 0.3em;
 }
 main {

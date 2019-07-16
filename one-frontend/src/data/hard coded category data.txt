@@ -1,0 +1,80 @@
+    //hard-coded mock data for pie chart
+    categorySums: state => {
+      var data = [
+        {
+          id: "education",
+          name: "Education",
+          value: 700, //the education category itself has 100
+          children: [
+            {
+              id: "books & supplies",
+              name: "Books & Supplies",
+              value: 100
+            },
+            {
+              id: "tuition",
+              name: "Tuition",
+              value: 200
+            },
+            {
+              id: "exams",
+              name: "Exams",
+              value: 300
+            }
+          ]
+        },
+        {
+          id: "health & fitness",
+          name: "Health & Fitness",
+          value: 600,
+          children: [
+            {
+              id: "dentist",
+              name: "Dentist",
+              value: 100
+            },
+            {
+              id: "doctor",
+              name: "Doctor",
+              value: 200
+            },
+            {
+              id: "gym",
+              name: "Gym",
+              value: 300
+            }
+          ]
+        },
+        {
+          id: "electronics",
+          name: "Electronics",
+          value: 200,
+          children: [
+            {
+              id: "computer",
+              name: "Computer",
+              value: 150
+            },
+            {
+              id: "mobile",
+              name: "Mobile",
+              value: 50
+            },
+            {
+              id: "accessory",
+              name: "Accessory",
+              value: 0
+            }
+          ]
+        },
+        {
+          name: "Food",
+          value: 100
+        },
+        {
+          name: "Entertainment",
+          value: 50
+        }
+      ];
+      return data;
+    }
