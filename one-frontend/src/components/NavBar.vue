@@ -59,6 +59,7 @@ export default {
   height: 100vh;
   width: 15em;
   position: fixed;
+  z-index: 10;
 }
 #logo {
   padding-top: 2em;

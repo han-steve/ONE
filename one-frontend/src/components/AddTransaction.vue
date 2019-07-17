@@ -114,6 +114,7 @@ export default {
   left: 5.9rem;
   transition: 0.2s ease-out;
   cursor: pointer;
+  z-index: 900;
 }
 .plus-button:hover {
   transform: scale(1.1);

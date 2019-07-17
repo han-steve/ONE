@@ -10,6 +10,24 @@ import dataUtil from "@/services/DataUtil.js";
 export default new Vuex.Store({
   state: {
     transactions: data,
+    balance: 100, //hardcoded sample
+    accounts: [
+      {
+        account_id: "bOwYxeA3rvTa1b7Q8YzqfRANOQ6MVqtqznxKV",
+        balances: {
+          available: 1175.47,
+          current: 1184.35,
+          iso_currency_code: "USD",
+          limit: null,
+          unofficial_currency_code: null
+        },
+        mask: "5373",
+        name: "CHASE COLLEGE",
+        official_name: null,
+        subtype: "checking",
+        type: "depository"
+      }
+    ],
     categories: require("@/data/CategoryTree.json"),
     filters: {
       date: {
@@ -72,21 +90,55 @@ export default new Vuex.Store({
     //only works when the data is sorted by time
     lineChartData: (state, getters) => {
       var transactions = getters.filteredTransactions;
+      var startDate = state.filters.date.start;
+      var endDate = state.filters.date.end;
       var data = [];
       if (state.filters.type !== "all") {
-        var total = 0;
-        for (let i = transactions.length - 1; i >= 0; i--) {
-          var transaction = transactions[i];
-          total += transaction.amount;
-          if (i > 0 && transactions[i - 1].date !== transaction.date) {
-            data.push({
-              name: transaction.date,
-              value: [transaction.date, total]
-            });
+        let total = 0;
+        let currentDay = new Date(startDate.getTime()); //clone the start date so we don't mutate the filter
+        let index = transactions.length - 1;
+        // doing it this way so that every day will have a datapoint
+        while (+currentDay <= +endDate) {
+          while (
+            index >= 0 &&
+            +date.parseDate(transactions[index].date) === +currentDay
+          ) {
+            total += Math.abs(transactions[index].amount);
+            index--;
           }
+          let currentDayString = date.stringifyDate(currentDay);
+          data.push({
+            name: currentDayString,
+            value: [currentDayString, total]
+          });
+          currentDay.setDate(currentDay.getDate() + 1);
+        }
+      } else {
+        //work backwards from balance
+        let balance = state.balance;
+        let currentDay = new Date(endDate.getTime());
+        let index = 0;
+        data.push({
+          name: date.stringifyDate(currentDay),
+          value: [date.stringifyDate(currentDay), balance]
+        });
+        //using > instead of >= to compensate for shifting all balances by one day
+        while (+currentDay > +startDate) {
+          while (
+            index < transactions.length &&
+            +date.parseDate(transactions[index].date) === +currentDay
+          ) {
+            balance += transactions[index].amount;
+            index++;
+          }
+          currentDay.setDate(currentDay.getDate() - 1); //fix off-by-one error when working backwards
+          let currentDayString = date.stringifyDate(currentDay);
+          data.push({
+            name: currentDayString,
+            value: [currentDayString, balance]
+          });
         }
       }
-      //if all
       return data;
     },
     pieChartData: (state, getters) => {

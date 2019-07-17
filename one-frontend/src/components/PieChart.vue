@@ -38,7 +38,11 @@ export default {
       pie: {
         tooltip: {
           trigger: "item",
-          formatter: "{b}: ${c} ({d}%)"
+          formatter: param => {
+            return `${param.name}: $${param.value.toFixed(2)} (${
+              param.percent
+            }%)`;
+          }
         },
         legend: {
           type: "scroll",
@@ -82,9 +86,7 @@ export default {
             },
             itemStyle: {
               color: param => {
-                if (param.value !== 0) {
-                  return colors[colorIndex++];
-                }
+                return colors[param.dataIndex];
               }
             },
             labelLine: {
@@ -128,12 +130,10 @@ export default {
       if (newData) {
         dataStack.push(newData);
         this.updateData();
-        this.updateLegend();
       } else {
         if (currentData.length > 1) {
           dataStack.push([currentData[param.dataIndex]]);
           this.updateData();
-          this.updateLegend();
         }
       }
     },
@@ -141,14 +141,19 @@ export default {
       if (dataStack.length > 1) {
         dataStack.pop();
         this.updateData();
-        this.updateLegend();
       }
     },
     updateData() {
       var data = dataStack[dataStack.length - 1].filter(element => {
         return element.value > 0;
       });
-      this.pie.series[0].data = data;
+      if (data.length > 0) {
+        this.pie.series[0].data = data;
+      } else {
+        //to prevent adding data of 0 length to the stack.
+        //Honestly should put the filtering code above in nextLevel instead
+        dataStack.pop();
+      }
       if (dataStack.length === 1) {
         this.hidden = true;
       } else {
@@ -157,14 +162,13 @@ export default {
       colors = interpolateColors(
         this.startColor,
         this.endColor,
-        this.pie.legend.data.length
+        this.pie.series[0].data.length
       );
     }
   },
   created() {
     dataStack = [this.pieChartData];
     this.updateData();
-    this.updateLegend();
   },
   computed: {
     total() {
@@ -172,7 +176,7 @@ export default {
       this.pie.series[0].data.forEach(element => {
         sum += element.value || 0;
       });
-      return sum;
+      return sum.toFixed(2);
     },
     pieChartData() {
       return this.$store.getters.pieChartData;
@@ -182,7 +186,6 @@ export default {
     pieChartData() {
       dataStack = [this.pieChartData];
       this.updateData();
-      this.updateLegend();
     }
   }
 };

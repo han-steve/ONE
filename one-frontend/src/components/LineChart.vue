@@ -7,7 +7,6 @@
 <script>
 import ECharts from "vue-echarts";
 import echarts from "echarts";
-import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -56,7 +55,7 @@ export default {
         },
         series: [
           {
-            name: "Total Spending",
+            name: "",
             type: "line",
             showSymbol: false,
             itemStyle: {
@@ -74,15 +73,52 @@ export default {
                 }
               ])
             },
-            data: this.lineChartData
+            data: []
           }
         ]
       }
     };
   },
-  computed: mapGetters(["lineChartData"]),
+  computed: {
+    lineChartData() {
+      return this.$store.getters.lineChartData;
+    },
+    lineChartName() {
+      var type = this.$store.state.filters.type;
+      if (type === "expense") return "Total Spending";
+      if (type === "income") return "Total Income";
+      if (type === "all") return "Balance";
+    }
+  },
   created() {
     this.line.series[0].data = this.lineChartData;
+    this.line.series[0].name = this.lineChartName;
+  },
+  watch: {
+    // because you can't use computed property in data.
+    // tell me if you have a better way to do this lol
+    // Also props in data don't seem to be reactive
+    lineChartData() {
+      this.line.series[0].data = this.lineChartData;
+      this.line.series[0].itemStyle.color = this.startColor;
+      this.line.series[0].areaStyle.color = new echarts.graphic.LinearGradient(
+        0,
+        0,
+        0,
+        1,
+        [
+          {
+            offset: 0,
+            color: this.endColor
+          },
+          {
+            offset: 1,
+            color: this.startColor
+          }
+        ]
+      );
+      this.line.series[0].name = this.lineChartName;
+    }
   }
 };
 </script>

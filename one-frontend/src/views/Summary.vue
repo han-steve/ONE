@@ -13,10 +13,11 @@
     </div>
     <div class="second-background">
       <filter-bar></filter-bar>
-      <div class="charts">
-        <pie-chart :startColor="startColor" :endColor="endColor"></pie-chart>
+      <div class="charts" :class="{'charts-no-pie': !displayPie}">
+        <pie-chart v-if="displayPie" :startColor="startColor" :endColor="endColor"></pie-chart>
         <line-chart :startColor="startColor" :endColor="endColor"></line-chart>
       </div>
+      <transaction-table></transaction-table>
     </div>
   </main>
 </template>
@@ -25,12 +26,14 @@
 import FilterBar from "@/components/FilterBar.vue";
 import PieChart from "@/components/PieChart.vue";
 import LineChart from "@/components/LineChart.vue";
+import TransactionTable from "@/components/TransactionTable.vue";
 
 export default {
   components: {
     FilterBar,
     PieChart,
-    LineChart
+    LineChart,
+    TransactionTable
   },
   data() {
     return {
@@ -74,6 +77,9 @@ export default {
     },
     isAll() {
       return this.type === "all";
+    },
+    displayPie() {
+      return this.type !== "all";
     }
   }
 };
@@ -83,9 +89,13 @@ export default {
 .charts {
   display: grid;
   width: calc(100% - 1px);
-  grid-template-columns: 420px auto;
+  /* Would like to use '420px auto' but there are issues with resizing */
+  grid-template-columns: 420px 500px;
   grid-column-gap: 20px;
   margin-top: 20px;
+}
+.charts-no-pie {
+  grid-template-columns: auto;
 }
 .heading {
   display: flex;

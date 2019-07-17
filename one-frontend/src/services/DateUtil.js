@@ -36,6 +36,12 @@ function parseDate(dateString) {
   var day = +dateString.substring(8, 10);
   return new Date(year, month - 1, day);
 }
+function stringifyDate(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  return year + "-" + month + "-" + day;
+}
 export default {
   getToday,
   getThisMonth,
@@ -43,5 +49,6 @@ export default {
   getThisYear,
   getPastYear,
   getEarliestDate,
-  parseDate
+  parseDate,
+  stringifyDate
 };
