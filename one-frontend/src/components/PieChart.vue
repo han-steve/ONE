@@ -125,6 +125,7 @@ export default {
       }
     },
     nextLevel(param) {
+      this.$store.commit("SET_FILTER_CATEGORIES", [param.data.id]);
       var currentData = this.pie.series[0].data;
       var newData = currentData[param.dataIndex].children;
       if (newData) {
@@ -186,6 +187,7 @@ export default {
     pieChartData() {
       dataStack = [this.pieChartData];
       this.updateData();
+      console.log("shit's changed");
     }
   }
 };

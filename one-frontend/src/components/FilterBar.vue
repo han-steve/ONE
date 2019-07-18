@@ -4,7 +4,8 @@
       <div class="left-filter-container">
         <treeselect
           class="left-filter-button"
-          v-model="value"
+          :value="selectedCategories"
+          @input="selectCategories"
           :options="categories"
           :closeOnSelect="true"
           :multiple="true"
@@ -26,9 +27,18 @@ export default {
   },
   data() {
     return {
-      value: null,
       categories: require("@/data/CategoryTree.json")
     };
+  },
+  computed: {
+    selectedCategories() {
+      return this.$store.state.filters.categories;
+    }
+  },
+  methods: {
+    selectCategories(e) {
+      this.$store.commit("SET_FILTER_CATEGORIES", e);
+    }
   }
 };
 </script>

@@ -74,7 +74,6 @@ h1 {
   padding: 2em;
   margin: 1.3em 0;
   border-radius: 2em;
-  height: 100vh;
 }
 .bubble {
   background-color: #f9f9fa;

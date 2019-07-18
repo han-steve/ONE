@@ -43,6 +43,23 @@ function updateSums(root) {
   }
   return root.value;
 }
+function findSubCategories(root, result) {
+  result.push(root.id);
+  if (!root.children) {
+    return;
+  } else {
+    root.children.forEach(el => {
+      findSubCategories(el, result);
+    });
+  }
+}
+export default {
+  findCategory,
+  populateTreeWithValues,
+  updateSums,
+  findSubCategories
+};
+
 // var categories = require("../data/CategoryTree.json");
 // var transactions = [
 //   {
@@ -1100,8 +1117,3 @@ function updateSums(root) {
 // categories.forEach(element => {
 //   updateSums(element);
 // });
-export default {
-  findCategory,
-  populateTreeWithValues,
-  updateSums
-};

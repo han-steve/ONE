@@ -17,7 +17,9 @@
         <pie-chart v-if="displayPie" :startColor="startColor" :endColor="endColor"></pie-chart>
         <line-chart :startColor="startColor" :endColor="endColor"></line-chart>
       </div>
-      <transaction-table></transaction-table>
+      <div class="table">
+        <data-table :heroes="tableData" :columns="tableColumns"></data-table>
+      </div>
     </div>
   </main>
 </template>
@@ -26,14 +28,14 @@
 import FilterBar from "@/components/FilterBar.vue";
 import PieChart from "@/components/PieChart.vue";
 import LineChart from "@/components/LineChart.vue";
-import TransactionTable from "@/components/TransactionTable.vue";
+import DataTable from "@/components/DataTable.vue";
 
 export default {
   components: {
     FilterBar,
     PieChart,
     LineChart,
-    TransactionTable
+    DataTable
   },
   data() {
     return {
@@ -80,6 +82,12 @@ export default {
     },
     displayPie() {
       return this.type !== "all";
+    },
+    tableColumns() {
+      return this.$store.getters.tableColumns;
+    },
+    tableData() {
+      return this.$store.getters.tableData;
     }
   }
 };
@@ -90,7 +98,7 @@ export default {
   display: grid;
   width: calc(100% - 1px);
   /* Would like to use '420px auto' but there are issues with resizing */
-  grid-template-columns: 420px 500px;
+  grid-template-columns: 420px calc(100% - 450px);
   grid-column-gap: 20px;
   margin-top: 20px;
 }
@@ -114,5 +122,7 @@ export default {
 .red {
   background-color: rgb(241, 42, 42);
   color: white;
+}
+.table {
 }
 </style>

@@ -63,6 +63,13 @@ export default new Vuex.Store({
   actions: {},
   getters: {
     filteredTransactions: state => {
+      var subcategories = [];
+      state.filters.categories.forEach(root => {
+        dataUtil.findSubCategories(
+          dataUtil.findCategory(root, state.categories),
+          subcategories
+        );
+      });
       return state.transactions.filter(transaction => {
         var transactionDate = date.parseDate(transaction.date);
         var isRightType = true;
@@ -77,8 +84,8 @@ export default new Vuex.Store({
           (state.filters.accounts.length
             ? state.filters.accounts.includes(transaction.account_id)
             : true) &&
-          (state.filters.categories.length
-            ? state.filters.categories.includes(transaction.category_id)
+          (subcategories.length
+            ? subcategories.includes(transaction.category_id)
             : true) &&
           (state.filters.payees.length
             ? state.filters.payees.includes(transaction.name)
@@ -142,13 +149,30 @@ export default new Vuex.Store({
       return data;
     },
     pieChartData: (state, getters) => {
-      delete require.cache[
-        require.resolve("@/data/CategoryTreeForPieChart.json")
-      ];
       var result = require("@/data/CategoryTreeForPieChart.json");
       dataUtil.populateTreeWithValues(getters.filteredTransactions, result);
       result.forEach(el => {
         dataUtil.updateSums(el);
+      });
+      return result;
+    },
+    //This is all hardcoded so it probably shouldn't be in vuex but whatever
+    tableColumns: state => {
+      return ["date", "amount", "account", "category", "payee", "memo"];
+    },
+    tableData: (state, getters) => {
+      var result = [];
+      getters.filteredTransactions.forEach(transaction => {
+        result.push({
+          date: transaction.date,
+          amount: transaction.amount,
+          account: state.accounts.find(
+            account => account.account_id === transaction.account_id
+          ).name,
+          category: transaction.category, //will be replaced by id
+          payee: transaction.name,
+          memo: "" //nothing yet
+        });
       });
       return result;
     }
