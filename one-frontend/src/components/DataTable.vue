@@ -98,8 +98,8 @@ td {
 
 th,
 td {
-  min-width: 100px;
-  padding: 10px 20px;
+  min-width: 80px;
+  padding: 5px 10px;
 }
 
 th.active {

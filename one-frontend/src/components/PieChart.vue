@@ -21,7 +21,7 @@
 <script>
 import ECharts from "vue-echarts";
 import echarts from "echarts";
-
+import dataUtil from "@/services/DataUtil.js";
 import { interpolateColors } from "@/services/Colors.js";
 
 var dataStack = [];
@@ -126,21 +126,14 @@ export default {
     },
     nextLevel(param) {
       this.$store.commit("SET_FILTER_CATEGORIES", [param.data.id]);
-      var currentData = this.pie.series[0].data;
-      var newData = currentData[param.dataIndex].children;
-      if (newData) {
-        dataStack.push(newData);
-        this.updateData();
-      } else {
-        if (currentData.length > 1) {
-          dataStack.push([currentData[param.dataIndex]]);
-          this.updateData();
-        }
-      }
     },
     previousLevel() {
       if (dataStack.length > 1) {
         dataStack.pop();
+        console.log(dataStack[dataStack.length - 1])
+        // this.$store.commit("SET_FILTER_CATEGORIES", [
+        //   dataStack[dataStack.length - 1].id
+        // ]);
         this.updateData();
       }
     },
@@ -181,13 +174,29 @@ export default {
     },
     pieChartData() {
       return this.$store.getters.pieChartData;
+    },
+    categoryFilter() {
+      return this.$store.state.filters.categories;
     }
   },
   watch: {
     pieChartData() {
       dataStack = [this.pieChartData];
       this.updateData();
-      console.log("shit's changed");
+    },
+    categoryFilter() {
+      var filteredCategory = dataUtil.findCategory(
+        this.categoryFilter[0],
+        this.pieChartData
+      );
+      console.log(filteredCategory);
+      var newData = filteredCategory.children;
+      if (newData) {
+        dataStack.push(newData);
+      } else {
+        dataStack.push([filteredCategory]);
+      }
+      this.updateData();
     }
   }
 };

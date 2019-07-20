@@ -9,7 +9,7 @@
               <h1>Add Transaction</h1>
               <div class="toggle-button">
                 <toggle-button
-                  v-model="toggle"
+                  v-model="isIncome"
                   :value="false"
                   :labels="{checked: 'Earned', unchecked: 'Spent'}"
                   :color="{checked: 'rgba(62, 105, 221, 1)', unchecked: 'rgba(241, 42, 42, 1)'}"
@@ -23,32 +23,41 @@
             <div class="input-section">
               <div class="input-container">
                 <label class="input-label">Date:</label>
-                <treeselect class="input-field" :autoFocus="true"></treeselect>
+                <!-- I really don't have other options than putting them all in style -->
+                <v-date-picker
+                  class="datepicker"
+                  :input-props="{
+                    style: 'font-weight: 700; font-size: 1em; font-family: Segoe UI; padding: 8.3px 20px; border: none; box-shadow: none; background-color: #ebebeb; border-radius: 40px; width: 200px; color: #4F4F4F',
+                    autofocus: true
+                  }"
+                  :popover="{visibility: 'click'}"
+                  v-model="transaction.date"
+                ></v-date-picker>
               </div>
               <div class="input-container">
                 <label class="input-label">Amount:</label>
-                <treeselect class="input-field"></treeselect>
+                <input class="input-field" type="number" min="0" v-model="transaction.amount"></input>
               </div>
               <div class="input-container">
-                <label class="input-label">Date:</label>
-                <treeselect class="input-field"></treeselect>
+                <label class="input-label">Account:</label>
+                <treeselect class="input-field" :options="accounts" v-model="transaction.account"></treeselect>
               </div>
               <div class="input-container">
-                <label class="input-label">Amount:</label>
-                <treeselect class="input-field"></treeselect>
+                <label class="input-label">Category:</label>
+                <treeselect class="input-field" :options="categories" v-model="transaction.category"></treeselect>
               </div>
               <div class="input-container">
-                <label class="input-label">Date:</label>
-                <treeselect class="input-field"></treeselect>
+                <label class="input-label">Payee:</label>
+                <input class="input-field" type="text" v-model="transaction.payee"></input>
               </div>
               <div class="input-container">
-                <label class="input-label">Amount:</label>
-                <treeselect class="input-field"></treeselect>
+                <label class="input-label">Memo:</label>
+                <input class="input-field" type="text" v-model="transaction.memo"></input>
               </div>
             </div>
             <div class="submit-section">
-              <button id="submit-button">Submit</button>
-              <button id="cancel-button">Cancel</button>
+              <button :disabled="!readyToSubmit" :class="{disabled: !readyToSubmit}" id="submit-button" @click="submit">Submit</button>
+              <button id="cancel-button" @click="cancel">Cancel</button>
             </div>
           </div>
         </transition>
@@ -61,6 +70,7 @@
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import { ToggleButton } from "vue-js-toggle-button";
+import dateUtil from "@/services/DateUtil.js";
 
 export default {
   components: {
@@ -69,10 +79,26 @@ export default {
   },
   data() {
     return {
+      categories: require("@/data/CategoryTree.json"),
+      accounts: [],
       show: false,
       showModal: false,
-      toggle: false
+      isIncome: false,
+      transaction: {
+        date: dateUtil.getToday(),
+        amount: 0,
+        account: null,
+        category: null,
+        payee: "",
+        memo: ""
+      }
     };
+  },
+  computed: {
+    readyToSubmit() {
+      return this.transaction.date && this.transaction.amount && 
+      this.transaction.account && this.transaction.category
+    }
   },
   methods: {
     open() {
@@ -80,7 +106,32 @@ export default {
     },
     close() {
       this.show = false;
+    },
+    submit() {
+      if (this.isIncome) {
+        this.transaction.amount = -this.transaction.amount
+      }
+      console.log(this.transaction);
+      this.clear();
+      this.close();
+    },
+    cancel() {
+      this.clear();
+      this.close();
+    },
+    clear() {
+      this.transaction = {
+        date: dateUtil.getToday(),
+        amount: 0,
+        account: null,
+        category: null,
+        payee: "",
+        memo: ""
+      }
     }
+  },
+  created() {
+    this.accounts = this.$store.getters.getAccounts
   }
 };
 </script>

@@ -101,4 +101,23 @@ button {
 button:focus {
   outline: 0;
 }
+.disabled {
+  background-color: #ebebeb !important;
+  color: #909090 !important;
+  cursor: default !important;
+}
+input {
+  padding: 8px 20px;
+  border: none;
+  background-color: #ebebeb;
+  color: #4f4f4f;
+  font-weight: 700;
+  font-size: 1em;
+  font-family: "Segoe UI";
+  border-radius: 30px;
+  box-sizing: border-box;
+}
+input:focus {
+  outline: 0;
+}
 </style>

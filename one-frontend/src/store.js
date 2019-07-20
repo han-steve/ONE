@@ -9,11 +9,12 @@ import dataUtil from "@/services/DataUtil.js";
 
 export default new Vuex.Store({
   state: {
+    // positive is spent, negative is earned
     transactions: data,
     balance: 100, //hardcoded sample
     accounts: [
       {
-        account_id: "bOwYxeA3rvTa1b7Q8YzqfRANOQ6MVqtqznxKV",
+        id: "bOwYxeA3rvTa1b7Q8YzqfRANOQ6MVqtqznxKV",
         balances: {
           available: 1175.47,
           current: 1184.35,
@@ -21,14 +22,12 @@ export default new Vuex.Store({
           limit: null,
           unofficial_currency_code: null
         },
-        mask: "5373",
         name: "CHASE COLLEGE",
-        official_name: null,
         subtype: "checking",
         type: "depository"
       }
     ],
-    categories: require("@/data/CategoryTree.json"),
+    categories: require("@/data/CategoryTreeForPieChart.json"),
     filters: {
       date: {
         start: date.getThisMonth(),
@@ -41,11 +40,8 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    SET_FILTER_DATE_START(state, startDate) {
-      state.filters.date.start = startDate;
-    },
-    SET_FILTER_DATE_END(state, endDate) {
-      state.filters.date.end = endDate;
+    SET_FILTER_DATE_RANGE(state, dateRange) {
+      state.filters.date = dateRange;
     },
     SET_FILTER_ACCOUNTS(state, accounts) {
       state.filters.accounts = accounts;
@@ -86,6 +82,29 @@ export default new Vuex.Store({
             : true) &&
           (subcategories.length
             ? subcategories.includes(transaction.category_id)
+            : true) &&
+          (state.filters.payees.length
+            ? state.filters.payees.includes(transaction.name)
+            : true) &&
+          isRightType
+        );
+      });
+    },
+    //the same thing except doesn't filter by category
+    filteredTransactionsNoCategory: state => {
+      return state.transactions.filter(transaction => {
+        var transactionDate = date.parseDate(transaction.date);
+        var isRightType = true;
+        if (state.filters.type === "income") {
+          isRightType = transaction.amount < 0;
+        } else if (state.filters.type === "expense") {
+          isRightType = transaction.amount > 0;
+        }
+        return (
+          +transactionDate >= +state.filters.date.start &&
+          +transactionDate <= +state.filters.date.end &&
+          (state.filters.accounts.length
+            ? state.filters.accounts.includes(transaction.account_id)
             : true) &&
           (state.filters.payees.length
             ? state.filters.payees.includes(transaction.name)
@@ -148,9 +167,18 @@ export default new Vuex.Store({
       }
       return data;
     },
+    // I tried to make a new tree with the root being the category filter,
+    // but it didn't work because to populate the tree, we need the find category method.
+    // However, that function only works with a full tree (3 levels), which is why the
+    // new, smaller tree cannot be searched and filled with values.
+    // Currently, the tree is always a full tree, no matter filtered by which category.
+    // Only the pie chart is doing the filtering based on the categories filter.
     pieChartData: (state, getters) => {
       var result = require("@/data/CategoryTreeForPieChart.json");
-      dataUtil.populateTreeWithValues(getters.filteredTransactions, result);
+      dataUtil.populateTreeWithValues(
+        getters.filteredTransactionsNoCategory,
+        result
+      );
       result.forEach(el => {
         dataUtil.updateSums(el);
       });
@@ -167,11 +195,21 @@ export default new Vuex.Store({
           date: transaction.date,
           amount: transaction.amount,
           account: state.accounts.find(
-            account => account.account_id === transaction.account_id
+            account => account.id === transaction.account_id
           ).name,
           category: transaction.category, //will be replaced by id
           payee: transaction.name,
           memo: "" //nothing yet
+        });
+      });
+      return result;
+    },
+    getAccounts: state => {
+      var result = [];
+      state.accounts.forEach(account => {
+        result.push({
+          id: account.id,
+          label: account.name
         });
       });
       return result;
