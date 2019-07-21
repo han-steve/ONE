@@ -8,27 +8,28 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 
-object QuickstartServer extends App with Routes {
+object QuickstartServer extends Routes {
 
-  implicit val system: ActorSystem = ActorSystem("helloAkkaHttpServer")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
-  implicit val executionContext: ExecutionContext = system.dispatcher
 
-  val userRegistryActor: ActorRef = system.actorOf(UserRegistryActor.props, "userRegistryActor")
-  val transactionActor: ActorRef = system.actorOf(TransactionActor.props, "transactionActor")
 
   lazy val route: Route = routes
 
-  val serverBinding: Future[Http.ServerBinding] = Http().bindAndHandle(routes, "localhost", 8080)
+  val host = "localhost"
+  val port = 8080
+  val serverBinding: Future[Http.ServerBinding] = Http().bindAndHandle(routes, host, port)
 
-  serverBinding.onComplete {
-    case Success(bound) =>
-      println(s"Server online at http://${bound.localAddress.getHostString}:${bound.localAddress.getPort}/")
-    case Failure(e) =>
-      Console.err.println(s"Server could not start!")
-      e.printStackTrace()
-      system.terminate()
+  def main(args: Array[String]): Unit = {
+
+    serverBinding.onComplete {
+      case Success(bound) =>
+        println(s"Server online at http://${host}:${port}/")
+      case Failure(e) =>
+        Console.err.println(s"Server could not start!")
+        e.printStackTrace()
+        system.terminate()
+    }
+
+    Await.result(system.whenTerminated, Duration.Inf)
   }
 
-  Await.result(system.whenTerminated, Duration.Inf)
 }
