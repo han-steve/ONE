@@ -21,7 +21,8 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr>Total: {{sum}}</tr>
+      <span>Total: {{sum}}</span>
+      <span>Mean: {{sum}}</span>
     </tfoot>
   </table>
 </template>
@@ -38,6 +39,12 @@ export default {
           return a - b.amount;
         }, 0)
         .toFixed(2);
+    },
+    average() {
+      if (this.transaction.length > 0) {
+        return this.sum / this.transactions.length;
+      }
+      return 0;
     }
   },
   methods: {
