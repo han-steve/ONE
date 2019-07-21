@@ -44,6 +44,7 @@
         <v-date-picker
           class="datepicker"
           mode="range"
+          :color="color"
           :value="selectedRange"
           @input="selectRange"
           :max-date="new Date()"
@@ -68,6 +69,7 @@ export default {
   components: {
     Treeselect
   },
+  props: ["color"],
   data() {
     // end is always today
     var dateRangeTypes = [

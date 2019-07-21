@@ -12,6 +12,7 @@
     <tbody>
       <tr v-for="entry in filteredHeroes">
         <td v-for="key in columns">{{entry[key]}}</td>
+        <td>Edit</td>
       </tr>
     </tbody>
   </table>

@@ -12,13 +12,13 @@
       </div>
     </div>
     <div class="second-background">
-      <filter-bar></filter-bar>
+      <filter-bar :color="datePickerColor"></filter-bar>
       <div class="charts" :class="{'charts-no-pie': !displayPie}">
         <pie-chart v-if="displayPie" :startColor="startColor" :endColor="endColor"></pie-chart>
         <line-chart :startColor="startColor" :endColor="endColor"></line-chart>
       </div>
       <div class="table">
-        <data-table :heroes="tableData" :columns="tableColumns"></data-table>
+        <transaction-table></transaction-table>
       </div>
     </div>
   </main>
@@ -28,14 +28,14 @@
 import FilterBar from "@/components/FilterBar.vue";
 import PieChart from "@/components/PieChart.vue";
 import LineChart from "@/components/LineChart.vue";
-import DataTable from "@/components/DataTable.vue";
+import TransactionTable from "@/components/TransactionTable.vue";
 
 export default {
   components: {
     FilterBar,
     PieChart,
     LineChart,
-    DataTable
+    TransactionTable
   },
   data() {
     return {
@@ -71,6 +71,9 @@ export default {
         return "rgb(212, 223, 255)"; //light blue
       }
     },
+    datePickerColor() {
+      return this.isExpense ? "red" : "blue";
+    },
     isExpense() {
       return this.type === "expense";
     },
@@ -96,11 +99,13 @@ export default {
 <style scoped>
 .charts {
   display: grid;
+  /* Using calc here cause for some reason 100% causes horizontal scroll bar */
   width: calc(100% - 1px);
   /* Would like to use '420px auto' but there are issues with resizing */
-  grid-template-columns: 420px calc(100% - 450px);
+  grid-template-columns: 420px calc(100% - 440px);
   grid-column-gap: 20px;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 .charts-no-pie {
   grid-template-columns: auto;

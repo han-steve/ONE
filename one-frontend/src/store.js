@@ -22,7 +22,7 @@ export default new Vuex.Store({
           limit: null,
           unofficial_currency_code: null
         },
-        name: "CHASE COLLEGE",
+        name: "Chase College",
         subtype: "checking",
         type: "depository"
       }
@@ -184,20 +184,20 @@ export default new Vuex.Store({
       });
       return result;
     },
-    //This is all hardcoded so it probably shouldn't be in vuex but whatever
-    tableColumns: state => {
-      return ["date", "amount", "account", "category", "payee", "memo"];
-    },
     tableData: (state, getters) => {
       var result = [];
       getters.filteredTransactions.forEach(transaction => {
         result.push({
+          id: transaction.transaction_id,
           date: transaction.date,
-          amount: transaction.amount,
+          amount: transaction.amount.toFixed(2),
           account: state.accounts.find(
             account => account.id === transaction.account_id
           ).name,
-          category: transaction.category, //will be replaced by id
+          category: dataUtil.findCategory(
+            transaction.category_id,
+            state.categories
+          ).name, //will be replaced by id
           payee: transaction.name,
           memo: "" //nothing yet
         });

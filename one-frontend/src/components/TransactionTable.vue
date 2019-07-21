@@ -1,47 +1,36 @@
 <template>
-  <div id="table">
-    <div id="heading" class="rows">
-      <div class="table-heading">Date</div>
-      <div class="table-heading">Amount</div>
-      <div class="table-heading">Account</div>
-      <div class="table-heading">Category</div>
-      <div class="table-heading">Payee</div>
-      <div class="table-heading">Memo</div>
-    </div>
-    <hr />
-    <ul>
-      <div id="data">
-        <li v-for="transaction of transactions" :key="transaction.transaction_id">
-          <div class="rows">
-            <div class="date">{{ transaction.date }}</div>
-            <div class="amount">{{-transaction.amount}}</div>
-            <div class="account">{{transaction.account_id}}</div>
-            <div class="category">{{transaction.category}}</div>
-            <div class="payee">{{transaction.name}}</div>
-            <div class="memo">{{transaction.category_id}}</div>
-          </div>
-        </li>
-      </div>
-      <hr />
-      <li>
-        <div class="rows">
-          <div id="sum">Sum:</div>
-          <div class="amount">${{this.sum}}</div>
-          <div class="account"></div>
-          <div class="category"></div>
-          <div class="payee"></div>
-          <div class="memo"></div>
-        </div>
-      </li>
-    </ul>
-  </div>
+  <table class="bubble">
+    <thead>
+      <tr id="heading">
+        <th class="date">Date</th>
+        <th class="account">Account</th>
+        <th class="category">Category</th>
+        <th class="payee">Payee</th>
+        <th class="memo">Memo</th>
+        <th class="amount">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="transaction of transactions" :key="transaction.id" @click="edit(transaction.id)">
+        <td>{{transaction.date}}</td>
+        <td>{{transaction.account}}</td>
+        <td>{{transaction.category}}</td>
+        <td>{{transaction.payee}}</td>
+        <td>{{transaction.memo}}</td>
+        <td>{{-transaction.amount}}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>Total: {{sum}}</tr>
+    </tfoot>
+  </table>
 </template>
 
 <script>
 export default {
   computed: {
     transactions() {
-      return this.$store.getters.filteredTransactions;
+      return this.$store.getters.tableData;
     },
     sum() {
       return this.transactions
@@ -50,40 +39,46 @@ export default {
         }, 0)
         .toFixed(2);
     }
+  },
+  methods: {
+    edit(id) {
+      console.log(id);
+    }
   }
 };
 </script>
 
 <style scoped>
-#table {
-  background-color: white;
-  border-radius: 30px;
-  /* box-shadow: -5px 29px 162px -54px grey; */
-  padding-bottom: 15px;
-}
-.table-heading {
-  text-align: center;
-  padding-top: 12px;
-  font-size: 1.2em;
-  font-weight: 700;
-}
-#heading {
-  margin-bottom: 10px;
-}
-#sum {
-  margin: 0;
-  padding: 0;
-}
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.rows {
-  text-align: center;
+table {
+  border-spacing: 0;
+  padding: 15px;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 2fr 0.5fr 0.5fr;
-  margin-top: 0.3em;
+  position: relative;
+}
+th {
+  text-align: left;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+th,
+td {
+  padding: 8px 10px;
+  border-bottom: 2px solid #eee;
+}
+tbody tr:hover {
+  background-color: #eee;
+}
+tbody tr {
+  cursor: pointer;
+}
+.date {
+  width: 5em;
+}
+/* it's kinda weird that this is hard-coded since we don't know the account name */
+.account {
+  width: 6em;
+}
+tfoot tr {
+  text-align: right;
 }
 </style>
