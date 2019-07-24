@@ -20,7 +20,7 @@ export default {
 <style>
 #app {
   padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Open Sans", sans-serif;
   display: grid;
   grid-template-columns: 15em auto;
   grid-template-areas: "navBar dashboard";
@@ -58,9 +58,11 @@ body {
   padding: 2em 2.8em;
 }
 h1 {
-  font-size: 2.8em;
+  font-size: 2.5em;
   margin-top: 0;
   margin-bottom: 0;
+  font-weight: 800;
+  color: #222;
 }
 .subtitle {
   font-size: 1.1em;

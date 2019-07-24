@@ -62,7 +62,7 @@
 
 <script>
 import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import "./vue-treeselect.css";
 import dateUtil from "@/services/DateUtil.js";
 
 export default {
