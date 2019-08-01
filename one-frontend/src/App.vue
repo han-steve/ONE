@@ -56,6 +56,7 @@ body {
 .first-background {
   background-color: #f7f7fc;
   padding: 2em 2.8em;
+  min-height: 100vh;
 }
 h1 {
   font-size: 2.5em;
@@ -63,6 +64,16 @@ h1 {
   margin-bottom: 0;
   font-weight: 800;
   color: #222;
+}
+h2 {
+  margin: 0;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  color: #414141;
+  margin-bottom: 15px;
+}
+h3 {
+  margin: 0;
 }
 .subtitle {
   font-size: 1.1em;

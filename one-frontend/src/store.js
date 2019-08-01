@@ -58,6 +58,23 @@ export default new Vuex.Store({
   },
   actions: {},
   getters: {
+    getTransaction: state => id => {
+      var transaction = state.transactions.find(
+        transaction => transaction.transaction_id === id
+      );
+      return {
+        id: transaction.transaction_id,
+        date: date.parseDate(transaction.date),
+        amount: transaction.amount.toFixed(2),
+        account: transaction.account_id,
+        category: transaction.category_id,
+        payee: transaction.name,
+        memo: '' //nothing yet
+      };
+    },
+    getAccount: state => id => {
+      return state.accounts.find(account => account.id === id);
+    },
     filteredTransactions: state => {
       var subcategories = [];
       state.filters.categories.forEach(root => {

@@ -56,7 +56,6 @@
         />
       </div>
     </div>
-    <hr />
   </div>
 </template>
 
@@ -163,6 +162,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 .left-filter-container {
   display: grid;

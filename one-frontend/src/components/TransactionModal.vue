@@ -1,12 +1,11 @@
 <template>
   <div>
-    <i class="fas fa-plus-circle plus-button" @click="open"></i>
     <transition name="modal-background" @after-enter="showModal=true">
       <div v-if="show" class="modal-bg" @click.self="showModal=false">
         <transition name="modal" @after-leave="close">
           <div v-if="showModal" class="modal">
             <div class="title-section">
-              <h1>Add Transaction</h1>
+              <h1><slot></slot>Transaction</h1>
               <div class="toggle-button">
                 <toggle-button
                   v-model="isIncome"
@@ -101,6 +100,10 @@ export default {
     }
   },
   methods: {
+    setTransaction(id) {
+      var transaction = this.$store.getters.getTransaction(id);
+      this.transaction = transaction;
+    },
     open() {
       this.show = true;
     },

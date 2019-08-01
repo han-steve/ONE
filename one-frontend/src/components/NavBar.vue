@@ -33,18 +33,25 @@
         </div>
       </div>
     </div>
-    <add-transaction />
+    <i class="fas fa-plus-circle plus-button" @click="openModal"></i>
+    <transaction-modal ref="modal">Add&nbsp</transaction-modal>
     <user></user>
   </div>
 </template>
 
 <script>
 import User from "@/components/User.vue";
-import AddTransaction from "@/components/AddTransaction.vue";
+import TransactionModal from "@/components/TransactionModal.vue";
+
 export default {
   components: {
     User,
-    AddTransaction
+    TransactionModal
+  },
+  methods: {
+    openModal() {
+      this.$refs.modal.open();
+    }
   }
 };
 </script>
@@ -107,5 +114,19 @@ a {
 }
 .nav-options i {
   width: 30px;
+}
+/* button */
+.plus-button {
+  color: white;
+  font-size: 50px;
+  position: fixed;
+  bottom: 100px;
+  left: 5.9rem;
+  transition: 0.2s ease-out;
+  cursor: pointer;
+  z-index: 900;
+}
+.plus-button:hover {
+  transform: scale(1.1);
 }
 </style>
