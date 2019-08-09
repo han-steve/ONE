@@ -27,6 +27,7 @@ import AccountCard from "@/components/AccountCard.vue";
 import PieChart from "@/components/PieChart.vue";
 import LineChart from "@/components/LineChart.vue";
 import TransactionTable from "@/components/TransactionTable.vue";
+import {defaultFilter} from "@/services/Variables.js"
 
 export default {
   components: {
@@ -34,6 +35,9 @@ export default {
     PieChart,
     LineChart,
     TransactionTable
+  },
+  created() {
+    this.$store.commit("SET_FILTERS", defaultFilter)
   }
 };
 </script>
