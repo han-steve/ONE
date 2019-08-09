@@ -1,11 +1,11 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-import data from './transactions_steve.js'; // will be replaced by Ajax
-import date from '@/services/DateUtil.js';
-import dataUtil from '@/services/DataUtil.js';
+import data from "./transactions_steve.js"; // will be replaced by Ajax
+import date from "@/services/DateUtil.js";
+import dataUtil from "@/services/DataUtil.js";
 
 export default new Vuex.Store({
   state: {
@@ -14,20 +14,20 @@ export default new Vuex.Store({
     balance: 100, //hardcoded sample
     accounts: [
       {
-        id: 'bOwYxeA3rvTa1b7Q8YzqfRANOQ6MVqtqznxKV',
+        id: "bOwYxeA3rvTa1b7Q8YzqfRANOQ6MVqtqznxKV",
         balances: {
           available: 1175.47,
           current: 1184.35,
-          iso_currency_code: 'USD',
+          iso_currency_code: "USD",
           limit: null,
           unofficial_currency_code: null
         },
-        name: 'Chase College',
-        subtype: 'checking',
-        type: 'depository'
+        name: "Chase College",
+        subtype: "checking",
+        type: "depository"
       }
     ],
-    categories: require('@/data/CategoryTreeForPieChart.json'),
+    categories: require("@/data/CategoryTreeForPieChart.json"),
     filters: {
       date: {
         start: date.getThisMonth(),
@@ -36,7 +36,7 @@ export default new Vuex.Store({
       accounts: [],
       categories: [],
       payees: [],
-      type: 'expense'
+      type: "expense"
     }
   },
   mutations: {
@@ -69,7 +69,7 @@ export default new Vuex.Store({
         account: transaction.account_id,
         category: transaction.category_id,
         payee: transaction.name,
-        memo: '' //nothing yet
+        memo: "" //nothing yet
       };
     },
     getAccount: state => id => {
@@ -86,9 +86,9 @@ export default new Vuex.Store({
       return state.transactions.filter(transaction => {
         var transactionDate = date.parseDate(transaction.date);
         var isRightType = true;
-        if (state.filters.type === 'income') {
+        if (state.filters.type === "income") {
           isRightType = transaction.amount < 0;
-        } else if (state.filters.type === 'expense') {
+        } else if (state.filters.type === "expense") {
           isRightType = transaction.amount > 0;
         }
         return (
@@ -112,9 +112,9 @@ export default new Vuex.Store({
       return state.transactions.filter(transaction => {
         var transactionDate = date.parseDate(transaction.date);
         var isRightType = true;
-        if (state.filters.type === 'income') {
+        if (state.filters.type === "income") {
           isRightType = transaction.amount < 0;
-        } else if (state.filters.type === 'expense') {
+        } else if (state.filters.type === "expense") {
           isRightType = transaction.amount > 0;
         }
         return (
@@ -136,7 +136,7 @@ export default new Vuex.Store({
       var startDate = state.filters.date.start;
       var endDate = state.filters.date.end;
       var data = [];
-      if (state.filters.type !== 'all') {
+      if (state.filters.type !== "all") {
         let total = 0;
         let currentDay = new Date(startDate.getTime()); //clone the start date so we don't mutate the filter
         let index = transactions.length - 1;
@@ -191,7 +191,7 @@ export default new Vuex.Store({
     // Currently, the tree is always a full tree, no matter filtered by which category.
     // Only the pie chart is doing the filtering based on the categories filter.
     pieChartData: (state, getters) => {
-      var result = require('@/data/CategoryTreeForPieChart.json');
+      var result = require("@/data/CategoryTreeForPieChart.json");
       dataUtil.populateTreeWithValues(
         getters.filteredTransactionsNoCategory,
         result
@@ -216,7 +216,7 @@ export default new Vuex.Store({
             state.categories
           ).name, //will be replaced by id
           payee: transaction.name,
-          memo: '' //nothing yet
+          memo: "" //nothing yet
         });
       });
       return result;
@@ -227,6 +227,22 @@ export default new Vuex.Store({
         result.push({
           id: account.id,
           label: account.name
+        });
+      });
+      return result;
+    },
+    getPayees: state => {
+      // using set to prevent duplicates
+      var set = new Set();
+      state.transactions.forEach(transaction => {
+        set.add(transaction.name);
+      });
+      // put it in the object form that treeselect requires
+      var result = [];
+      set.forEach(name => {
+        result.push({
+          id: name,
+          label: name
         });
       });
       return result;
