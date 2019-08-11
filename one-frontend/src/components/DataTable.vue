@@ -77,12 +77,6 @@ export default {
 </script>
 
 <style scoped>
-table {
-  border: 2px solid #42b983;
-  border-radius: 3px;
-  background-color: #fff;
-}
-
 th {
   background-color: #42b983;
   color: rgba(255, 255, 255, 0.66);

@@ -22,9 +22,9 @@
         ></treeselect>
         <treeselect
           class="left-filter-button"
-          :value="selectedAccounts"
-          @input="selectAccounts"
-          :options="accounts"
+          :value="selectedPayees"
+          @input="selectPayees"
+          :options="payees"
           :closeOnSelect="true"
           :multiple="true"
           placeholder="Filter by Payee"
@@ -56,13 +56,12 @@
         />
       </div>
     </div>
-    <hr />
   </div>
 </template>
 
 <script>
 import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import "./vue-treeselect.css";
 import dateUtil from "@/services/DateUtil.js";
 
 export default {
@@ -114,11 +113,17 @@ export default {
     this.accounts = this.$store.getters.getAccounts;
   },
   computed: {
+    payees() {
+      return this.$store.getters.getPayees;
+    },
     selectedCategories() {
       return this.$store.state.filters.categories;
     },
     selectedAccounts() {
       return this.$store.state.filters.accounts;
+    },
+    selectedPayees() {
+      return this.$store.state.filters.payees;
     },
     selectedRange() {
       return this.$store.state.filters.date;
@@ -142,6 +147,9 @@ export default {
     selectAccounts(e) {
       this.$store.commit("SET_FILTER_ACCOUNTS", e);
     },
+    selectPayees(e) {
+      this.$store.commit("SET_FILTER_PAYEES", e);
+    },
     selectRange(e) {
       this.$store.commit("SET_FILTER_DATE_RANGE", e);
     },
@@ -163,6 +171,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 .left-filter-container {
   display: grid;

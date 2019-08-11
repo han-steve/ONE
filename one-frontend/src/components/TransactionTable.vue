@@ -1,33 +1,47 @@
 <template>
-  <table class="bubble">
-    <thead>
-      <tr id="heading">
-        <th class="date">Date</th>
-        <th class="account">Account</th>
-        <th class="category">Category</th>
-        <th class="payee">Payee</th>
-        <th class="memo">Memo</th>
-        <th class="amount">Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="transaction of transactions" :key="transaction.id" @click="edit(transaction.id)">
-        <td>{{transaction.date}}</td>
-        <td>{{transaction.account}}</td>
-        <td>{{transaction.category}}</td>
-        <td>{{transaction.payee}}</td>
-        <td>{{transaction.memo}}</td>
-        <td>{{-transaction.amount}}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>Total: {{sum}}</tr>
-    </tfoot>
-  </table>
+  <div class="bubble">
+    <table>
+      <thead>
+        <tr id="heading">
+          <th class="date">Date</th>
+          <th class="account">Account</th>
+          <th class="category">Category</th>
+          <th class="payee">Payee</th>
+          <th class="memo">Memo</th>
+          <th class="amount">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="transaction of transactions" :key="transaction.id" @click="edit(transaction.id)">
+          <td>{{transaction.date}}</td>
+          <td>{{transaction.account}}</td>
+          <td>{{transaction.category}}</td>
+          <td>{{transaction.payee}}</td>
+          <td>{{transaction.memo}}</td>
+          <td>{{-transaction.amount}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <td colspan="6">
+          <span class="total">Total:</span>
+          <span>{{sum}}</span>
+          &nbsp
+          <span class="total">Mean:</span>
+          <span>{{average}}</span>
+        </td>
+      </tfoot>
+    </table>
+    <transaction-modal ref="modal">Edit&nbsp</transaction-modal>
+  </div>
 </template>
 
 <script>
+import TransactionModal from "@/components/TransactionModal.vue";
+
 export default {
+  components: {
+    TransactionModal
+  },
   computed: {
     transactions() {
       return this.$store.getters.tableData;
@@ -38,11 +52,18 @@ export default {
           return a - b.amount;
         }, 0)
         .toFixed(2);
+    },
+    average() {
+      if (this.transactions.length > 0) {
+        return this.sum / this.transactions.length;
+      }
+      return 0;
     }
   },
   methods: {
     edit(id) {
-      console.log(id);
+      this.$refs.modal.open();
+      this.$refs.modal.setTransaction(id);
     }
   }
 };
@@ -63,13 +84,15 @@ th {
 th,
 td {
   padding: 8px 10px;
-  border-bottom: 2px solid #eee;
 }
 tbody tr:hover {
   background-color: #eee;
 }
 tbody tr {
   cursor: pointer;
+}
+tbody td {
+  border-bottom: 2px solid #eee;
 }
 .date {
   width: 5em;
@@ -80,5 +103,8 @@ tbody tr {
 }
 tfoot tr {
   text-align: right;
+}
+.total {
+  font-weight: 700;
 }
 </style>

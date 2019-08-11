@@ -4,7 +4,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 import data from "./transactions_steve.js"; // will be replaced by Ajax
-import date from "@/services/DateUtil.js";
+import dateUtil from "@/services/DateUtil.js";
 import dataUtil from "@/services/DataUtil.js";
 
 export default new Vuex.Store({
@@ -30,8 +30,8 @@ export default new Vuex.Store({
     categories: require("@/data/CategoryTreeForPieChart.json"),
     filters: {
       date: {
-        start: date.getThisMonth(),
-        end: date.getToday()
+        start: dateUtil.getThisMonth(),
+        end: dateUtil.getToday()
       },
       accounts: [],
       categories: [],
@@ -40,6 +40,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_FILTERS(state, newFilters) {
+      state.filters = newFilters;
+    },
     SET_FILTER_DATE_RANGE(state, dateRange) {
       state.filters.date = dateRange;
     },
@@ -58,6 +61,23 @@ export default new Vuex.Store({
   },
   actions: {},
   getters: {
+    getTransaction: state => id => {
+      var transaction = state.transactions.find(
+        transaction => transaction.transaction_id === id
+      );
+      return {
+        id: transaction.transaction_id,
+        date: dateUtil.parseDate(transaction.date),
+        amount: transaction.amount.toFixed(2),
+        account: transaction.account_id,
+        category: transaction.category_id,
+        payee: transaction.name,
+        memo: "" //nothing yet
+      };
+    },
+    getAccount: state => id => {
+      return state.accounts.find(account => account.id === id);
+    },
     filteredTransactions: state => {
       var subcategories = [];
       state.filters.categories.forEach(root => {
@@ -67,7 +87,7 @@ export default new Vuex.Store({
         );
       });
       return state.transactions.filter(transaction => {
-        var transactionDate = date.parseDate(transaction.date);
+        var transactionDate = dateUtil.parseDate(transaction.date);
         var isRightType = true;
         if (state.filters.type === "income") {
           isRightType = transaction.amount < 0;
@@ -93,7 +113,7 @@ export default new Vuex.Store({
     //the same thing except doesn't filter by category
     filteredTransactionsNoCategory: state => {
       return state.transactions.filter(transaction => {
-        var transactionDate = date.parseDate(transaction.date);
+        var transactionDate = dateUtil.parseDate(transaction.date);
         var isRightType = true;
         if (state.filters.type === "income") {
           isRightType = transaction.amount < 0;
@@ -127,12 +147,12 @@ export default new Vuex.Store({
         while (+currentDay <= +endDate) {
           while (
             index >= 0 &&
-            +date.parseDate(transactions[index].date) === +currentDay
+            +dateUtil.parseDate(transactions[index].date) === +currentDay
           ) {
             total += Math.abs(transactions[index].amount);
             index--;
           }
-          let currentDayString = date.stringifyDate(currentDay);
+          let currentDayString = dateUtil.stringifyDate(currentDay);
           data.push({
             name: currentDayString,
             value: [currentDayString, total]
@@ -145,20 +165,20 @@ export default new Vuex.Store({
         let currentDay = new Date(endDate.getTime());
         let index = 0;
         data.push({
-          name: date.stringifyDate(currentDay),
-          value: [date.stringifyDate(currentDay), balance]
+          name: dateUtil.stringifyDate(currentDay),
+          value: [dateUtil.stringifyDate(currentDay), balance]
         });
         //using > instead of >= to compensate for shifting all balances by one day
         while (+currentDay > +startDate) {
           while (
             index < transactions.length &&
-            +date.parseDate(transactions[index].date) === +currentDay
+            +dateUtil.parseDate(transactions[index].date) === +currentDay
           ) {
             balance += transactions[index].amount;
             index++;
           }
           currentDay.setDate(currentDay.getDate() - 1); //fix off-by-one error when working backwards
-          let currentDayString = date.stringifyDate(currentDay);
+          let currentDayString = dateUtil.stringifyDate(currentDay);
           data.push({
             name: currentDayString,
             value: [currentDayString, balance]
@@ -210,6 +230,22 @@ export default new Vuex.Store({
         result.push({
           id: account.id,
           label: account.name
+        });
+      });
+      return result;
+    },
+    getPayees: state => {
+      // using set to prevent duplicates
+      var set = new Set();
+      state.transactions.forEach(transaction => {
+        set.add(transaction.name);
+      });
+      // put it in the object form that treeselect requires
+      var result = [];
+      set.forEach(name => {
+        result.push({
+          id: name,
+          label: name
         });
       });
       return result;
