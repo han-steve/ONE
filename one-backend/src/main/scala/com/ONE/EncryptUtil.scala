@@ -1,10 +1,10 @@
-package com.example
+package com.ONE
 
 import java.math.BigInteger
 import java.security.{MessageDigest, NoSuchAlgorithmException}
 
 
-private[example] object EncryptUtil {
+private[ONE] object EncryptUtil {
 
   private val sfSalt = "9e107d9d372bb6826bd81d3542a419d6"
 

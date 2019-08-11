@@ -5,28 +5,29 @@ import { isEquivalent } from "../lib/lib";
 Vue.use(Vuex);
 
 const state = {
-    username: '',
-    email: '',
-    password: '',
-    phoneNumber: '',
-    transactions: []
+    profile: {
+        user_id: -1,
+        username: '',
+        email: '',
+        password: '',
+        phoneNumber: '',
+    },
+    transactions: [],
+    connections: []
 }
 
 const getters = {
     getCurrentUser: function(state) {
-        return state.username;
+        return state.profile.username;
     }
 }
 
 const mutations = {
     setCurrentUserMutations: function(state, nextUsername) {
-        state.username = nextUsername;
+        state.profile.username = nextUsername;
     },
     updateProfileMutation: function(state, model) {
-        state.username = model.username;
-        state.email = model.email;
-        state.password = model.password;
-        state.phoneNumber = model.phoneNumber;
+        state.profile = model;
     },
     clearCurrentStoredTransactionsMutation: function(state) {
         state.transactions = []
@@ -37,14 +38,14 @@ const mutations = {
     },
     editTransactionMutation: function(state, transaction) {
         for(let i = 0; i < state.transactions.length; i++) {
-            let current = state.transactions[i];
-            if(current.id === transaction.id) {
+            if(state.transactions[i].transaction_id === transaction.transaction_id) {
                 state.transactions[i].transaction_date = transaction.transaction_date;
                 state.transactions[i].category = transaction.category;
+                state.transactions[i].account = transaction.account;
                 state.transactions[i].payee = transaction.payee;
                 state.transactions[i].amount = transaction.amount;
                 state.transactions[i].memo = transaction.memo;
-                state.transactions[i].account = transaction.account;
+                break;
             }
         }
         state.transactions.sort((a, b) => new Date(b.transaction_date).getTime() - new Date(a.transaction_date).getTime());
@@ -53,6 +54,14 @@ const mutations = {
         var index = 0;
         while(!isEquivalent(state.transactions[index], transaction)) index++;
         state.transactions.splice(index, 1);
+    },
+    addBankConnectionMutation: function(state, transaction) {
+        state.connections.push(transaction);
+    },
+    removeBankConnectionMutation: function(state, connection) {
+        var index = 0;
+        while (!isEquivalent(state.connections[index], connection)) index++;
+        state.connections.splice(index, 1);
     }
 }
 
@@ -74,11 +83,18 @@ const actions = {
     },
     removeTransactionAction: function(context, transaction) {
         context.commit('removeTransactionMutation', transaction);
+    },
+    addBankConnectionAction: function(context, connection) {
+        context.commit('addBankConnectionMutation', connection);
+    },
+    removeBankConnectionAction: function(context, connection) {
+        context.commit('removeBankConnectionMutation', connection);
     }
+
 }
 
 export default new Vuex.Store({
-  strict: true,
+    strict: true,
     state,
     getters,
     mutations,

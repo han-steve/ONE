@@ -83,7 +83,7 @@
 </template>
 
 <script>
-    import { httpPutOptions } from "../lib/http"
+    import { httpPostOptions } from "../lib/http"
     import Dashboard from "./Dashboard";
 
     export default {
@@ -97,15 +97,15 @@
         computed: {
             editModel() {
                 return {
-                    id: this.transaction.id,
-                    username: this.transaction.username,
+                    user_id: this.transaction.user_id,
                     toggle: this.transaction.amount > 0,
                     transaction_date: this.transaction.transaction_date,
                     category: this.transaction.category,
+                    account: this.transaction.account,
                     payee: this.transaction.payee,
                     amount: Math.abs(this.transaction.amount),
                     memo: this.transaction.memo,
-                    account: this.transaction.account
+                    transaction_id: this.transaction.transaction_id
                 }
             },
             payerPayee() {
@@ -120,22 +120,22 @@
                     let factor = 1;
                     if(this.spent !== null && !this.spent) factor = -1;
                     let model = {
-                        id: curr.id,
+                        user_id: curr.user_id,
                         transaction_date: curr.transaction_date,
                         category: curr.category,
+                        account: curr.account,
                         payee: curr.payee,
                         amount: Number(Math.abs(curr.amount)) * factor,
                         memo: curr.memo,
-                        account: curr.account,
+                        transaction_id: curr.transaction_id
                     };
-                    fetch("http://127.0.0.1:8080/transactions", httpPutOptions(model))
+                    fetch("http://127.0.0.1:8080/transactions/" + this.$store.state.profile.user_id + "/update", httpPostOptions(model))
                         .then(res => res.json())
                         .then(response => {
                             this.$store.dispatch("editTransactionAction", model);
-                            console.log('Success:', JSON.stringify(response))
+                            alert("Transaction updated!");
                         })
-                        .catch(error => console.error('Error:', error));
-                    alert("Transaction updated!");
+                        .catch(error => alert("Transaction failed to update."));
                     this.close();
                 } else {
                     alert("Make sure you fill in amount, account, AND proper date!");
