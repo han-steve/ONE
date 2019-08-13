@@ -105,7 +105,7 @@
                         data.transactions.forEach(t => {
                             const model = {
                                 id: -1,
-                                username: this.$store.state.username,
+                                username: this.$store.state.profile.username,
                                 transaction_date: t.date,
                                 category: t.category,
                                 payee: t.payee,

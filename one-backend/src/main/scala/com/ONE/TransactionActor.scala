@@ -4,7 +4,7 @@ import java.sql.ResultSet
 
 import akka.actor.{ Actor, ActorLogging, Props }
 
-final case class Transaction(user_id: Int, transaction_date: String, category: String, account: String, payee: String, amount: Double, memo: String, transaction_id: Option[Int] =  None)
+final case class Transaction(user_id: Int, transaction_date: String, category_id: String, category: String, account: String, payee: String, amount: Double, memo: String, transaction_id: Option[Int] =  None)
 final case class Transactions(transactions: Seq[Transaction])
 
 object TransactionActor {
@@ -26,15 +26,16 @@ class TransactionActor extends Actor with ActorLogging {
       val result = AppConstants.SqlConnection.createStatement().executeQuery(query)
       var dbTransactions = Set.empty[Transaction]
       while (result.next()) {
-        dbTransactions += Transaction(result.getInt("user_id"), result.getString("transaction_date"), result.getString("category"),
+        dbTransactions += Transaction(result.getInt("user_id"), result.getString("transaction_date"), result.getString("category_id"), result.getString("category"),
           result.getString("account"), result.getString("payee"), result.getDouble("amount"), result.getString("memo"), Option(result.getInt("transaction_id")))
       }
       sender() ! Transactions(dbTransactions.toSeq)
     }
     case MakeTransaction(transaction) =>
-      val query = "insert into transactions (\"user_id\", \"transaction_date\", \"category\", \"account\", \"payee\", \"amount\", \"memo\") values (" +
+      val query = "insert into transactions (\"user_id\", \"transaction_date\", \"category_id\", \"category\", \"account\", \"payee\", \"amount\", \"memo\") values (" +
         transaction.user_id + ", '" +
-        transaction.transaction_date + "', '" +
+        transaction.transaction_date + "', " +
+        transaction.category_id + ", '" +
         transaction.category + "', '" +
         transaction.account + "', '" +
         transaction.payee + "', " +
@@ -49,6 +50,7 @@ class TransactionActor extends Actor with ActorLogging {
     case UpdateTransaction(transaction) =>
       val query = "update transactions set " +
         "transaction_date = '" + transaction.transaction_date + "', " +
+        "category_id = " + transaction.category_id + ", " +
         "category = '" + transaction.category + "', " +
         "account = '" + transaction.account + "', " +
         "payee = '" + transaction.payee + "', " +

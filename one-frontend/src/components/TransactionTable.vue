@@ -12,8 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="transaction of transactions" :key="transaction.id" @click="edit(transaction.id)">
-          <td>{{transaction.date}}</td>
+        <tr v-for="transaction of transactions" :key="transaction.transaction_id" @click="edit(transaction.transaction_id)">
+          <td>{{transaction.transaction_date}}</td>
           <td>{{transaction.account}}</td>
           <td>{{transaction.category}}</td>
           <td>{{transaction.payee}}</td>
@@ -55,15 +55,17 @@ export default {
     },
     average() {
       if (this.transactions.length > 0) {
-        return this.sum / this.transactions.length;
+        return Number(this.sum / this.transactions.length).toFixed(2);
       }
       return 0;
     }
   },
   methods: {
     edit(id) {
-      this.$refs.modal.open();
-      this.$refs.modal.setTransaction(id);
+      if(!this.$store.getters.getTransaction(id).isPlaid) {
+        this.$refs.modal.open();
+        this.$refs.modal.setTransaction(id);
+      }
     }
   }
 };

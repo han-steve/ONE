@@ -92,13 +92,13 @@ class BankActor extends Actor with ActorLogging {
           var amount = -1 * e.getAmount
           if(totalTransactions != 0)
             bankTransactions += s""","""
-          bankTransactions += s"""{"date": """" + e.getDate + s"""", "category": """" + category + s"""", "amount": """ + amount + s""", "account":"""" + accounts.get(e.getAccountId) + s"""", "payee": """" + e.getName + """"}"""
+          bankTransactions += s"""{"transaction_id": """" + e.getTransactionId + s"""", "transaction_date": """" + e.getDate + s"""", "category_id": """" + e.getCategoryId + s"""", "category": """" + category + s"""", "amount": """ + amount + s""", "account":"""" + accounts.get(e.getAccountId) + s"""", "payee": """" + e.getName + """"}"""
           totalTransactions += 1
         }
         if(transactionsList.size() != PLAID_TRANSACTION_COUNT)
           receivedAllTransactions = !receivedAllTransactions
       }
-      bankTransactions += s"""]}"""
+      bankTransactions += s"""]}""";
       println(bankTransactions)
       val response: HttpResponse = HttpResponse(entity = HttpEntity(
         ContentTypes.`application/json`,
