@@ -15,7 +15,7 @@
         <a>Profile</a>
       </div>
       <div class="menu-option text">
-        <a>Logout</a>
+        <router-link to="login">Logout</router-link>
       </div>
       <div class="menu-option text">
         <a>Support</a>
@@ -72,5 +72,9 @@ export default {};
 }
 .background:hover .user-menu {
   max-width: 200px;
+}
+a {
+  color: white;
+  text-decoration: none;
 }
 </style>

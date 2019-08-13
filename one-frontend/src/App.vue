@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav-bar />
+    <router-view name="navbar"></router-view>
     <transition name="slide" mode="out-in">
       <router-view />
     </transition>

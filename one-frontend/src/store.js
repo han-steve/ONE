@@ -41,7 +41,10 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_FILTERS(state, newFilters) {
-      state.filters = newFilters;
+      // have to do it this way cause replacing object doesn't work apparently
+      Object.keys(newFilters).forEach(key => {
+        state.filters[key] = newFilters[key];
+      });
     },
     SET_FILTER_DATE_RANGE(state, dateRange) {
       state.filters.date = dateRange;

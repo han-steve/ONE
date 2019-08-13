@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Summary from "@/views/Summary.vue";
+import NavBar from "@/components/NavBar.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Transactions from "@/views/Transactions.vue";
 import store from "./store.js";
@@ -14,22 +15,27 @@ export default new Router({
     {
       path: "/summary",
       name: "summary",
-      component: Summary
+      components: { default: Summary, navbar: NavBar }
     },
     {
       path: "/dashboard",
       name: "dashboard",
-      component: Dashboard,
+      components: { default: Dashboard, navbar: NavBar },
       beforeEnter: (to, from, next) => {
         store.commit("SET_FILTERS", defaultFilter);
-        console.log("route change");
         next();
       }
     },
     {
       path: "/transactions",
       name: "transactions",
-      component: Transactions
+      components: { default: Transactions, navbar: NavBar }
+    },
+    {
+      path: "/login",
+      name: "login",
+      components: { navbar: NavBar },
+      props: { navbar: { login: true } }
     }
   ]
 });

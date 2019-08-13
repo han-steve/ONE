@@ -6,6 +6,13 @@
         <span class="subtitle">List of your transactions</span>
       </div>
       <div class="buttons">
+        <div class="input-container">
+          <input type="text" />
+          <div id="search-icon">
+            <i class="fas fa-search"></i>
+            <span class="placeholder">Search Memo</span>
+          </div>
+        </div>
         <button class="expense" :class="{red: isExpense}" @click="setExpense">Expense</button>
         <button class="income" :class="{blue: isIncome}" @click="setIncome">Income</button>
         <button class="all" :class="{blue: isAll}" @click="setAll">All</button>
@@ -79,7 +86,7 @@ export default {
 }
 .buttons {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto;
   grid-column-gap: 20px;
 }
 .blue {
@@ -89,5 +96,24 @@ export default {
 .red {
   background-color: rgb(241, 42, 42);
   color: white;
+}
+.input-container {
+  position: relative;
+}
+#search-icon {
+  position: absolute;
+  display: block;
+  left: 15px;
+  top: 9px;
+  transition: 0.3s ease;
+  color: #909090;
+}
+input:focus ~ #search-icon {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.placeholder {
+  font-weight: 700;
+  margin-left: 7px;
 }
 </style>
