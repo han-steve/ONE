@@ -186,7 +186,7 @@ export default {
     },
     categoryFilter() {
       var filteredCategory = dataUtil.findCategory(
-        this.categoryFilter[0],
+        this.categoryFilter[0] + "",
         this.pieChartData
       );
       console.log(filteredCategory);

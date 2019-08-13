@@ -33,7 +33,7 @@ export default {
     };
   },
   mounted() {
-    this.user = this.$store.state.username;
+    this.user = this.$store.state.profile.username;
   },
   computed: {
     datacollection: function() {

@@ -7,7 +7,7 @@
       v-bind:transaction="TransactionEditModel"
     ></edit-entry>
     <main>
-      <h1>Welcome {{ this.$store.state.username }}!</h1>
+      <h1>Welcome {{ this.$store.state.profile.username }}!</h1>
       <h2>Dashboard</h2>
       <p class="subtitle">overview of your financial life</p>
       <div id="filter">
@@ -96,7 +96,7 @@ import SpendingChart from "../components/SpendingChart";
 import SpendingLineChart from "../components/SpendingLineChart";
 import EditEntry from "../components/EditEntry";
 
-import { httpDeleteOptions, httpGetOptions } from "../lib/http";
+import { httpGetOptions } from "../lib/http";
 
 export default {
   name: "dashboard",
@@ -106,30 +106,7 @@ export default {
     SpendingLineChart
   },
   mounted() {
-    if (this.$store.state.username === "") this.$router.push({ path: "/" });
-    fetch(
-      "http://127.0.0.1:8080/transactions/" + this.$store.state.username,
-      httpGetOptions()
-    )
-      .then(res => res.json())
-      .then(response => {
-        this.$store.dispatch("clearCurrentStoredTransactionsAction");
-        let transactions = response.transactions;
-        for (let i = 0; i < transactions.length; i++) {
-          this.$store.dispatch("addTransactionAction", transactions[i]);
-        }
-      })
-      .catch(error => console.error("Error:", error));
-    fetch(
-      "http://127.0.0.1:8080/users/" + this.$store.state.username,
-      httpGetOptions()
-    )
-      .then(res => res.json())
-      .then(response => {
-        let user = response;
-        this.$store.dispatch("updateProfileAction", user);
-      })
-      .catch(error => console.error("Error:", error));
+    if (this.$store.state.profile.username === "") this.$router.push({ path: "/" });
   },
   data() {
     return {
@@ -141,14 +118,14 @@ export default {
       page: 1,
       max: 1,
       TransactionEditModel: {
-        id: -1,
-        username: this.$store.state.username,
+        user_id: this.$store.state.profile.user_id,
         transaction_date: null,
         category: "",
+        account: "",
         payee: "",
         amount: 0,
         memo: "",
-        account: ""
+        transaction_id: -1
       }
     };
   },
@@ -176,24 +153,25 @@ export default {
   methods: {
     rm(transaction) {
       fetch(
-        "http://127.0.0.1:8080/transactions",
-        httpDeleteOptions(transaction)
+        "http://127.0.0.1:8080/transactions/" + this.$store.state.profile.user_id + "/delete/" + transaction.transaction_id,
+        httpGetOptions()
       )
         .then(res => res.json())
         .then(response => {
-          console.log("response" + response);
+          alert("Transaction successfully deleted.")
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => alert("Failed to delete transaction."));
       this.$store.dispatch("removeTransactionAction", transaction);
     },
     edit(transaction) {
-      this.TransactionEditModel.id = transaction.id;
+      this.TransactionEditModel.user_id = transaction.user_id;
       this.TransactionEditModel.transaction_date = transaction.transaction_date;
       this.TransactionEditModel.category = transaction.category;
+      this.TransactionEditModel.account = transaction.account;
       this.TransactionEditModel.payee = transaction.payee;
       this.TransactionEditModel.amount = transaction.amount;
       this.TransactionEditModel.memo = transaction.memo;
-      this.TransactionEditModel.account = transaction.account;
+      this.TransactionEditModel.transaction_id = transaction.transaction_id;
       this.openEditEntry();
     },
     openEditEntry() {

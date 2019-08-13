@@ -1,4 +1,4 @@
-package com.example;
+package com.ONE;
 
 import akka.http.scaladsl.model.HttpMethods._
 import akka.http.scaladsl.model.headers._
@@ -44,6 +44,6 @@ trait CORSHandler {
 
   // Helper method to add CORS headers to HttpResponse
   // preventing duplication of CORS headers across code
-  def addCORSHeaders(response: HttpResponse): HttpResponse =
-    response.withHeaders(corsResponseHeaders)
+//  def addCORSHeaders(response: HttpResponse): HttpResponse =
+//    response.withHeaders(corsResponseHeaders)
 }

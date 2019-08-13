@@ -2,27 +2,28 @@
     <div class="container-1">
         <main>
             <div id="container-2">
-            <h2>Login</h2>
-            <div id="grid">
-                <i class="fa fa-user" aria-hidden="true"></i>
-                <input type="text" class="form-control margin-bottom" placeholder="Username" v-model=LoginModel.username>
-                <i class="fa fa-lock" aria-hidden="true"></i>
-                <input type="password" class="form-control margin-bottom" placeholder="Password" @keyup.enter="login()" v-model=LoginModel.password>
-            </div>
-            <button id="loginButton" class="btn btn-md btn-success float-center" @click="login()">
-                Submit
-            </button>
-            <button id="signupButton" class="btn btn-md btn-primary float-center" @click="signup()">
-                SignUp
-            </button>
+                <h2>Login</h2>
+                <div id="grid">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <input type="text" class="form-control margin-bottom" placeholder="Username" v-model=LoginModel.username>
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <input type="password" class="form-control margin-bottom" placeholder="Password" @keyup.enter="login()" v-model=LoginModel.password>
+                </div>
+                <button id="loginButton" class="btn btn-md btn-success float-center" @click="login()">
+                    Submit
+                </button>
+                <button id="signupButton" class="btn btn-md btn-primary float-center" @click="signup()">
+                    SignUp
+                </button>
             </div>
         </main>
     </div>
 </template>
 
 <script>
-    import { httpPostOptions } from "../lib/http";
+    import {httpGetOptions} from "../lib/http";
     import MD5 from "crypto-js/md5";
+    import Profile from "./Profile";
 
 
     export default {
@@ -40,24 +41,51 @@
         },
         computed: {
             getCurrentUser() {
-                return this.$store.state.username;
+                return this.$store.state.profile.username;
             }
         },
         methods: {
             login() {
-                var model = {
-                    username: this.LoginModel.username,
-                    email: "",
-                    password: MD5(this.LoginModel.password).toString(),
-                    phoneNumber: ""
-                };
-                fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
+                var username = this.LoginModel.username;
+                var password = MD5(this.LoginModel.password).toString();
+                fetch("http://127.0.0.1:8080/users/login/" + username + "/" + password, httpGetOptions())
                     .then(res => res.json())
                     .then(response => {
                         if(!response)
                             alert("Wrong username or password!");
                         else {
-                            this.resetCurrentUser(this.LoginModel.username.trim());
+                            this.resetCurrentUser(username.trim());
+                            fetch("http://127.0.0.1:8080/users/" + this.$store.state.profile.username, httpGetOptions())
+                                .then(res => res.json())
+                                .then(response => {
+                                    let user = response;
+                                    this.$store.dispatch("updateProfileAction", user);
+                                    fetch(
+                                        "http://127.0.0.1:8080/transactions/" + this.$store.state.profile.user_id,
+                                        httpGetOptions()
+                                    )
+                                        .then(res => res.json())
+                                        .then(response => {
+                                            this.$store.dispatch("clearCurrentStoredTransactionsAction");
+                                            let transactions = response.transactions;
+                                            for (let i = 0; i < transactions.length; i++) {
+                                                this.$store.dispatch("addTransactionAction", transactions[i]);
+                                            }
+                                        })
+                                        .catch(error => console.error("Error:", error));
+                                    fetch("http://127.0.0.1:8080/bank/" + this.$store.state.profile.user_id, httpGetOptions())
+                                        .then(res => res.json())
+                                        .then(response => {
+                                            let banks = response['banks'];
+                                            let numBanks = banks.length;
+                                            for(let i = 0; i < numBanks; i++) {
+                                                this.$store.dispatch("addBankConnectionAction", banks[i]);
+                                                this.getTransactions(banks[i].access_token)
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                })
+                                .catch(error => console.error("Error:", error));
                             this.$router.push({path: '/dashboard'})
                         }
                     })
@@ -69,6 +97,25 @@
             resetCurrentUser(username) {
                 this.$store.dispatch('setCurrentUserAction', username);
                 this.$store.dispatch('clearCurrentStoredTransactionsAction');
+            },
+            getTransactions(access_token) {
+                fetch("http://127.0.0.1:8080/bank/" + this.$store.state.profile.user_id + "/transactions/" + access_token, httpGetOptions())
+                    .then(res => res.json())
+                    .then(data => {
+                        data.transactions.forEach(t => {
+                            const model = {
+                                id: -1,
+                                username: this.$store.state.profile.username,
+                                transaction_date: t.date,
+                                category: t.category,
+                                payee: t.payee,
+                                amount: Number(t.amount),
+                                memo: '',
+                                account: t.account
+                            };
+                            this.$store.dispatch("addTransactionAction", model);
+                        });
+                    });
             }
         }
     };
@@ -102,7 +149,7 @@
         margin-left: 1%;
     }
     .container-1 {
-        display: grid; 
+        display: grid;
         align-items: center;
         align-content: center;
     }
@@ -110,15 +157,15 @@
         background-color: white;
         padding: 4em;
         border-radius: 2em;
-          box-shadow: -5px 29px 162px -54px grey;
+        box-shadow: -5px 29px 162px -54px grey;
 
     }
     @media only screen and (max-width: 1100px) {
-  main{
-    height: 85vh;
-    border-radius: 1em;
-    margin: 0 5vw;
-    background-color: transparent;
-  }
-}
+        main{
+            height: 85vh;
+            border-radius: 1em;
+            margin: 0 5vw;
+            background-color: transparent;
+        }
+    }
 </style>

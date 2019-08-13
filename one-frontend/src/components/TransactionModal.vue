@@ -17,6 +17,7 @@
                   :font-size="16"
                   :margin="5"
                 />
+                <button id="cancel-button" @click="cancel"><i class="fa fa-times"></i></button>
               </div>
             </div>
             <div class="input-section">
@@ -30,7 +31,7 @@
                     autofocus: true
                   }"
                   :popover="{visibility: 'click'}"
-                  v-model="transaction.date"
+                  v-model="transaction.transaction_date"
                 ></v-date-picker>
               </div>
               <div class="input-container">
@@ -47,7 +48,7 @@
               </div>
               <div class="input-container">
                 <label class="input-label">Payee:</label>
-                <input class="input-field" type="text" v-model="transaction.payee"></input>
+                <input class="input-field" type="text" v-model="transaction.isPlaid ? transaction.name : transaction.payee"></input>
               </div>
               <div class="input-container">
                 <label class="input-label">Memo:</label>
@@ -55,8 +56,8 @@
               </div>
             </div>
             <div class="submit-section">
-              <button :disabled="!readyToSubmit" :class="{disabled: !readyToSubmit}" id="submit-button" @click="submit">Submit</button>
-              <button id="cancel-button" @click="cancel">Cancel</button>
+              <button :disabled="!readyToSubmit" :class="{disabled: !readyToSubmit}" id="submit-button" @click="submit"><i class="fa fa-save"></i></button>
+              <button id="delete-button" @click="remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
             </div>
           </div>
         </transition>
@@ -70,6 +71,8 @@ import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import { ToggleButton } from "vue-js-toggle-button";
 import dateUtil from "@/services/DateUtil.js";
+import dataUtil from "@/services/DataUtil.js";
+import {httpGetOptions, httpPostOptions} from "../http";
 
 export default {
   components: {
@@ -84,9 +87,11 @@ export default {
       showModal: false,
       isIncome: false,
       transaction: {
-        date: dateUtil.getToday(),
+        transaction_id: 0,
+        transaction_date: dateUtil.getToday(),
         amount: 0,
         account: null,
+        category_id: "",
         category: null,
         payee: "",
         memo: ""
@@ -95,7 +100,7 @@ export default {
   },
   computed: {
     readyToSubmit() {
-      return this.transaction.date && this.transaction.amount && 
+      return this.transaction.transaction_date && this.transaction.amount && 
       this.transaction.account && this.transaction.category
     }
   },
@@ -114,19 +119,63 @@ export default {
       if (this.isIncome) {
         this.transaction.amount = -this.transaction.amount
       }
+      const model = {
+          user_id: this.$store.state.profile.user_id,
+          transaction_date: new Date(this.transaction.transaction_date).toISOString().split("T")[0],
+          category_id: this.transaction.category_id,
+          category: dataUtil.findCategory(this.transaction.category_id, this.$store.state.categories).name,
+          account: this.transaction.account,
+          payee: this.transaction.isPlaid ? this.transaction.name : this.transaction.payee,
+          amount: Number(this.transaction.amount),
+          memo: this.transaction.memo
+        };
+      if(!this.transaction.transaction_id) {
+        fetch("http://127.0.0.1:8080/transactions/create", httpPostOptions(model))
+          .then(res => res.json())
+          .then(response => {
+            model.transaction_id = Number(response);
+            this.$store.dispatch("addTransactionAction", model);
+            alert("Transaction added.")
+          })
+          .catch(error => alert("Failed to add transaction."));
+      }
+      else {
+        model.transaction_id = this.transaction.transaction_id;
+        fetch("http://127.0.0.1:8080/transactions/" + this.$store.state.profile.user_id + "/update", httpPostOptions(model))
+          .then(res => res.json())
+          .then(response => {
+              this.$store.dispatch("editTransactionAction", model);
+              alert("Transaction updated!");
+          })
+          .catch(error => alert("Transaction failed to update."));
+      }
       console.log(this.transaction);
-      this.clear();
-      this.close();
+      this.cancel();
     },
     cancel() {
       this.clear();
       this.close();
     },
+    remove() {
+      fetch(
+        "http://127.0.0.1:8080/transactions/" + this.$store.state.profile.user_id + "/delete/" + this.transaction.transaction_id,
+        httpGetOptions()
+      )
+        .then(res => res.json())
+        .then(response => {
+          alert("Transaction successfully deleted.")
+          this.cancel();
+        });
+        // .catch(error => alert("Failed to delete transaction."));
+      this.$store.dispatch("removeTransactionAction", this.transaction.transaction_id);
+    },
     clear() {
       this.transaction = {
-        date: dateUtil.getToday(),
+        transaction_id: 0,
+        transaction_date: dateUtil.getToday(),
         amount: 0,
         account: null,
+        category_id: "",
         category: null,
         payee: "",
         memo: ""
@@ -230,7 +279,10 @@ label {
 #submit-button {
   background-color: rgba(62, 105, 221, 1);
 }
-#cancel-button {
+#delete-button {
   background-color: rgba(241, 42, 42, 1);
 }
+/* #cancel-button {
+  background-color: rgba(241, 42, 42, 1);
+} */
 </style>

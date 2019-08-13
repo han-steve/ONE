@@ -69,21 +69,27 @@ export default {
           this.SignUpModel.phoneNumber = "";
         }
         const model = {
+          user_id: -1,
           username: this.SignUpModel.username,
           email: this.SignUpModel.email,
           password: MD5(this.SignUpModel.password).toString(),
           phoneNumber: this.SignUpModel.phoneNumber
         };
-        fetch("http://127.0.0.1:8080/users", httpPostOptions(model))
+        fetch("http://127.0.0.1:8080/users/signup", httpPostOptions(model))
             .then(res => res.json())
             .then(response => {
-              console.log('Success:', JSON.stringify(response))
-              this.resetCurrentUser(this.SignUpModel.username.trim())
-              this.$router.push({path: "/dashboard"});
-            }).catch(error => {
-          console.error('Error:', error)
-          alert("This username or email has been taken.")
-          });
+              if(!response) {
+                alert("\"This username or email has been taken.\"")
+              }
+              else {
+                this.resetCurrentUser(this.SignUpModel.username.trim())
+                this.$router.push({path: "/dashboard"});
+              }
+            });
+        // .catch(error => {
+        //   console.error('Error:', error)
+        //   alert("This username or email has been taken.")
+        //   });
       }
       else
         alert("Make sure the inputted email is properly formatted and includes '@'")

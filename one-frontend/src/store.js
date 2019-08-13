@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+import { isEquivalent } from "./lib";
+
 Vue.use(Vuex);
 
 import data from "./transactions_steve.js"; // will be replaced by Ajax
@@ -10,7 +12,8 @@ import dataUtil from "@/services/DataUtil.js";
 export default new Vuex.Store({
   state: {
     // positive is spent, negative is earned
-    transactions: data,
+    // transactions: data,
+    transactions: [],
     balance: 100, //hardcoded sample
     accounts: [
       {
@@ -37,7 +40,15 @@ export default new Vuex.Store({
       categories: [],
       payees: [],
       type: "expense"
-    }
+    },
+    profile: {
+      user_id: 2,
+      username: "timothytqin",
+      email: "timothy.t.qin@gmail.com",
+      password: "72e8c77916fdba1ba4180c384ba3d294",
+      phoneNumber: "2148366351"
+    },
+    connections: []
   },
   mutations: {
     SET_FILTERS(state, newFilters) {
@@ -60,22 +71,99 @@ export default new Vuex.Store({
     },
     SET_FILTER_TYPE(state, type) {
       state.filters.type = type;
+    },
+    setCurrentUserMutations: function(state, nextUsername) {
+      state.profile.username = nextUsername;
+    },
+    updateProfileMutation: function(state, model) {
+      state.profile = model;
+    },
+    clearCurrentStoredTransactionsMutation: function(state) {
+      state.transactions = [];
+    },
+    addTransactionMutation: function(state, transaction) {
+      state.transactions.push(transaction);
+      state.transactions.sort(
+        (a, b) =>
+          new Date(b.transaction_date).getTime() -
+          new Date(a.transaction_date).getTime()
+      );
+    },
+    editTransactionMutation: function(state, transaction) {
+      for (let i = 0; i < state.transactions.length; i++) {
+        if (
+          state.transactions[i].transaction_id === transaction.transaction_id
+        ) {
+          state.transactions[i].transaction_date = transaction.transaction_date;
+          state.transactions[i].category = transaction.category;
+          state.transactions[i].account = transaction.account;
+          state.transactions[i].payee = transaction.payee;
+          state.transactions[i].amount = transaction.amount;
+          state.transactions[i].memo = transaction.memo;
+          break;
+        }
+      }
+      state.transactions.sort(
+        (a, b) =>
+          new Date(b.transaction_date).getTime() -
+          new Date(a.transaction_date).getTime()
+      );
+    },
+    removeTransactionMutation: function(state, transaction_id) {
+      var index = 0;
+      while (!state.transactions[index].transaction_id === transaction_id) index++;
+      state.transactions.splice(index, 1);
+    },
+    addBankConnectionMutation: function(state, transaction) {
+      state.connections.push(transaction);
+    },
+    removeBankConnectionMutation: function(state, connection) {
+      var index = 0;
+      while (!isEquivalent(state.connections[index], connection)) index++;
+      state.connections.splice(index, 1);
     }
   },
-  actions: {},
+  actions: {
+    setCurrentUserAction: function(context, username) {
+      context.commit("setCurrentUserMutations", username);
+    },
+    updateProfileAction: function(context, model) {
+      context.commit("updateProfileMutation", model);
+    },
+    clearCurrentStoredTransactionsAction: function(context) {
+      context.commit("clearCurrentStoredTransactionsMutation");
+    },
+    addTransactionAction: function(context, transaction) {
+      context.commit("addTransactionMutation", transaction);
+    },
+    editTransactionAction: function(context, transaction) {
+      context.commit("editTransactionMutation", transaction);
+    },
+    removeTransactionAction: function(context, transaction) {
+      context.commit("removeTransactionMutation", transaction);
+    },
+    addBankConnectionAction: function(context, connection) {
+      context.commit("addBankConnectionMutation", connection);
+    },
+    removeBankConnectionAction: function(context, connection) {
+      context.commit("removeBankConnectionMutation", connection);
+    }
+  },
   getters: {
     getTransaction: state => id => {
       var transaction = state.transactions.find(
         transaction => transaction.transaction_id === id
       );
       return {
-        id: transaction.transaction_id,
-        date: dateUtil.parseDate(transaction.date),
-        amount: transaction.amount.toFixed(2),
+        isPlaid: transaction.isPlaid,
+        transaction_id: transaction.transaction_id,
+        transaction_date: dateUtil.parseDate(transaction.transaction_date),
+        amount: transaction.amount,
         account: transaction.account_id,
-        category: transaction.category_id,
-        payee: transaction.name,
-        memo: "" //nothing yet
+        category_id: transaction.category_id,
+        category: transaction.category,
+        payee: transaction.payee,
+        memo: transaction.memo //nothing yet
       };
     },
     getAccount: state => id => {
@@ -85,12 +173,12 @@ export default new Vuex.Store({
       var subcategories = [];
       state.filters.categories.forEach(root => {
         dataUtil.findSubCategories(
-          dataUtil.findCategory(root, state.categories),
+          dataUtil.findCategory(root + "", state.categories),
           subcategories
         );
       });
       return state.transactions.filter(transaction => {
-        var transactionDate = dateUtil.parseDate(transaction.date);
+        var transactionDate = dateUtil.parseDate(transaction.transaction_date);
         var isRightType = true;
         if (state.filters.type === "income") {
           isRightType = transaction.amount < 0;
@@ -107,7 +195,7 @@ export default new Vuex.Store({
             ? subcategories.includes(transaction.category_id)
             : true) &&
           (state.filters.payees.length
-            ? state.filters.payees.includes(transaction.name)
+            ? state.filters.payees.includes(transaction.payee)
             : true) &&
           isRightType
         );
@@ -116,7 +204,7 @@ export default new Vuex.Store({
     //the same thing except doesn't filter by category
     filteredTransactionsNoCategory: state => {
       return state.transactions.filter(transaction => {
-        var transactionDate = dateUtil.parseDate(transaction.date);
+        var transactionDate = dateUtil.parseDate(transaction.transaction_date);
         var isRightType = true;
         if (state.filters.type === "income") {
           isRightType = transaction.amount < 0;
@@ -130,7 +218,7 @@ export default new Vuex.Store({
             ? state.filters.accounts.includes(transaction.account_id)
             : true) &&
           (state.filters.payees.length
-            ? state.filters.payees.includes(transaction.name)
+            ? state.filters.payees.includes(transaction.payee)
             : true) &&
           isRightType
         );
@@ -150,7 +238,7 @@ export default new Vuex.Store({
         while (+currentDay <= +endDate) {
           while (
             index >= 0 &&
-            +dateUtil.parseDate(transactions[index].date) === +currentDay
+            +dateUtil.parseDate(transactions[index].transaction_date) === +currentDay
           ) {
             total += Math.abs(transactions[index].amount);
             index--;
@@ -175,7 +263,7 @@ export default new Vuex.Store({
         while (+currentDay > +startDate) {
           while (
             index < transactions.length &&
-            +dateUtil.parseDate(transactions[index].date) === +currentDay
+            +dateUtil.parseDate(transactions[index].transaction_date) === +currentDay
           ) {
             balance += transactions[index].amount;
             index++;
@@ -203,6 +291,7 @@ export default new Vuex.Store({
         result
       );
       result.forEach(el => {
+        // dataUtil.calcSum(el);
         dataUtil.updateSums(el);
       });
       return result;
@@ -211,18 +300,19 @@ export default new Vuex.Store({
       var result = [];
       getters.filteredTransactions.forEach(transaction => {
         result.push({
-          id: transaction.transaction_id,
-          date: transaction.date,
-          amount: transaction.amount.toFixed(2),
-          account: state.accounts.find(
-            account => account.id === transaction.account_id
-          ).name,
+          transaction_id: transaction.transaction_id,
+          transaction_date: transaction.transaction_date,
+          amount: transaction.amount,
+          account: transaction.account,
+          // state.accounts.find(
+          //   account => account.id === transaction.account_id
+          // ).name,
           category: dataUtil.findCategory(
             transaction.category_id,
             state.categories
           ).name, //will be replaced by id
-          payee: transaction.name,
-          memo: "" //nothing yet
+          payee: transaction.payee,
+          memo: transaction.memo
         });
       });
       return result;
@@ -241,7 +331,7 @@ export default new Vuex.Store({
       // using set to prevent duplicates
       var set = new Set();
       state.transactions.forEach(transaction => {
-        set.add(transaction.name);
+        set.add(transaction.payee);
       });
       // put it in the object form that treeselect requires
       var result = [];

@@ -108,25 +108,23 @@ export default {
   methods: {
     submit() {
       var curr = this.EntryModel;
-      if (this.$store.state.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
+      if (this.$store.state.profile.username !== "" && curr.amount !== "" && curr.account !== "" && curr.date.toString().split("-").length === 3) {
         var factor = -1;
         if(this.EntryModel.toggle) factor = 1;
         const model = {
-          id: -1,
-          username: this.$store.state.username,
+          user_id: this.$store.state.profile.user_id,
           transaction_date: this.EntryModel.date,
           category: this.EntryModel.category,
+          account: this.EntryModel.account,
           payee: this.EntryModel.payee,
           amount: Number(Math.abs(this.EntryModel.amount)) * factor,
-          memo: this.EntryModel.memo,
-          account: this.EntryModel.account
+          memo: this.EntryModel.memo
         };
-        fetch("http://127.0.0.1:8080/transactions", httpPostOptions(model))
+        fetch("http://127.0.0.1:8080/transactions/create", httpPostOptions(model))
         .then(res => res.json())
         .then(response => {
-          model.id = Number(response);
+          model.transaction_id = Number(response);
           this.$store.dispatch("addTransactionAction", model);
-          console.log('Success:', JSON.stringify(response))
         })
         .catch(error => console.error('Error:', error));
         this.EntryModel = {
@@ -164,8 +162,8 @@ export default {
   box-shadow: -5px 29px 162px -54px grey;
 }
 #grid {
-  display: grid; 
-  grid-template-columns: 3em auto; 
+  display: grid;
+  grid-template-columns: 3em auto;
   grid-template-rows: repeat(6, 3em);
   grid-column-gap: 1em;
 }

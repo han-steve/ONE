@@ -25,6 +25,15 @@ function populateTreeWithValues(transactions, categoryTree) {
     }
   });
 }
+function calcSum(root) {
+  var sum = root.value;
+  if (root.children) {
+    root.children.forEach(child => {
+      sum += calcSum(child);
+    });
+  }
+  root.value = sum;
+}
 function updateSums(root) {
   if (!root.children) {
     if (!root.value) {
@@ -56,6 +65,7 @@ function findSubCategories(root, result) {
 export default {
   findCategory,
   populateTreeWithValues,
+  calcSum,
   updateSums,
   findSubCategories
 };

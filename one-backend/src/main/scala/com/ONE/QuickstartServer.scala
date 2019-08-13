@@ -1,4 +1,4 @@
-package com.example
+package com.ONE
 
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.duration.Duration
@@ -10,7 +10,7 @@ import akka.stream.ActorMaterializer
 
 object QuickstartServer extends Routes {
 
-
+  import AppConstants._
 
   lazy val route: Route = routes
 
@@ -26,10 +26,10 @@ object QuickstartServer extends Routes {
       case Failure(e) =>
         Console.err.println(s"Server could not start!")
         e.printStackTrace()
-        system.terminate()
+        AppConstants.system.terminate()
     }
 
-    Await.result(system.whenTerminated, Duration.Inf)
+    Await.result(AppConstants.system.whenTerminated, Duration.Inf)
   }
 
 }

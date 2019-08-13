@@ -1,4 +1,4 @@
-package com.example
+package com.ONE
 
 import java.sql.ResultSet
 import java.util.Date
@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-final case class Bank(username: String, access_token: String, item_id: String, primary_key: String)
+final case class Bank(user_id: Int, connection_id: Option[Int] =  None, access_token: String, item_id: String, primary_key: String)
 final case class Banks(banks: Seq[Bank])
 final case class BankAccessToken(public_token: String)
 
@@ -23,13 +23,13 @@ object BankActor {
   final case class GetAccessToken(access_token: BankAccessToken)
   final case class SetAccessToken(access_token: BankAccessToken)
   final case class AddBankConnection(connection: Bank)
-  final case class GetConnectedBanks(banks: ResultSet)
+  final case class GetConnectedBanks(user_id: Int)
 
   val APP_PORT = 8080
   val PLAID_CLIENT_ID = "5d0fb7795a4c3e0012b150bf"
-  val PLAID_SECRET = "5b9e32967789bf70e9fdcf2946cd6f"
+  val PLAID_SECRET = "7f264190cf743e9abd4a758b3d392a"
   val PLAID_PUBLIC_KEY = "fdf561c3029d9d9e59acfe5b34a67f"
-  val PLAID_ENV = "sandbox"
+  val PLAID_ENV = "development"
 
   // PLAID_PRODUCTS is a comma-separated list of products to use when initializing
   // Link. Note that this list must contain 'assets' in order for the app to be
@@ -52,7 +52,7 @@ object BankActor {
 
   // Initialize the Plaid client
   // Find your API keys in the Dashboard (https://dashboard.plaid.com/account/keys)
-  val plaidClient: PlaidClient = PlaidClient.newBuilder.clientIdAndSecret(PLAID_CLIENT_ID, PLAID_SECRET).publicKey(PLAID_PUBLIC_KEY).sandboxBaseUrl // optional. only needed to call endpoints that require a public key
+  val plaidClient: PlaidClient = PlaidClient.newBuilder.clientIdAndSecret(PLAID_CLIENT_ID, PLAID_SECRET).publicKey(PLAID_PUBLIC_KEY).developmentBaseUrl // optional. only needed to call endpoints that require a public key
     .build // or equivalent, depending on which environment you're calling into
 
   def props: Props = Props[BankActor]
@@ -92,13 +92,13 @@ class BankActor extends Actor with ActorLogging {
           var amount = -1 * e.getAmount
           if(totalTransactions != 0)
             bankTransactions += s""","""
-          bankTransactions += s"""{"date": """" + e.getDate + s"""", "category": """" + category + s"""", "amount": """ + amount + s""", "account":"""" + accounts.get(e.getAccountId) + s"""", "payee": """" + e.getName + """"}"""
+          bankTransactions += s"""{"transaction_id": """" + e.getTransactionId + s"""", "transaction_date": """" + e.getDate + s"""", "category_id": """" + e.getCategoryId + s"""", "category": """" + category + s"""", "amount": """ + amount + s""", "account":"""" + accounts.get(e.getAccountId) + s"""", "payee": """" + e.getName + """"}"""
           totalTransactions += 1
         }
         if(transactionsList.size() != PLAID_TRANSACTION_COUNT)
           receivedAllTransactions = !receivedAllTransactions
       }
-      bankTransactions += s"""]}"""
+      bankTransactions += s"""]}""";
       println(bankTransactions)
       val response: HttpResponse = HttpResponse(entity = HttpEntity(
         ContentTypes.`application/json`,
@@ -128,12 +128,20 @@ class BankActor extends Actor with ActorLogging {
       sender() ! response
     }
     case AddBankConnection(connection: Bank) => {
-      sender() ! new BankActionPerformed("Inserting connection into bank with username=" + connection.username + " and primary_key=" + connection.primary_key)
+      val query = "insert into banks (\"user_id\", \"access_token\", \"item_id\", \"primary_key\") values ('" + connection.user_id + "', '" +
+        connection.access_token + "', '" + connection.item_id + "', '" + connection.primary_key + "'); ";
+      println("[QUERY] " + query)
+      val sql_statement = AppConstants.SqlConnection.createStatement()
+      sql_statement.execute(query)
+      sender() ! s"true"
     }
-    case GetConnectedBanks(banks: ResultSet) => {
+    case GetConnectedBanks(user_id: Int) => {
       var connectedBanks = Set.empty[Bank]
-      while(banks.next()) {
-        connectedBanks += new Bank(banks.getString("username"), banks.getString("access_token"), banks.getString("item_id"), banks.getString("primary_key"))
+      val query = "select * from banks where user_id = '" + user_id + "';"
+      println("[QUERY] " + query)
+      val result = AppConstants.SqlConnection.createStatement().executeQuery(query)
+      while(result.next()) {
+        connectedBanks += new Bank(result.getInt("user_id"), Option(result.getInt("connection_id")), result.getString("access_token"), result.getString("item_id"), result.getString("primary_key"))
       }
       sender() ! Banks(connectedBanks.toSeq)
     }
