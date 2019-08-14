@@ -2,7 +2,10 @@
   <div class="background">
     <div class="login">
       <form>
-        <h1>Log in</h1>
+        <transition name="title" mode="out-in">
+          <!-- adding a key makes the transition work -->
+          <h1 :key="text">{{ text }}</h1>
+        </transition>
         <div class="input-fields">
           <div class="input-field">
             <input type="text" placeholder="username" autofocus />
@@ -14,11 +17,25 @@
         <button type="submit" @click.prevent="submit">Submit</button>
       </form>
       <div class="social-media">
-        <!-- add social media logins -->
+        <div id="or">or</div>
+        <img id="facebook" class="button" src="../assets/facebook.svg" />
       </div>
       <div class="alternate-action">
-        <p>Don't have a account?</p>
-        <img id="signup-button" src="../assets/signup.svg" />
+        <p>{{firstWord}} have a account?</p>
+        <img
+          id="signup-button"
+          v-if="login"
+          class="button"
+          src="../assets/signup.svg"
+          @click="login = false"
+        />
+        <img
+          id="signup-button"
+          v-else
+          class="button"
+          src="../assets/login.svg"
+          @click="login = true"
+        />
       </div>
     </div>
   </div>
@@ -35,6 +52,14 @@ export default {
     submit() {
       this.$router.push("dashboard");
     }
+  },
+  computed: {
+    firstWord() {
+      return this.login ? "Don't" : "Already";
+    },
+    text() {
+      return this.login ? "Log in" : "Sign up";
+    }
   }
 };
 </script>
@@ -48,7 +73,7 @@ export default {
   align-items: center;
 }
 .login {
-  width: 400px;
+  width: 350px;
 }
 h1 {
   color: white;
@@ -113,7 +138,36 @@ p {
   margin: 0;
   margin-bottom: 10px;
 }
+.button {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
 #signup-button {
   width: 100px;
+}
+.button:hover {
+  transform: scale(1.05);
+}
+
+.title-enter-active,
+.title-leave-active {
+  transition: all 0.5s ease;
+}
+.title-enter,
+.title-leave-to {
+  opacity: 0;
+  transform: translateX(-200px);
+}
+
+#or {
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+  /* using margin instead of center align cause not everything's centered */
+  margin: 25px 0 20px 170px;
+}
+#facebook {
+  margin-left: 50px;
+  width: 280px;
 }
 </style>

@@ -27,9 +27,8 @@ import AccountCard from "@/components/AccountCard.vue";
 import PieChart from "@/components/PieChart.vue";
 import LineChart from "@/components/LineChart.vue";
 import TransactionTable from "@/components/TransactionTable.vue";
-import {defaultFilter} from "@/services/Variables.js"
-import {httpGetOptions} from "../http";
-
+import { defaultFilter } from "@/services/Variables.js";
+import { httpGetOptions } from "../http";
 
 export default {
   components: {
@@ -39,64 +38,78 @@ export default {
     TransactionTable
   },
   created() {
-    this.$store.commit("SET_FILTERS", defaultFilter)
+    this.$store.commit("SET_FILTERS", defaultFilter);
   },
   mounted() {
-    fetch("http://127.0.0.1:8080/users/" + this.$store.state.profile.username, httpGetOptions())
+    fetch(
+      "http://127.0.0.1:8080/users/" + this.$store.state.profile.username,
+      httpGetOptions()
+    )
       .then(res => res.json())
       .then(response => {
-          let user = response;
-          this.$store.dispatch("updateProfileAction", user);
-          fetch(
-              "http://127.0.0.1:8080/transactions/" + this.$store.state.profile.user_id,
-              httpGetOptions()
-          )
-              .then(res => res.json())
-              .then(response => {
-                  this.$store.dispatch("clearCurrentStoredTransactionsAction");
-                  let transactions = response.transactions;
-                  for (let i = 0; i < transactions.length; i++) {
-                      transactions[i].isPlaid = false;
-                      this.$store.dispatch("addTransactionAction", transactions[i]);
-                  }
-              })
-              .catch(error => console.error("Error:", error));
-          fetch("http://127.0.0.1:8080/bank/" + this.$store.state.profile.user_id, httpGetOptions())
-              .then(res => res.json())
-              .then(response => {
-                  let banks = response['banks'];
-                  let numBanks = banks.length;
-                  for(let i = 0; i < numBanks; i++) {
-                      this.$store.dispatch("addBankConnectionAction", banks[i]);
-                      this.getTransactions(banks[i].access_token)
-                  }
-              })
-              .catch(error => console.error('Error:', error));
+        let user = response;
+        this.$store.dispatch("updateProfileAction", user);
+        //can be optimized so that the 2 promises are run concurrently.
+        fetch(
+          "http://127.0.0.1:8080/transactions/" +
+            this.$store.state.profile.user_id,
+          httpGetOptions()
+        )
+          .then(res => res.json())
+          .then(response => {
+            this.$store.dispatch("clearCurrentStoredTransactionsAction");
+            let transactions = response.transactions;
+            for (let i = 0; i < transactions.length; i++) {
+              transactions[i].isPlaid = false;
+              this.$store.dispatch("addTransactionAction", transactions[i]);
+            }
+          })
+          .catch(error => console.error("Error:", error));
+        fetch(
+          "http://127.0.0.1:8080/bank/" + this.$store.state.profile.user_id,
+          httpGetOptions()
+        )
+          .then(res => res.json())
+          .then(response => {
+            let banks = response["banks"];
+            let numBanks = banks.length;
+            for (let i = 0; i < numBanks; i++) {
+              this.$store.dispatch("addBankConnectionAction", banks[i]);
+              this.getTransactions(banks[i].access_token);
+            }
+          })
+          .catch(error => console.error("Error:", error));
       })
       .catch(error => console.error("Error:", error));
   },
   methods: {
     getTransactions(access_token) {
-                fetch("http://127.0.0.1:8080/bank/" + this.$store.state.profile.user_id + "/transactions/" + access_token, httpGetOptions())
-                    .then(res => res.json())
-                    .then(data => {
-                        data.transactions.forEach(t => {
-                            const model = {
-                                isPlaid: true,
-                                user_id: this.$store.state.profile.user_id,
-                                transaction_id: t.transaction_id,
-                                transaction_date: t.transaction_date,
-                                category_id: t.category_id,
-                                category: t.category,
-                                account: t.account,
-                                payee: t.payee,
-                                amount: -Number(t.amount),
-                                memo: t.memo
-                            };
-                            this.$store.dispatch("addTransactionAction", model);
-                        });
-                    });
-            }
+      fetch(
+        "http://127.0.0.1:8080/bank/" +
+          this.$store.state.profile.user_id +
+          "/transactions/" +
+          access_token,
+        httpGetOptions()
+      )
+        .then(res => res.json())
+        .then(data => {
+          data.transactions.forEach(t => {
+            const model = {
+              isPlaid: true,
+              user_id: this.$store.state.profile.user_id,
+              transaction_id: t.transaction_id,
+              transaction_date: t.transaction_date,
+              category_id: t.category_id,
+              category: t.category,
+              account: t.account,
+              payee: t.payee,
+              amount: -Number(t.amount),
+              memo: t.memo
+            };
+            this.$store.dispatch("addTransactionAction", model);
+          });
+        });
+    }
   }
 };
 </script>

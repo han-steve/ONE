@@ -111,7 +111,8 @@ export default new Vuex.Store({
     },
     removeTransactionMutation: function(state, transaction_id) {
       var index = 0;
-      while (!state.transactions[index].transaction_id === transaction_id) index++;
+      while (!state.transactions[index].transaction_id === transaction_id)
+        index++;
       state.transactions.splice(index, 1);
     },
     addBankConnectionMutation: function(state, transaction) {
@@ -238,7 +239,8 @@ export default new Vuex.Store({
         while (+currentDay <= +endDate) {
           while (
             index >= 0 &&
-            +dateUtil.parseDate(transactions[index].transaction_date) === +currentDay
+            +dateUtil.parseDate(transactions[index].transaction_date) ===
+              +currentDay
           ) {
             total += Math.abs(transactions[index].amount);
             index--;
@@ -263,7 +265,8 @@ export default new Vuex.Store({
         while (+currentDay > +startDate) {
           while (
             index < transactions.length &&
-            +dateUtil.parseDate(transactions[index].transaction_date) === +currentDay
+            +dateUtil.parseDate(transactions[index].transaction_date) ===
+              +currentDay
           ) {
             balance += transactions[index].amount;
             index++;
