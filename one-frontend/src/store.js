@@ -42,11 +42,11 @@ export default new Vuex.Store({
       type: "expense"
     },
     profile: {
-      user_id: 2,
-      username: "timothytqin",
-      email: "timothy.t.qin@gmail.com",
-      password: "72e8c77916fdba1ba4180c384ba3d294",
-      phoneNumber: "2148366351"
+      user_id: -1,
+      username: "",
+      email: "",
+      password: "",
+      phoneNumber: ""
     },
     connections: []
   },
@@ -71,6 +71,17 @@ export default new Vuex.Store({
     },
     SET_FILTER_TYPE(state, type) {
       state.filters.type = type;
+    },
+    resetMutation(state) {
+      state.profile = {
+        user_id: -1,
+        username: "",
+        email: "",
+        password: "",
+        phoneNumber: ""
+      };
+      state.transactions = [];
+      state.connections = [];
     },
     setCurrentUserMutations: function(state, nextUsername) {
       state.profile.username = nextUsername;
@@ -148,6 +159,9 @@ export default new Vuex.Store({
     },
     removeBankConnectionAction: function(context, connection) {
       context.commit("removeBankConnectionMutation", connection);
+    },
+    resetAction: function(context) {
+      context.commit("resetMutation");
     }
   },
   getters: {

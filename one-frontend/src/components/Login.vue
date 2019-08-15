@@ -8,10 +8,18 @@
         </transition>
         <div class="input-fields">
           <div class="input-field">
-            <input type="text" placeholder="username" autofocus />
+            <input type="text" placeholder="username" autofocus v-model="username"/>
           </div>
           <div class="input-field">
-            <input type="text" placeholder="password" autofocus />
+            <input type="text" placeholder="password" autofocus v-model="password"/>
+          </div>
+          <div class="signup" v-if="!login">
+            <div class="input-field">
+              <input type="text" placeholder="email" autofocus v-model="email"/>
+            </div>
+            <div class="input-field">
+              <input type="text" placeholder="phone number" autofocus v-model="phoneNumber"/>
+            </div>
           </div>
         </div>
         <button type="submit" @click.prevent="submit">Submit</button>
@@ -42,15 +50,148 @@
 </template>
 
 <script>
+import {httpGetOptions, httpPostOptions} from "../http";
+import MD5 from "crypto-js/md5";
+
 export default {
   data() {
     return {
-      login: true
+      login: true,
+      username: "",
+      password: "",
+      email: "",
+      phoneNumber: ""
     };
   },
   methods: {
+    signin() {
+        var username = this.username;
+        var password = MD5(this.password).toString();
+        fetch("http://127.0.0.1:8080/users/login/" + username + "/" + password, httpGetOptions())
+            .then(res => res.json())
+            .then(response => {
+                if(!response)
+                    alert("Wrong username or password!");
+                else {
+                    this.resetCurrentUser();
+                    fetch("http://127.0.0.1:8080/users/" + username, httpGetOptions())
+                        .then(res => res.json())
+                        .then(response => {
+                            let user = response;
+                            this.$store.dispatch("updateProfileAction", user);
+
+                        })
+                        .then(() =>  {
+                          this.getDBTransactions();
+                          this.getBankConnections();
+                        })
+                        .catch(error => console.error("Error:", error));
+                    this.$router.push("dashboard")
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    },
+    signup() {
+      if(this.username !== "" && this.email.match("@") && this.password.trim().length >= 6) {
+        if(this.phoneNumber !== "" && this.phoneNumber.trim().length !== 10) {
+          this.phoneNumber = "";
+        }
+        const model = {
+          user_id: -1,
+          username: this.username,
+          email: this.email,
+          password: MD5(this.password).toString(),
+          phoneNumber: this.phoneNumber
+        };
+        fetch("http://127.0.0.1:8080/users/signup", httpPostOptions(model))
+            .then(res => res.json())
+            .then(response => {
+              if(!response) {
+                alert("\"This username or email has been taken.\"")
+              }
+              else {
+                this.resetCurrentUser()
+                this.$router.push("dashboard");
+              }
+            });
+        // .catch(error => {
+        //   console.error('Error:', error)
+        //   alert("This username or email has been taken.")
+        //   });
+      }
+      else
+        alert("Make sure the inputted email is properly formatted and includes '@'")
+    },
+    getDBTransactions() {
+      fetch(
+            "http://127.0.0.1:8080/transactions/" +
+              this.$store.state.profile.user_id,
+            httpGetOptions()
+          )
+            .then(res => res.json())
+            .then(response => {
+              this.$store.dispatch("clearCurrentStoredTransactionsAction");
+              let transactions = response.transactions;
+              for (let i = 0; i < transactions.length; i++) {
+                transactions[i].isPlaid = false;
+                this.$store.dispatch("addTransactionAction", transactions[i]);
+              }
+            })
+            .catch(error => console.error("Error:", error));
+    },
+    getBankConnections() {
+      fetch(
+            "http://127.0.0.1:8080/bank/" + this.$store.state.profile.user_id,
+            httpGetOptions()
+          )
+            .then(res => res.json())
+            .then(response => {
+              let banks = response["banks"];
+              let numBanks = banks.length;
+              for (let i = 0; i < numBanks; i++) {
+                this.$store.dispatch("addBankConnectionAction", banks[i]);
+                this.getTransactions(banks[i].access_token);
+              }
+            })
+            .catch(error => console.error("Error:", error));
+    },
+    getTransactions(access_token) {
+      fetch(
+        "http://127.0.0.1:8080/bank/" +
+          this.$store.state.profile.user_id +
+          "/transactions/" +
+          access_token,
+        httpGetOptions()
+      )
+        .then(res => res.json())
+        .then(data => {
+          data.transactions.forEach(t => {
+            const model = {
+              isPlaid: true,
+              user_id: this.$store.state.profile.user_id,
+              transaction_id: t.transaction_id,
+              transaction_date: t.transaction_date,
+              category_id: t.category_id,
+              category: t.category,
+              account: t.account,
+              payee: t.payee,
+              amount: -Number(t.amount),
+              memo: t.memo
+            };
+            this.$store.dispatch("addTransactionAction", model);
+          });
+        });
+    },
     submit() {
-      this.$router.push("dashboard");
+      if(this.login) {
+        this.signin();
+      }
+      else {
+        this.signup();
+      }
+    },
+    resetCurrentUser() {
+        this.$store.dispatch('resetAction');
     }
   },
   computed: {

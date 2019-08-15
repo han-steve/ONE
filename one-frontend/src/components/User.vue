@@ -14,7 +14,7 @@
       <div class="menu-option text">
         <a>Profile</a>
       </div>
-      <div class="menu-option text">
+      <div class="menu-option text" @click="reset()">
         <router-link to="login">Logout</router-link>
       </div>
       <div class="menu-option text">
@@ -25,7 +25,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    reset() {
+      this.$store.dispatch("resetAction");
+    }
+  }
+};
 </script>
 
 <style scoped>
