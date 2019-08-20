@@ -41,6 +41,10 @@ export default {
       type: "expense"
     };
   },
+  mounted() {
+    if(this.$store.state.profile.username === "")
+      this.$router.push("login")
+  },
   methods: {
     setExpense() {
       this.type = "expense";

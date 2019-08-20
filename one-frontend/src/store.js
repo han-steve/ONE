@@ -14,8 +14,11 @@ export default new Vuex.Store({
     // positive is spent, negative is earned
     // transactions: data,
     transactions: [],
-    balance: 100, //hardcoded sample
-    accounts: [
+    balance: 0, //hardcoded sample
+    accounts: 
+    // {
+    // },
+    [
       {
         id: "bOwYxeA3rvTa1b7Q8YzqfRANOQ6MVqtqznxKV",
         balances: {

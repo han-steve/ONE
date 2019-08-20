@@ -44,11 +44,11 @@
               </div>
               <div class="input-container">
                 <label class="input-label">Category:</label>
-                <treeselect class="input-field" :options="categories" v-model="transaction.category"></treeselect>
+                <treeselect class="input-field" :options="categories" v-model="transaction.category_id"></treeselect>
               </div>
               <div class="input-container">
                 <label class="input-label">Payee:</label>
-                <input class="input-field" type="text" v-model="transaction.isPlaid ? transaction.name : transaction.payee"></input>
+                <input class="input-field" type="text" v-model="transaction.payee"></input>
               </div>
               <div class="input-container">
                 <label class="input-label">Memo:</label>
@@ -125,7 +125,7 @@ export default {
           category_id: this.transaction.category_id,
           category: dataUtil.findCategory(this.transaction.category_id, this.$store.state.categories).name,
           account: this.transaction.account,
-          payee: this.transaction.isPlaid ? this.transaction.name : this.transaction.payee,
+          payee: this.transaction.payee,
           amount: Number(this.transaction.amount),
           memo: this.transaction.memo
         };

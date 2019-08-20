@@ -13,9 +13,16 @@ export default new Router({
   mode: "history",
   routes: [
     {
-      path: "/summary",
-      name: "summary",
-      components: { default: Summary, navbar: NavBar }
+      path: "/",
+      name: "login",
+      components: { navbar: NavBar },
+      props: { navbar: { login: true } }
+    },
+    {
+      path: "/login",
+      name: "login",
+      components: { navbar: NavBar },
+      props: { navbar: { login: true } }
     },
     {
       path: "/dashboard",
@@ -27,15 +34,14 @@ export default new Router({
       }
     },
     {
+      path: "/summary",
+      name: "summary",
+      components: { default: Summary, navbar: NavBar }
+    },
+    {
       path: "/transactions",
       name: "transactions",
       components: { default: Transactions, navbar: NavBar }
-    },
-    {
-      path: "/login",
-      name: "login",
-      components: { navbar: NavBar },
-      props: { navbar: { login: true } }
     }
   ]
 });

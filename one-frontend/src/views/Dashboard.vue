@@ -39,6 +39,10 @@ export default {
   },
   created() {
     this.$store.commit("SET_FILTERS", defaultFilter);
+  },
+  mounted() {
+    if(this.$store.state.profile.username === "")
+      this.$router.push("login")
   }
 };
 </script>

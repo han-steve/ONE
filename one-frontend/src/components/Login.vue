@@ -85,8 +85,8 @@ export default {
                           this.getDBTransactions();
                           this.getBankConnections();
                         })
+                        .then(() => this.$router.push("dashboard"))
                         .catch(error => console.error("Error:", error));
-                    this.$router.push("dashboard")
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -173,6 +173,7 @@ export default {
               transaction_date: t.transaction_date,
               category_id: t.category_id,
               category: t.category,
+              account_id: t.account_id,
               account: t.account,
               payee: t.payee,
               amount: -Number(t.amount),
