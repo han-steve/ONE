@@ -19,7 +19,7 @@
     "firebase": "^5.8.3",
     "font-awesome": "^4.7.0",
     "fs": "0.0.1-security",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "moment": "2.22.x",
     "plaid": "^4.2.0",
     "popper.js": "^1.15.0",
