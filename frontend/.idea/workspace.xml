@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d3079405-8583-400b-9345-84f10bb1f7fa" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../one-frontend/src/components/MapView.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../one-frontend/src/services/Categories/CategoryMapper.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../one-frontend/src/services/Categories/Map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/.browserslistrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/.eslintrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/.firebase/hosting.ZGlzdA.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/.firebaserc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/babel.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/database.rules.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/firebase.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/postcss.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/public/welcome.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/App.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/HorzBarChart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/LineChart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/PieChart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/chart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/Accounts.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/AddEntry.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/Budget.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/ChartDeprecated.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/Dashboard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/EditEntry.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/LineChart.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/Login.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/LoginOld.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/NavTpl.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/Profile.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/SignUp.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/SpendingChart.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/SpendingLineChart.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/components/Welcome.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/const/routing.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/firebase.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/lib/http.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/lib/lib.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/router/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/store/store.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hackathon/src/testData.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/build.sbt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/project/build.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/project/plugins.sbt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/resources/application.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/AppConstants.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/BankActor.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/BankRoute.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/CORSHandler.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/ContactActor.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/ContactRoute.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/EncryptUtil.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/JsonSupport.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/QuickstartServer.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/Routes.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/ScalaConcepts.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/TransactionActor.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/TransactionRoute.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/UserActor.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/main/scala/com/ONE/UserRoute.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-backend/src/test/scala/com/ONE/UserRoutesSpec.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/components/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/components/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/components/NavBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/components/NavBar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/services/DataUtil.js" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/services/DataUtil.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../one-frontend/src/views/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../one-frontend/src/views/Dashboard.vue" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/node_modules/" />
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../one-frontend/src/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../one-frontend/src/store.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+                <element signature="e#1844#7367#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../one-frontend/src/services/DataUtil.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret selection-end-line="20" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/MapView.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="325">
+              <caret line="45" column="19" lean-forward="true" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../one-frontend/src/App.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../one-frontend/src/views/Dashboard.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="284">
+              <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+              <folding>
+                <element signature="e#173#220#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Single File Component" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>addLay</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/../one-frontend/src/components/NavBar.vue" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/components/Login.vue" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/components/Map.vue" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/router.js" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/leaflet.js" />
+        <option value="$PROJECT_DIR$/../one-frontend/package.json" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/App.vue" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/main.js" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/views/Dashboard.vue" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/components/MapView.vue" />
+        <option value="$PROJECT_DIR$/../one-frontend/public/index.html" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/store.js" />
+        <option value="$PROJECT_DIR$/../one-frontend/src/services/DataUtil.js" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="width" value="1680" />
+    <option name="height" value="1050" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="one-frontend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="one-frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="one-frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="one-frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="one-frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="one-frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d3079405-8583-400b-9345-84f10bb1f7fa" name="Default Changelist" comment="" />
+      <created>1566688039234</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1566688039234</updated>
+      <workItem from="1566688040568" duration="288000" />
+      <workItem from="1566952901386" duration="254000" />
+      <workItem from="1569130200790" duration="75000" />
+      <workItem from="1571509912289" duration="27164000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="27781000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24954791" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32959184" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31428573" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24954791" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31428573" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../one-frontend/babel.config.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/DataTable.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/LineChart.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/sectional.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.es2015.collection.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="35" column="12" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/TransactionModal.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-852" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/PieChart.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="31" column="22" lean-forward="true" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/node_modules/@riophae/vue-treeselect/dist/vue-treeselect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/AccountCard.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/User.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="36" lean-forward="true" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/lib.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/http.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/views/Transactions.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="32" lean-forward="true" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/FilterBar.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="29" column="39" lean-forward="true" selection-end-line="254" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/leaflet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/node_modules/leaflet/dist/leaflet-src.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="14011" column="4" selection-start-line="14011" selection-start-column="4" selection-end-line="14011" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/node_modules/leaflet/dist/leaflet-src.esm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="6888" column="4" selection-start-line="6888" selection-start-column="4" selection-end-line="6888" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/NavBar.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1072">
+          <caret line="88" column="19" selection-start-line="88" selection-start-column="19" selection-end-line="88" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/TransactionTable.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="46" column="37" lean-forward="true" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/views/Summary.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="920">
+          <caret line="95" column="4" selection-start-line="95" selection-start-column="4" selection-end-line="95" selection-end-column="4" />
+          <folding>
+            <element signature="e#1002#1053#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/Login.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="41" column="4" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="15" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.es5.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="1451" column="38" selection-start-line="1451" selection-start-column="38" selection-end-line="1451" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/App.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/views/Dashboard.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="284">
+          <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+          <folding>
+            <element signature="e#173#220#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/store.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+            <element signature="e#1844#7367#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/components/MapView.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="45" column="19" lean-forward="true" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../one-frontend/src/services/DataUtil.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="20" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

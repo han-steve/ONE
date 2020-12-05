@@ -2,8 +2,8 @@
   <div id="background">
     <div class="nav-bar" :class="{fullscreen: login}">
       <div id="logo" v-show="!login">
-        <h1>ONE</h1>
-        <div id="rectangle"></div>
+        <h1><u>Taco 'Bout It</u></h1>
+<!--        <div id="rectangle"></div>-->
       </div>
       <transition name="nav">
         <div id="nav" v-show="!login">
@@ -90,15 +90,15 @@ export default {
 }
 #logo h1 {
   text-align: center;
-  font-weight: 900;
+  font-weight: 650;
   font-style: italic;
-  font-size: 4em;
+  font-size: 2em;
   margin: 0;
   color: white;
 }
 #rectangle {
   width: 8em;
-  height: 0.8em;
+  height: 0.4em;
   background-color: white;
   margin: 0 auto;
   position: relative;
